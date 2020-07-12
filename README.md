@@ -10,8 +10,8 @@ MAST-SEY is an open-source Monte Carlo code capable of predicting secondary elec
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
-2. Download the elsepa code: https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/5zzrz874tt-1.zip (https://doi.org/10.1016/j.cpc.2004.09.006)
-3. Apply the `elscata.patch` in the downloaded directory
+2. Download the [elsepa] (https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/5zzrz874tt-1.zip) code (https://doi.org/10.1016/j.cpc.2004.09.006).
+3. Apply the `elscata.patch` in the downloaded directory.
 ```bash
 patch elscata.patch elscata.f
 ```
@@ -83,4 +83,4 @@ Optionally a file containing density of states can be provided. This file has tw
 See files in the `examples` directory for sample files.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
