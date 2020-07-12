@@ -5,19 +5,24 @@ MAST-SEY is an open-source Monte Carlo code capable of predicting secondary elec
 
 ## Installation
 
-Download the source code and compile with `gcc`, version > 6.2 of `gcc` is recommended.
+1. Download the source code and compile with `gcc`, version > 6.2 of `gcc` is recommended.
 ```bash
-g++ -std=c++11 -g -O3 -o mast_sey_v25 mast_sey_v25_binary.cpp
+g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
-1. Extract all the files to a convenient location
-2. Add that location to your PATH:
+2. Download the elsepa code: https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/5zzrz874tt-1.zip (https://doi.org/10.1016/j.cpc.2004.09.006)
+3. Apply the `elscata.patch` in the downloaded directory
+```bash
+patch elscata.patch elscata.f
+```
+4. Copy the executables `mast_sey1` and `elscata` to a convenient location
+5. Add that location to your PATH:
 ```bash
 export PATH=${PATH}:/complete/path/to/your/mast_sey
 ```    
     - you can add that line to your .bashrc of you dont want to execute it each time
-3. If files are not executable make them executable:
+6. Make sure that the copied files are executable:
 ```bash
-chmod +x mast_sey_vXX mast_sey_prep elddcs
+chmod +x mast_sey elsepa
 ```
 
 ## Usage
@@ -28,21 +33,10 @@ This step postprocesses the input files to a form convenient for the second step
 
 The command below is an example of how to run the "prepare" step:
 ```bash
-mast_sey -e 1000 100 -i 100 50 -qdep DFT P DHFS FM
+mast_sey -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 ```
-
-
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
-
-In this case
-The `examples` directory containes all the neccesare file 
+In this example, the cumulative integrals will be calculated in the energy range (`-e`) between the Fermi energy (read from `material.in`) and 1000 eV, on a grid of 100 points on a logarithmic scale. The integrals in energy and q (momentum) space will be calculated on grids of 100 and 50 equally spaced points, respectively. A DFT calculated q-dependence of energy loss function will be used. The inelastic scattering cross ections will be calculated using a model with [P]oint nuclear charge, [D]irac-[H]artree-[F]ock-[S]later electron model, and [F]urness-[M]cCarthy exchange.
+The `examples` directory containes all the necceary input files to run this example.
 ## Contributing
 
 
