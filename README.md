@@ -29,22 +29,22 @@ chmod +x mast_sey elsepa
 ## Usage
 
 The code is executed in two steps:
-1. "prepare" stage:
+# The "prepare" step
 This step postprocesses the input files to a form convenient for the second step to use. It takes the dielectric function `eps.in` or the energy loss function `elf.in`, and using the parameters contained in `material.in`, prepares the cumulative integrals of cross sections. These results are stored in `inelastic.in` and `elastic.in`. Additionally a file `mfp.plot` is generated, and allows for a convenient plotting of the inelastic and elastic mean free paths, which are generated in this step as well. This step is performed only once for each case.
 
-  The command below is an example of how to run the "prepare" step:
+The command below is an example of how to run the "prepare" step:
 ```bash
 mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 ```
-  The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
+The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
-  In this example, the cumulative integrals will be calculated in the energy range (`-e`) between the Fermi energy (read from `material.in`) and 1000 eV, on a grid of 100 points on a logarithmic scale. The integrals (`-i`) in energy and q (momentum) space will be calculated on grids of 100 and 50 equally spaced points, respectively. A DFT calculated q-dependence (`-qdep`) of energy loss function will be used. The elastic scattering cross sections(`-elastic`) will be calculated using a model with [P]oint nuclear charge, [D]irac-[H]artree-[F]ock-[S]later electron model, and [F]urness-[M]cCarthy exchange.
+In this example, the cumulative integrals will be calculated in the energy range (`-e`) between the Fermi energy (read from `material.in`) and 1000 eV, on a grid of 100 points on a logarithmic scale. The integrals (`-i`) in energy and q (momentum) space will be calculated on grids of 100 and 50 equally spaced points, respectively. A DFT calculated q-dependence (`-qdep`) of energy loss function will be used. The elastic scattering cross sections(`-elastic`) will be calculated using a model with [P]oint nuclear charge, [D]irac-[H]artree-[F]ock-[S]later electron model, and [F]urness-[M]cCarthy exchange.
 
-  After running this step, new files, `inelastic.in` and `elastic.in` will be created, as well as `mfp.plot`. The first two will be used in the second step of running the code, while the `mfp.plot` can be used to plot the obtained elastic and inelastic mean free paths in the users plotting program of choice.
+After running this step, new files, `inelastic.in` and `elastic.in` will be created, as well as `mfp.plot`. The first two will be used in the second step of running the code, while the `mfp.plot` can be used to plot the obtained elastic and inelastic mean free paths in the users plotting program of choice.
 
-  Executing mast sey with a `-h` flag (`mast_sey -h`) will display additional options available to use.
+Executing mast sey with a `-h` flag (`mast_sey -h`) will display additional options available to use.
 
-2. The "execute" step:
+# The "execute" step:
 ```bash
 mast_sey execute -e 350 -m 10000
 ```
