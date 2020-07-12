@@ -10,17 +10,17 @@ MAST-SEY is an open-source Monte Carlo code capable of predicting secondary elec
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
-2. [Download the elsepa code](https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/5zzrz874tt-1.zip) (https://doi.org/10.1016/j.cpc.2004.09.006).
+2. [Download the elsepa code](https://data.mendeley.com/datasets/5zzrz874tt/1#file-ac245c2b-053a-4fd7-9e5a-3f706e70a87f) (https://doi.org/10.1016/j.cpc.2004.09.006).
 3. Apply the `elscata.patch` in the downloaded directory.
 ```bash
 patch elscata.patch elscata.f
 ```
-4. Copy the executables `mast_sey1` and `elscata` to a convenient location
-5. Add that location to your PATH:
+4. Copy the executables `mast_sey` and `elscata` to a convenient location.
+5. Add that location to your PATH. You can add that line to your .bashrc of you dont want to execute it each time:
 ```bash
 export PATH=${PATH}:/complete/path/to/your/mast_sey
 ```    
-Yyou can add that line to your .bashrc of you dont want to execute it each time
+
 6. Make sure that the copied files are executable:
 ```bash
 chmod +x mast_sey elsepa
@@ -68,7 +68,7 @@ The `examples` directory containes all the necessary input files to run this exa
 There is a number of input files necessary to run the code:
 
 1. `material.in`
-This file contains all the information about the studied system, it consists of 4 lines
+This file contains all the information about the studied system, it consists of 4 lines:
 ```
 Atomic number
 Unit cell volume per atom (Å)
