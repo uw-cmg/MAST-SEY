@@ -1,5 +1,6 @@
-
+<h1 align="center">
 <img src="MAST-SEY_logo_sm.png" width="50%">
+</h1>
 
 MAST-SEY is an open-source Monte Carlo code capable of predicting secondary electron emission using input data generated entirely from first principle (density functional theory) calculations. It utilises the complex dielectric function and Penn's theory for inelastic scattering processes, and relativistic Schrödinger theory by means of partial-wave expansion method to govern elastic scattering. It allows to not only use the momentum independent (q=0) dielectric function but also to include explicitly calculated momentum dependence, as well as to utilise first-principle density of states in secondary electron generation. 
 
@@ -19,7 +20,7 @@ patch elscata.patch elscata.f
 ```bash
 export PATH=${PATH}:/complete/path/to/your/mast_sey
 ```    
-    - you can add that line to your .bashrc of you dont want to execute it each time
+Yyou can add that line to your .bashrc of you dont want to execute it each time
 6. Make sure that the copied files are executable:
 ```bash
 chmod +x mast_sey elsepa
@@ -39,25 +40,18 @@ In this example, the cumulative integrals will be calculated in the energy range
 
 After running this step, new files, `inelastic.in` and `elastic.in` will be created, as well as `mfp.plot`. The first two will be used in the second step of running the code, while the `mfp.plot` can be used to plot the obtained elastic and inelastic mean free paths in the users plotting program of choice.
 
-2. The "execute" step.
+2. The "execute" step:
 ```bash
 mast_sey execute -e 350 -m 10000
 ```
-In this example, the secondary electron yield (SEY) will be calculated using the Monte Carlo method for 10000 electrons (`-m`) and their incident energy (`-e`) equal to 350 eV. A result will be similar to the following
+In this example, the secondary electron yield (SEY) will be calculated using the Monte Carlo method for 10000 electrons (`-m`) and their incident energy (`-e`) equal to 350 eV. The last two lines of the output should look similar to the following:
 ```bash
 # Energy[eV]     SEY TrueSEY   Bcksc DifPrim  eBcksc
     350.0000  0.7759  0.3614  0.4145  0.3077  0.0573
 ```
 Where the incident energy is repeated (`Energy[eV]`), and the values in question are presented: total secondary electron yield (`SEY`), true SEY i.e. SEY for electrons escaping through the surface  with energy < 50 eV (`TrueSEY`), backscattered electrons i.e. electrons which escaped with energy > 50 eV (`Bcksc`), diffused primaries i.e. primary electrons which escaped after a series of elastic and inelastic scattering events (`DifPrim`), and elastically backscattered electrons i.e. primary electrons which escaped after undergoing elastic scattering events only (`eBcksc`).
 
-The `examples` directory containes all the necceary input files to run this example.
-## Contributing
-
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
+The `examples` directory containes all the necessary input files to run this example.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
