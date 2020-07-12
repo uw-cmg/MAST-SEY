@@ -69,13 +69,13 @@ There is a number of input files necessary to run the code:
 
 1. `material.in'
 This file contains all the information about the studied system, it consists of 4 lines
-```bash
-Atomic number
-Unit cell volume per atom (Å)
-Fermi energy (eV)
-Work function (eV)
-```
-2. `elf.in` or `eps.in'
+
+    Atomic number
+    Unit cell volume per atom (Å)
+    Fermi energy (eV)
+    Work function (eV)
+
+2. `elf.in` or `eps.in`
 These files contain the energy loss function and the complex dielectric function. Only one is mandatory, if both are present `elf.in` will be used. The `elf.in` should have two columns: energy (eV) and energy loss function, separated by space or tab. The `eps.in` should have three columns: energy (eV), real, and imaginary part of the dielectric function, separated by spaces or tabs. If an explicit q-dependence is provided, the energy loss function is to be repeated for each provided value of q, each followed by a line containing the lenght of the q-vector (1/Bohr) repeated twice, and a separator line containing the two numbers `99999999 99999999`. This way the entire file has two columns and is easier to parse.
 
 See files in the `examples` directory for sample files.
