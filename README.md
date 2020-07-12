@@ -29,7 +29,7 @@ chmod +x mast_sey elsepa
 ## Usage
 
 The code is executed in two steps:
-# The "prepare" step
+### The "prepare" step
 This step postprocesses the input files to a form convenient for the second step to use. It takes the dielectric function `eps.in` or the energy loss function `elf.in`, and using the parameters contained in `material.in`, prepares the cumulative integrals of cross sections. These results are stored in `inelastic.in` and `elastic.in`. Additionally a file `mfp.plot` is generated, and allows for a convenient plotting of the inelastic and elastic mean free paths, which are generated in this step as well. This step is performed only once for each case.
 
 The command below is an example of how to run the "prepare" step:
@@ -44,7 +44,7 @@ After running this step, new files, `inelastic.in` and `elastic.in` will be crea
 
 Executing mast sey with a `-h` flag (`mast_sey -h`) will display additional options available to use.
 
-# The "execute" step:
+### The "execute" step:
 ```bash
 mast_sey execute -e 350 -m 10000
 ```
