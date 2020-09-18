@@ -7,22 +7,32 @@ For more detail please refer to the paper which this code accompanies: Comp. Mat
 
 ## Installation
 
-1. Download the source code and compile with `gcc`, version > 6.2 of `gcc` is recommended.
+1. Download the source code and compile with `gcc`, version > 6.2 of `gcc` is required:
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
 2. [Download the elsepa code](https://data.mendeley.com/datasets/5zzrz874tt/1#file-ac245c2b-053a-4fd7-9e5a-3f706e70a87f) (https://doi.org/10.1016/j.cpc.2004.09.006).
-3. Apply the `elscata.patch` in the downloaded directory.
+3. Unzip the downloaded `5zzrz874tt-1.zip` file and unpack the file inside: 
 ```bash
-patch elscata.patch elscata.f
+unzip 5zzrz874tt-1.zip
+tar -xvf adus_v1_0.tar.gz
 ```
-4. Copy the executables `mast_sey` and `elscata` to a convenient location.
-5. Add that location to your PATH. You can add that line to your .bashrc of you dont want to execute it each time:
+4. Move the `elscata.patch` patch inside the `elsepa` directory and apply it:
 ```bash
-export PATH=${PATH}:/complete/path/to/your/mast_sey
+cd elsepa
+patch -p0 < elsepa.patch
+```
+5. Compile the patched `elsepa`:
+```bash
+gfortran -o elsepa elscata.f
+```
+6. Move the executables `mast_sey` and `elsepa` to a convenient location.
+7. Add that location to your PATH. You can add that line to your .bashrc of you dont want to execute it each time:
+```bash
+export PATH=/complete/path/to/your/mast_sey:${PATH}
 ```    
 
-6. Make sure that the copied files are executable:
+8. Make sure that the copied files are executable:
 ```bash
 chmod +x mast_sey elsepa
 ```
