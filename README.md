@@ -1,5 +1,5 @@
 
-<img src="MAST-SEY_logo_sm.png" width="50%">
+<img src="misc/MAST-SEY_logo_sm.png" width="50%">
 
 
 MAST-SEY is an open-source Monte Carlo code capable of predicting secondary electron emission using input data generated entirely from first principle (density functional theory) calculations. It utilises the complex dielectric function and Penn's theory for inelastic scattering processes, and relativistic Schrödinger theory by means of partial-wave expansion method to govern elastic scattering. It allows to not only use the momentum independent (q=0) dielectric function but also to include explicitly calculated momentum dependence, as well as to utilise first-principle density of states in secondary electron generation.  
@@ -12,7 +12,7 @@ For more detail please refer to the paper which this code accompanies: Comp. Mat
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
 2. [Download the elsepa code](https://data.mendeley.com/datasets/5zzrz874tt/1#file-ac245c2b-053a-4fd7-9e5a-3f706e70a87f) (https://doi.org/10.1016/j.cpc.2004.09.006).
-3. Unzip the downloaded `5zzrz874tt-1.zip` file and unpack the file inside: 
+3. Unzip the downloaded `5zzrz874tt-1.zip` file and unpack the file inside:
 ```bash
 unzip 5zzrz874tt-1.zip
 tar -xvf adus_v1_0.tar.gz
@@ -59,7 +59,7 @@ Executing mast sey with a `-h` flag (`mast_sey -h`) will display additional opti
 ```bash
 mast_sey execute -e 350 -m 10000
 ```
-The user should, again, be greeted with the default MAST-SEY output screen. Although slightly different than the previous ont, it too contains the basic info along with a short feedback on the chosen options and files used, as well as basic errors in input (if any). Again if all is correct, a progress bar should start filling up (although for a larga number of simulated electrons it may take a while for even the first bar to appear). 
+The user should, again, be greeted with the default MAST-SEY output screen. Although slightly different than the previous ont, it too contains the basic info along with a short feedback on the chosen options and files used, as well as basic errors in input (if any). Again if all is correct, a progress bar should start filling up (although for a larga number of simulated electrons it may take a while for even the first bar to appear).
 
 In this example, the secondary electron yield (SEY) will be calculated using the Monte Carlo method for 10000 electrons (`-m`) and their incident energy (`-e`) equal to 350 eV. The last two lines of the output should look similar to the following:
 ```bash
