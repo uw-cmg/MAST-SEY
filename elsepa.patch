@@ -1,0 +1,1189 @@
+--- elsepa_orig.f	2020-09-18 08:35:53.884942232 +0200
++++ elsepa.f	2020-09-18 08:35:53.889981997 +0200
+@@ -151,35 +151,35 @@
+         RETURN
+       ENDIF
+ C
+-      WRITE(IW,1000)
+- 1000 FORMAT(1X,'#',/1X,'# Subroutine ELSEPA. Elastic scattering of ',
+-     1  'electrons and positrons',/1X,'#',20X,
+-     2  'by neutral atoms and positive ions')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(IW,1100)
+- 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
+-      ELSE
+-        WRITE(IW,1200)
+- 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
+-      ENDIF
++C      WRITE(IW,1000)
++C 1000 FORMAT(1X,'#',/1X,'# Subroutine ELSEPA. Elastic scattering of ',
++C     1  'electrons and positrons',/1X,'#',20X,
++C     2  'by neutral atoms and positive ions')
++C      IF(IELEC.EQ.-1) THEN
++C        WRITE(IW,1100)
++C 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
++C      ELSE
++C        WRITE(IW,1200)
++C 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
++C      ENDIF
+       E=EV/HREV
+-      WRITE(IW,1300) EV,E
+- 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
+-     1       E12.5,' a.u.')
++C      WRITE(IW,1300) EV,E
++C 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
++C     1       E12.5,' a.u.')
+ C
+ C  ****  You may wish to comment off the next condition to run the
+ C  program for kinetic energies less that 10 eV. However, the results
+ C  for these energies may be highly inaccurate.
+ C
+-      IF(EV.LT.10.0D0) THEN
+-        WRITE(IW,'(''  STOP. The kinetic energy is too small.'')')
+-        STOP 'The kinetic energy is too small.'
+-      ENDIF
+-      IF(EV.LT.100.0D0) THEN
+-        WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: Energy is '',
+-     1   ''too low.'',/1X,''#'',16X,''The reliability of the '',
+-     2   ''results is questionable.'')')
+-      ENDIF
++C      IF(EV.LT.10.0D0) THEN
++C        WRITE(IW,'(''  STOP. The kinetic energy is too small.'')')
++C        STOP 'The kinetic energy is too small.'
++C      ENDIF
++C      IF(EV.LT.100.0D0) THEN
++C        WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: Energy is '',
++C     1   ''too low.'',/1X,''#'',16X,''The reliability of the '',
++C     2   ''results is questionable.'')')
++C      ENDIF
+ C
+       IHEF0=0
+       IF(EV.GT.20.1D3*IZ.AND.IHEF.GT.0.AND.IZ.EQ.NELEC) THEN
+@@ -210,8 +210,8 @@
+ C
+       NMT=0
+       IF(MUFIN.EQ.1) THEN
+-        WRITE(IW,1600) RMUF
+- 1600   FORMAT(1X,'#',/1X,'# Muffin-tin model: Rmt =',1P,E12.5,' cm')
++C        WRITE(IW,1600) RMUF
++C 1600   FORMAT(1X,'#',/1X,'# Muffin-tin model: Rmt =',1P,E12.5,' cm')
+         CALL SPLINE(R,RV,SA,SB,SC,SD,0.0D0,0.0D0,NPOT)
+         CALL SPLINE(R,DEN,DENA,DENB,DENC,DEND,0.0D0,0.0D0,NPOT)
+         RMT=RMUF/A0B
+@@ -277,7 +277,7 @@
+         ENDDO
+         RHORMT=RHORMT+RHOU
+         SUM=RMOM(RAD,DEN,NP,0)
+-        WRITE(6,*) 'Electron density normalization =',SUM
++C        WRITE(6,*) 'Electron density normalization =',SUM
+ C
+         NMT=NP
+         E=E-RV(NMT)/RAD(NMT)
+@@ -306,9 +306,9 @@
+       IF(IELEC.EQ.-1.AND.MEXCH.NE.0) THEN
+         IF(MEXCH.EQ.1) THEN
+ C  ****  Furness-McCarthy exchange potential.
+-          WRITE(IW,1500)
+- 1500     FORMAT(1X,'#',/1X,'# Furness-McCarthy exchange',
+-     1      ' potential')
++C          WRITE(IW,1500)
++C 1500     FORMAT(1X,'#',/1X,'# Furness-McCarthy exchange',
++C     1      ' potential')
+           DO I=2,NP
+             AUX=RAD(I)*E*(1.0D0+EV/TREV)+RVST(I)
+             AUX2=AUX*AUX
+@@ -322,8 +322,8 @@
+           ENDDO
+         ELSE IF(MEXCH.EQ.2) THEN
+ C  ****  Thomas-Fermi exchange potential.
+-          WRITE(IW,1400)
+- 1400     FORMAT(1X,'#',/1X,'# Thomas-Fermi exchange potential')
++C          WRITE(IW,1400)
++C 1400     FORMAT(1X,'#',/1X,'# Thomas-Fermi exchange potential')
+           DO I=1,NP
+             RHO=DEN(MAX(2,I))/(FOURPI*RAD(MAX(2,I))**2)
+             SKF=(3.0D0*PI*PI*RHO)**3.333333333333333D-1
+@@ -340,8 +340,8 @@
+           ENDDO
+         ELSE IF(MEXCH.EQ.3) THEN
+ C  ****  Riley-Truhlar exchange potential.
+-          WRITE(IW,1501)
+- 1501     FORMAT(1X,'#',/1X,'# Riley-Truhlar exchange potential')
++C          WRITE(IW,1501)
++C 1501     FORMAT(1X,'#',/1X,'# Riley-Truhlar exchange potential')
+           DO I=1,NP
+             AUX=4.0D0*(RAD(I)*E*(1.0D0+EV/TREV)+RVST(I))
+             IF(AUX.GT.1.0D-16*DEN(I)) THEN
+@@ -370,10 +370,10 @@
+ C
+       IF(MABS.EQ.1.AND.VABSA.GT.1.0D-12.AND.EV.LE.1.0D6) THEN
+         IAB=1
+-        WRITE(IW,1502) VABSD,VABSA
+- 1502   FORMAT(1X,'#',/1X,'# LDA absorption potential (only electr',
+-     1    'on-hole excitations):',/1X,'#',
+-     2    27X,'Delta =',1P,E12.5,' eV',/1X,'#',28X,'Aabs =',E12.5)
++C        WRITE(IW,1502) VABSD,VABSA
++C 1502   FORMAT(1X,'#',/1X,'# LDA absorption potential (only electr',
++C     1    'on-hole excitations):',/1X,'#',
++C     2    27X,'Delta =',1P,E12.5,' eV',/1X,'#',28X,'Aabs =',E12.5)
+         DELTA=VABSD/HREV
+         AABS=VABSA
+ C
+@@ -396,8 +396,8 @@
+             RW(I)=0.0D0
+           ENDIF
+           RVPOL(I)=0.0D0
+-          WRITE(6,1503) I,RADI(I),RW(I)
+- 1503     FORMAT(1X,'i=',I4,',   r=',1P,E12.5,',   r*Wabs= ',E12.5)
++C          WRITE(6,1503) I,RADI(I),RW(I)
++C 1503     FORMAT(1X,'i=',I4,',   r=',1P,E12.5,',   r*Wabs= ',E12.5)
+         ENDDO
+         NPI=NP
+       ELSE
+@@ -457,12 +457,12 @@
+ C  ************  Atomic polarizability correction.
+ C
+ C  ****  Buckingham empirical potential.
+-        WRITE(IW,1700) VPOLA,VPOLB
+- 1700   FORMAT(1X,'#',/1X,'# Correlation-polarization potential (Buc',
+-     1    'kingham):',/1X,'#',27X,'Alpha =',1P,E12.5,' cm**3',
+-     2     /1X,'#',28X,'Bpol =',E12.5)
++C        WRITE(IW,1700) VPOLA,VPOLB
++C 1700   FORMAT(1X,'#',/1X,'# Correlation-polarization potential (Buc',
++C     1    'kingham):',/1X,'#',27X,'Alpha =',1P,E12.5,' cm**3',
++C     2     /1X,'#',28X,'Bpol =',E12.5)
+         IF(VPOLB.LT.0.01D0) THEN
+-          WRITE(IW,*) 'ELSEPA: VPOLB cannot be less than 0.01.'
++C          WRITE(IW,*) 'ELSEPA: VPOLB cannot be less than 0.01.'
+           STOP 'ELSEPA: VPOLB cannot be less than 0.01.'
+         ENDIF
+         ALPHA=VPOLA/A0B**3
+@@ -523,12 +523,12 @@
+ C
+       ELSE IF(MCPOL.EQ.2) THEN
+ C  ****  LDA correlation-polarization potential.
+-        WRITE(IW,1701) VPOLA,VPOLB
+- 1701   FORMAT(1X,'#',/1X,'# Correlation-polarization potential (LDA',
+-     1    '):',/1X,'#',27X,'Alpha =',1P,E12.5,' cm**3',
+-     2     /1X,'#',28X,'Bpol =',E12.5)
++C        WRITE(IW,1701) VPOLA,VPOLB
++C 1701   FORMAT(1X,'#',/1X,'# Correlation-polarization potential (LDA',
++C     1    '):',/1X,'#',27X,'Alpha =',1P,E12.5,' cm**3',
++C     2     /1X,'#',28X,'Bpol =',E12.5)
+         IF(VPOLB.LT.0.01D0) THEN
+-          WRITE(IW,*) 'ELSEPA: VPOLB cannot be less than 0.01.'
++C          WRITE(IW,*) 'ELSEPA: VPOLB cannot be less than 0.01.'
+           STOP 'ELSEPA: VPOLB cannot be less than 0.01.'
+         ENDIF
+         ALPHA=VPOLA/A0B**3
+@@ -552,10 +552,10 @@
+             RVI(I)=RV(I)
+           ENDDO
+           IF(IMODE.EQ.0) THEN
+-            WRITE(IW,1702)
+-            WRITE(6,1702)
+- 1702       FORMAT(1X,'#',/1X,'# ERROR: The correlation and pol',
+-     1        'arization potentials do not cross.')
++C            WRITE(IW,1702)
++C            WRITE(6,1702)
++C 1702       FORMAT(1X,'#',/1X,'# ERROR: The correlation and pol',
++C     1        'arization potentials do not cross.')
+             STOP
+           ENDIF
+           VCOUT=-1.0D16
+@@ -636,13 +636,13 @@
+   100 CONTINUE
+       IF(IHEF0.EQ.1) THEN
+         IAB=0
+-        WRITE(IW,1800)
+- 1800   FORMAT(1X,'#',/1X,'# WARNING: High-energy factorization',
+-     1    ' with free-atom DF screening.',/1X,'#',
+-     2    10X,'Absorption, polarization and exchange corrections are',
+-     3    /1X,'#',10X,'switched off.',/1X,'#',10X,
+-     4    'Phase shifts are calculated for the bare nucleus.'/1X,'#',
+-     5    10X,'Scattering amplitudes are not evaluated.')
++C        WRITE(IW,1800)
++C 1800   FORMAT(1X,'#',/1X,'# WARNING: High-energy factorization',
++C     1    ' with free-atom DF screening.',/1X,'#',
++C     2    10X,'Absorption, polarization and exchange corrections are',
++C     3    /1X,'#',10X,'switched off.',/1X,'#',10X,
++C     4    'Phase shifts are calculated for the bare nucleus.'/1X,'#',
++C     5    10X,'Scattering amplitudes are not evaluated.')
+ C  ****  Read screening function from data files.
+         JT=IZ
+         J1=JT-10*(JT/10)
+@@ -695,42 +695,42 @@
+     5 CONTINUE
+ C
+       IF(IWR.GT.0) THEN
+-        OPEN(99,FILE='scfield.dat')
+-        WRITE(99,3001)
+- 3001   FORMAT(1X,'#  Scattering field.',/1X,'#  All quantities in',
+-     1    ' atomic units (a.u.), unless otherwise indicated.')
+-        IF(IELEC.EQ.-1) THEN
+-          WRITE(99,3002) IZ,NELEC
+- 3002     FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
+-     1      ',   projectile: electron')
+-        ELSE
+-          WRITE(99,3003) IZ,NELEC
+- 3003     FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
+-     1      ',   projectile: positron')
+-        ENDIF
+-        WRITE(99,3004) EV/HREV,EV
+- 3004   FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' a.u. =',
+-     1      E12.5,' eV',/1X,'#')
+-        IF(NMT.GT.0) THEN
+-          WRITE(99,3005) NMT,RAD(NMT)
+- 3005     FORMAT(1X,'#  Muffin-tin radius = RAD(',I3,') =',
+-     1       1P,E12.5,' a.u.')
+-          WRITE(99,3006) EV/HREV-E,(EV/HREV-E)*HREV
+- 3006     FORMAT(1X,'#  Zero-energy shift = ',1P,E12.5,
+-     1       ' a.u. = ',E12.5,' eV')
+-          WRITE(99,3007) E,E*HREV
+- 3007     FORMAT(1X,'#  Effective kinetic energy =',1P,E12.5,
+-     1       ' a.u. =',E12.5,' eV',/1X,'#')
+-        ENDIF
+-        WRITE(99,3008)
+- 3008   FORMAT(1X,'#',3X,'i',7X,'r',11X,'r*V',9X,'r*Vst',8X,'r*Vex',7X,
+-     1        'r*Vpol',7X,'r*Wabs',8X,'rho_e',/1X,'#',96('-'))
++C        OPEN(99,FILE='scfield.dat')
++C        WRITE(99,3001)
++C 3001   FORMAT(1X,'#  Scattering field.',/1X,'#  All quantities in',
++C     1    ' atomic units (a.u.), unless otherwise indicated.')
++C        IF(IELEC.EQ.-1) THEN
++C          WRITE(99,3002) IZ,NELEC
++C 3002     FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
++C     1      ',   projectile: electron')
++C        ELSE
++C          WRITE(99,3003) IZ,NELEC
++C 3003     FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
++C     1      ',   projectile: positron')
++C        ENDIF
++C        WRITE(99,3004) EV/HREV,EV
++C 3004   FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' a.u. =',
++C     1      E12.5,' eV',/1X,'#')
++C        IF(NMT.GT.0) THEN
++C          WRITE(99,3005) NMT,RAD(NMT)
++C 3005     FORMAT(1X,'#  Muffin-tin radius = RAD(',I3,') =',
++C     1       1P,E12.5,' a.u.')
++C          WRITE(99,3006) EV/HREV-E,(EV/HREV-E)*HREV
++C 3006     FORMAT(1X,'#  Zero-energy shift = ',1P,E12.5,
++C     1       ' a.u. = ',E12.5,' eV')
++C          WRITE(99,3007) E,E*HREV
++C 3007     FORMAT(1X,'#  Effective kinetic energy =',1P,E12.5,
++C     1       ' a.u. =',E12.5,' eV',/1X,'#')
++C        ENDIF
++C        WRITE(99,3008)
++C 3008   FORMAT(1X,'#',3X,'i',7X,'r',11X,'r*V',9X,'r*Vst',8X,'r*Vex',7X,
++C     1        'r*Vpol',7X,'r*Wabs',8X,'rho_e',/1X,'#',96('-'))
+         DO I=1,NP
+           RHO=DEN(MAX(2,I))/(FOURPI*RAD(MAX(2,I))**2)
+-          WRITE(99,'(2X,I4,1P,7E13.5)') I,RAD(I),RV(I),
+-     1      IELEC*RVST(I),RVEX(I),RVPOL(I),RW(I),RHO
++C          WRITE(99,'(2X,I4,1P,7E13.5)') I,RAD(I),RV(I),
++C     1      IELEC*RVST(I),RVEX(I),RVPOL(I),RW(I),RHO
+         ENDDO
+-        CLOSE(99)
++C        CLOSE(99)
+       ENDIF
+ C
+ C  ************  Partial-wave analysis.
+@@ -808,49 +808,49 @@
+           ENDIF
+         ENDDO
+     7   CONTINUE
+-        WRITE(IW,2112) TH(IMATCH)
+- 2112   FORMAT(1X,'#',/1X,'# WARNING: Partial-wave scattering amplit',
+-     1    'udes and DCSs are calculated',/1X,'#',10X,
+-     2    'only for THETA .gt.',1P,E10.3,' deg')
++C        WRITE(IW,2112) TH(IMATCH)
++C 2112   FORMAT(1X,'#',/1X,'# WARNING: Partial-wave scattering amplit',
++C     1    'udes and DCSs are calculated',/1X,'#',10X,
++C     2    'only for THETA .gt.',1P,E10.3,' deg')
+       ENDIF
+ C
+ C  ****  Integrated cross sections.
+ C
+-      IF(DCST(1).LT.1.0D-35) WRITE(IW,2012) DMAX1(0.5D0,TH(IMATCH))
+- 2012 FORMAT(1X,'#',/1X,'# WARNING: DCSs are integrated only for',
+-     1  ' THETA .gt.',1P,E10.3,' deg')
++C      IF(DCST(1).LT.1.0D-35) WRITE(IW,2012) DMAX1(0.5D0,TH(IMATCH))
++C 2012 FORMAT(1X,'#',/1X,'# WARNING: DCSs are integrated only for',
++C     1  ' THETA .gt.',1P,E10.3,' deg')
+       ECS0=FOURPI*RMOM(XT,DCST,NTAB,0)
+       ECS1=FOURPI*RMOM(XT,DCST,NTAB,1)
+       ECS2=FOURPI*RMOM(XT,DCST,NTAB,2)
+       ECS=ECS0
+       TCS1=2.0D0*ECS1
+       TCS2=6.0D0*(ECS1-ECS2)
+-      WRITE(IW,2013) ECS,ECS/A0B2
+- 2013 FORMAT(1X,'#',/1X,'# Total elastic cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2')
+-      WRITE(IW,2014) TCS1,TCS1/A0B2
+- 2014 FORMAT(1X,'# 1st transport cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2')
+-      WRITE(IW,2015) TCS2,TCS2/A0B2
+- 2015 FORMAT(1X,'# 2nd transport cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
+-      IF(IAB.EQ.1.AND.IZ.EQ.NELEC) THEN
+-        WRITE(IW,2016) ABCS,ABCS/A0B2
+- 2016   FORMAT(1X,'#    Absorption cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2')
+-        WRITE(IW,2017) TOTCS,TOTCS/A0B2
+- 2017   FORMAT(1X,'#   Grand total cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
+-      ENDIF
++C      WRITE(IW,2013) ECS,ECS/A0B2
++C 2013 FORMAT(1X,'#',/1X,'# Total elastic cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2')
++C      WRITE(IW,2014) TCS1,TCS1/A0B2
++C 2014 FORMAT(1X,'# 1st transport cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2')
++C      WRITE(IW,2015) TCS2,TCS2/A0B2
++C 2015 FORMAT(1X,'# 2nd transport cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
++C      IF(IAB.EQ.1.AND.IZ.EQ.NELEC) THEN
++C        WRITE(IW,2016) ABCS,ABCS/A0B2
++C 2016   FORMAT(1X,'#    Absorption cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2')
++C        WRITE(IW,2017) TOTCS,TOTCS/A0B2
++C 2017   FORMAT(1X,'#   Grand total cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
++C      ENDIF
+ C
+       ECUT=MAX(20.0D3*IZ,2.0D6)
+-      WRITE(IW,'(1X,''#'')')
+-      WRITE(IW,'(1X,''# Differential cross section:'',23X,
+-     1  ''MU=(1-COS(THETA))/2'')')
+-      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
+-     1  10X,''DCS'',8X,''Sherman'',6X,''error''/1X,''#  (deg)'',
+-     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
+-     3  /1X,''#'',70(''-''))')
++C      WRITE(IW,'(1X,''#'')')
++C      WRITE(IW,'(1X,''# Differential cross section:'',23X,
++C     1  ''MU=(1-COS(THETA))/2'')')
++C      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
++C     1  10X,''DCS'',8X,''Sherman'',6X,''error''/1X,''#  (deg)'',
++C     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
++C     3  /1X,''#'',70(''-''))')
+ C
+       DO I=1,NTAB
+         WRITE(IW,2018) TH(I),XT(I),DCST(I),DCST(I)/A0B2,SPOL(I),ERROR(I)
+@@ -860,21 +860,21 @@
+ C  ****  Scattering amplitudes.
+ C
+       IF(IWR.GT.1) THEN
+-        OPEN(99,FILE='scatamp.dat')
+-        WRITE(99,'(1X,''#  Scattering amplitudes (in cm)'',
+-     1    6X,''MU=(1-cos(TH))/2'')')
+-        IF(IELEC.EQ.-1) THEN
+-          WRITE(99,3010) IZ
+- 3010     FORMAT(1X,'#  Z =',I4,',   projectile: electron')
+-        ELSE
+-          WRITE(99,3011) IZ
+- 3011     FORMAT(1X,'#  Z =',I4,',   projectile: positron')
+-        ENDIF
+-        WRITE(99,3012) EV
+- 3012   FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' eV',/1X,'#')
+-        WRITE(99,'(1X,''# TH (deg)'',6X,''MU'',10X,''Re(F)'',8X,
+-     1    ''Im(F)'',8X,''Re(G)'',8X,''Im(G)'',/1X,''#'',
+-     2    74(''-''))')
++C        OPEN(99,FILE='scatamp.dat')
++C        WRITE(99,'(1X,''#  Scattering amplitudes (in cm)'',
++C     1    6X,''MU=(1-cos(TH))/2'')')
++C        IF(IELEC.EQ.-1) THEN
++C          WRITE(99,3010) IZ
++C 3010     FORMAT(1X,'#  Z =',I4,',   projectile: electron')
++C        ELSE
++C          WRITE(99,3011) IZ
++C 3011     FORMAT(1X,'#  Z =',I4,',   projectile: positron')
++C        ENDIF
++C        WRITE(99,3012) EV
++C 3012   FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' eV',/1X,'#')
++C        WRITE(99,'(1X,''# TH (deg)'',6X,''MU'',10X,''Re(F)'',8X,
++C     1    ''Im(F)'',8X,''Re(G)'',8X,''Im(G)'',/1X,''#'',
++C     2    74(''-''))')
+         IF(IHEF0.NE.0) RETURN
+         DO I=1,NTAB
+           THRAD=TH(I)*PI/180.0D0
+@@ -884,10 +884,10 @@
+             CF=0.0D0
+             CG=0.0D0
+           ENDIF
+-          WRITE(99,3013) TH(I),XT(I),CF,CG
++C          WRITE(99,3013) TH(I),XT(I),CF,CG
+         ENDDO
+- 3013   FORMAT(1X,1P,E10.3,E13.5,4E13.5)
+-        CLOSE(99)
++C 3013   FORMAT(1X,1P,E10.3,E13.5,4E13.5)
++C        CLOSE(99)
+       ENDIF
+ C
+       RETURN
+@@ -987,20 +987,20 @@
+       IF(IZ.GT.103) STOP 'Atomic number larger than 103'
+       Z=DBLE(IZ)
+       AW=ELAW(IZ)
+-      IF(IZ.GT.0) THEN
+-        WRITE(IW,1001) LSYMBL(IZ),IZ,AW
+- 1001   FORMAT(1X,'#',/1X,'# Element: ',A2,',  Z = ',I3,
+-     1    ',  atomic weight =',1P,E12.5,' g/mol')
+-      ELSE
+-        WRITE(IW,'(1X,''#'',/1X,
+-     1    ''# Only polarization potential'')')
+-      ENDIF
++C      IF(IZ.GT.0) THEN
++C        WRITE(IW,1001) LSYMBL(IZ),IZ,AW
++C 1001   FORMAT(1X,'#',/1X,'# Element: ',A2,',  Z = ',I3,
++C     1    ',  atomic weight =',1P,E12.5,' g/mol')
++C      ELSE
++C        WRITE(IW,'(1X,''#'',/1X,
++C     1    ''# Only polarization potential'')')
++C      ENDIF
+ C
+ C  ************  Nuclear electrostatic potential (times R).
+ C
+       IF(MNUCL.EQ.1.OR.IZ.EQ.0) THEN
+-        WRITE(IW,1002)
+- 1002   FORMAT(1X,'#',/1X,'# Nuclear model: point charge')
++C        WRITE(IW,1002)
++C 1002   FORMAT(1X,'#',/1X,'# Nuclear model: point charge')
+         CALL SGRID(R,DIFR,1.0D-6,100.0D0,0.5D0*DBLE(NDIN),NDIN)
+         DO I=1,NDIN
+           RVN(I)=Z
+@@ -1015,10 +1015,10 @@
+      1             /(1.0D0+0.75D0*(R2/R1)**2))
+         R0=R1/10.0D0
+         CALL SGRID(R,DIFR,R0,100.0D0,0.5D0*DBLE(NDIN),NDIN)
+-        WRITE(IW,1004) R1*A0B
+- 1004   FORMAT(1X,'#',/1X,'# Nuclear model: uniform spherical d',
+-     1    'istribution',/1X,'#',16X,'Nuclear radius =',1P,E12.5,
+-     2    ' cm')
++C        WRITE(IW,1004) R1*A0B
++C 1004   FORMAT(1X,'#',/1X,'# Nuclear model: uniform spherical d',
++C     1    'istribution',/1X,'#',16X,'Nuclear radius =',1P,E12.5,
++C     2    ' cm')
+         DO I=1,NDIN
+           X=R(I)
+           IF(X.LT.R1) THEN
+@@ -1035,10 +1035,10 @@
+         R2=0.546D0*F2BOHR
+         R0=R1/10.0D0
+         CALL SGRID(R,DIFR,R0,100.0D0,0.5D0*DBLE(NDIN),NDIN)
+-        WRITE(IW,1005) R1*A0B,R2*A0B
+- 1005   FORMAT(1X,'#',/1X,'# Nuclear model: Fermi distribution',
+-     1    /1X,'#',16X,'Average radius =',1P,E12.5, ' cm',
+-     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
++C        WRITE(IW,1005) R1*A0B,R2*A0B
++C 1005   FORMAT(1X,'#',/1X,'# Nuclear model: Fermi distribution',
++C     1    /1X,'#',16X,'Average radius =',1P,E12.5, ' cm',
++C     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
+ C  ****  The array DENN contains the nuclear charge density.
+ C        (unnormalized).
+         DO I=1,NDIN
+@@ -1051,10 +1051,10 @@
+         RNUC=1.070D0*F2BOHR*AW**0.3333333333333333D0
+         R1=0.96219D0*RNUC+0.435D0*F2BOHR
+         R2=2.0D0*F2BOHR
+-        WRITE(IW,1105) R1*A0B,R2*A0B
+- 1105   FORMAT(1X,'#',/1X,'# Nuclear model: Helm''s Uu distribu',
+-     1    'tion',/1X,'#',16X,'  Inner radius =',1P,E12.5, ' cm',
+-     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
++C        WRITE(IW,1105) R1*A0B,R2*A0B
++C 1105   FORMAT(1X,'#',/1X,'# Nuclear model: Helm''s Uu distribu',
++C     1    'tion',/1X,'#',16X,'  Inner radius =',1P,E12.5, ' cm',
++C     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
+         IF(R2.GT.R1) THEN
+           STORED=R1
+           R1=R2
+@@ -1098,8 +1098,8 @@
+ C
+ C  ************  Electronic potential (times R).
+ C
+-      WRITE(IW,1006) NELEC
+- 1006 FORMAT(1X,'#',/1X,'# Number of electrons =',I3)
++C      WRITE(IW,1006) NELEC
++C 1006 FORMAT(1X,'#',/1X,'# Number of electrons =',I3)
+       IF(N.LT.0) STOP 'Negative number of electrons'
+       IF(N.GT.IZ) STOP 'Negative ion'
+       IF(N.EQ.0) THEN
+@@ -1114,24 +1114,24 @@
+ C  ****  Analytical electron density models.
+         IF(MELEC.EQ.1) THEN
+           CALL TFM(IZ,A1,A2,A3,AL1,AL2,AL3)
+-          WRITE(IW,1007)
+- 1007     FORMAT(1X,'#',/1X,
+-     1      '# Electron density: analytical TFM model')
++C          WRITE(IW,1007)
++C 1007     FORMAT(1X,'#',/1X,
++C     1      '# Electron density: analytical TFM model')
+         ELSE IF(MELEC.EQ.2) THEN
+           CALL TFD(IZ,A1,A2,A3,AL1,AL2,AL3)
+-          WRITE(IW,1008)
+- 1008     FORMAT(1X,'#',/1X,
+-     1      '# Electron density: analytical TFD model')
++C          WRITE(IW,1008)
++C 1008     FORMAT(1X,'#',/1X,
++C     1      '# Electron density: analytical TFD model')
+         ELSE
+           CALL DHFS(IZ,A1,A2,A3,AL1,AL2,AL3)
+-          WRITE(IW,1009)
+- 1009     FORMAT(1X,'#',/1X,
+-     1      '# Electron density: analytical DHFS model')
+-        ENDIF
+-        WRITE(IW,1010) A1,AL1,A2,AL2,A3,AL3
+- 1010   FORMAT(1X,'#',19X,'A1 = ',1P,D12.5,' ,   ALPHA1 =',D12.5,
+-     1      /1X,'#',19X,'A2 = ',D12.5,' ,   ALPHA2 =',D12.5,
+-     2      /1X,'#',19X,'A3 = ',D12.5,' ,   ALPHA3 =',D12.5)
++C          WRITE(IW,1009)
++C 1009     FORMAT(1X,'#',/1X,
++C     1      '# Electron density: analytical DHFS model')
++        ENDIF
++C        WRITE(IW,1010) A1,AL1,A2,AL2,A3,AL3
++C 1010   FORMAT(1X,'#',19X,'A1 = ',1P,D12.5,' ,   ALPHA1 =',D12.5,
++C     1      /1X,'#',19X,'A2 = ',D12.5,' ,   ALPHA2 =',D12.5,
++C     2      /1X,'#',19X,'A3 = ',D12.5,' ,   ALPHA3 =',D12.5)
+         XN=DBLE(N)
+         DO I=1,NDIN
+           DEN(I)=(A1*AL1*AL1*EXP(-AL1*R(I))
+@@ -1156,8 +1156,8 @@
+           ELFILE='density.usr '
+         ENDIF
+ C
+-        WRITE(IW,1011) ELFILE
+- 1011   FORMAT(1X,'#',/1X,'# Electron density: Read from file ',A12)
++C        WRITE(IW,1011) ELFILE
++C 1011   FORMAT(1X,'#',/1X,'# Electron density: Read from file ',A12)
+         OPEN(99,FILE=ELFILE,STATUS='OLD',ERR=1)
+         READ(99,'(A12)') NULL
+         READ(99,'(A12)') NULL
+@@ -1171,8 +1171,8 @@
+     1   CONTINUE
+         IF(NE.EQ.0) STOP 'I/O error in EFIELD'
+         CLOSE(99)
+-        WRITE(IW,1012) NE
+- 1012   FORMAT(1X,'#',19X,'Number of data points = ',I4)
++C        WRITE(IW,1012) NE
++C 1012   FORMAT(1X,'#',19X,'Number of data points = ',I4)
+         IF(NE.LT.4) STOP 'SPLINE needs more than 4 points'
+ C  ****  ... and interpolated (lin-log cubic spline).
+         CALL SPLINE(AUX,RVE,A,B,C,D,0.0D0,0.0D0,NE)
+@@ -1201,8 +1201,8 @@
+         AUX(I)=DEN(K)*DIFR(K)
+       ENDDO
+       CALL SLAG6(1.0D0,AUX,AUX,NDIN)
+-      WRITE(IW,1013) RVE(NDIN)
+- 1013 FORMAT(1X,'#',19X,'Volume integral =',1P,E12.5)
++C      WRITE(IW,1013) RVE(NDIN)
++C 1013 FORMAT(1X,'#',19X,'Volume integral =',1P,E12.5)
+       FNORM=DBLE(N)/RVE(NDIN)
+       DO I=1,NDIN
+         RVE(I)=FNORM*(RVE(I)+AUX(NDIN1-I)*R(I))
+@@ -1475,28 +1475,28 @@
+       COMMON/CRMORU/CFM(NPC),CGM(NPC),DPC(NPC),DMC(NPC),
+      1              CF,CG,RUTHC,WATSC,RK2,ERRF,ERRG,NPC1
+ C
+-      WRITE(IW,1000)
+- 1000 FORMAT(1X,'#',/1X,'# Subroutine MOTTSC. Elastic scattering of ',
+-     1  'electrons and positrons',/1X,'#',20X,
+-     2  'by unscreened Coulomb fields')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(IW,1100)
+- 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
+-      ELSE
+-        WRITE(IW,1200)
+- 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
+-      ENDIF
++C      WRITE(IW,1000)
++C 1000 FORMAT(1X,'#',/1X,'# Subroutine MOTTSC. Elastic scattering of ',
++C     1  'electrons and positrons',/1X,'#',20X,
++C     2  'by unscreened Coulomb fields')
++C      IF(IELEC.EQ.-1) THEN
++C        WRITE(IW,1100)
++C 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
++C      ELSE
++C        WRITE(IW,1200)
++C 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
++C      ENDIF
+       E=EV/HREV
+-      WRITE(IW,1300) EV,E
+- 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
+-     1       E12.5,' a.u.')
++C      WRITE(IW,1300) EV,E
++C 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
++C     1       E12.5,' a.u.')
+ C
+-      WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: Mott '',
+-     1  ''scattering (point unscreend nucleus).'')')
++C      WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: Mott '',
++C     1  ''scattering (point unscreend nucleus).'')')
+ C
+       IF(IZ.LE.0) STOP 'Negative atomic number.'
+-      WRITE(IW,1001) IZ
+- 1001 FORMAT(1X,'#',/1X,'# Z = ',I3)
++C      WRITE(IW,1001) IZ
++C 1001 FORMAT(1X,'#',/1X,'# Z = ',I3)
+ C
+       Z=DFLOAT(IZ*IELEC)
+       CALL DPWAC0(Z,EV)
+@@ -1560,13 +1560,13 @@
+         ENDIF
+       ENDDO
+ C
+-      WRITE(IW,'(1X,''#'')')
+-      WRITE(IW,'(1X,''# Differential cross section'',6X,
+-     1  ''MU=(1-COS(THETA))/2'')')
+-      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
+-     1  10X,''DCS'',8X,''Sherman'',7X,''error''/1X,''#  (deg)'',
+-     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
+-     3  /1X,''#'',71(''-''))')
++C      WRITE(IW,'(1X,''#'')')
++C      WRITE(IW,'(1X,''# Differential cross section'',6X,
++C     1  ''MU=(1-COS(THETA))/2'')')
++C      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
++C     1  10X,''DCS'',8X,''Sherman'',7X,''error''/1X,''#  (deg)'',
++C     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
++C     3  /1X,''#'',71(''-''))')
+       DO I=1,NTAB
+         WRITE(IW,2018) TH(I),XT(I),DCST(I),DCST(I)/A0B2,SPOL(I),ERROR(I)
+       ENDDO
+@@ -1677,31 +1677,31 @@
+ C
+       EXTERNAL DCSHB
+ C
+-      WRITE(IW,1000)
+- 1000 FORMAT(1X,'#',/1X,'# Subroutine HEBORN. Elastic scattering of ',
+-     1  'electrons and positrons',/1X,'#',20X,
+-     2  'by neutral atoms')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(IW,1100)
+- 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
+-      ELSE
+-        WRITE(IW,1200)
+- 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
+-      ENDIF
+-      E=EV/HREV
+-      WRITE(IW,1300) EV,E
+- 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
+-     1       E12.5,' a.u.')
++C      WRITE(IW,1000)
++C 1000 FORMAT(1X,'#',/1X,'# Subroutine HEBORN. Elastic scattering of ',
++C     1  'electrons and positrons',/1X,'#',20X,
++C     2  'by neutral atoms')
++C      IF(IELEC.EQ.-1) THEN
++C        WRITE(IW,1100)
++C 1100   FORMAT(1X,'#',/1X,'# Projectile: electron')
++C      ELSE
++C        WRITE(IW,1200)
++C 1200   FORMAT(1X,'#',/1X,'# Projectile: positron')
++C      ENDIF
++C      E=EV/HREV
++C      WRITE(IW,1300) EV,E
++C 1300 FORMAT(1X,'# Kinetic energy =',1P,E12.5,' eV =',
++C     1       E12.5,' a.u.')
+ C
+-      WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: High-energy '',
+-     1  ''Mott-Born approximation. Neutral atom.'')')
++C      WRITE(IW,'(1X,''#'',/1X,''#  ***  WARNING: High-energy '',
++C     1  ''Mott-Born approximation. Neutral atom.'')')
+ C
+       IF(IZ.LE.0) STOP 'Negative atomic number.'
+       IF(IZ.GT.103) STOP 'Atomic number larger than 103.'
+       AW=ELAW(IZ)
+-      WRITE(IW,1001) LSYMBL(IZ),IZ,AW
+- 1001 FORMAT(1X,'#',/1X,'# Element: ',A2,',  Z = ',I3,
+-     1  ',  atomic weight =',1P,E12.5,' g/mol')
++C      WRITE(IW,1001) LSYMBL(IZ),IZ,AW
++C 1001 FORMAT(1X,'#',/1X,'# Element: ',A2,',  Z = ',I3,
++C     1  ',  atomic weight =',1P,E12.5,' g/mol')
+ C
+       Z=DFLOAT(IZ*IELEC)
+       CALL DPWAC0(Z,EV)
+@@ -1729,8 +1729,8 @@
+     4 CONTINUE
+       CLOSE(UNIT=99)
+       IF(NQS.EQ.0) THEN
+-        WRITE(6,*) 'ELSEPA: I/O error. SCFILE does not exist.'
+-        WRITE(IW,*) 'ELSEPA: I/O error. SCFILE does not exist.'
++C        WRITE(6,*) 'ELSEPA: I/O error. SCFILE does not exist.'
++C        WRITE(IW,*) 'ELSEPA: I/O error. SCFILE does not exist.'
+         RETURN
+       ENDIF
+ C
+@@ -1738,8 +1738,8 @@
+ C
+       IF(MNUCL.EQ.1) THEN
+ C  ****  Point nucleus.
+-        WRITE(IW,1002)
+- 1002   FORMAT(1X,'#',/1X,'# Nuclear model: point charge')
++C        WRITE(IW,1002)
++C 1002   FORMAT(1X,'#',/1X,'# Nuclear model: point charge')
+         U1=0.0D0
+         U2=0.0D0
+       ELSE IF (MNUCL.EQ.2) THEN
+@@ -1748,10 +1748,10 @@
+         R2=2.00D0*F2BOHR
+         R1=R1*DSQRT((1.0D0+2.5D0*(R2/R1)**2)
+      1             /(1.0D0+0.75D0*(R2/R1)**2))
+-        WRITE(IW,1004) R1*A0B
+- 1004   FORMAT(1X,'#',/1X,'# Nuclear model: uniform spherical d',
+-     1    'istribution',/1X,'#',16X,'Nuclear radius =',1P,E12.5,
+-     2    ' cm')
++C        WRITE(IW,1004) R1*A0B
++C 1004   FORMAT(1X,'#',/1X,'# Nuclear model: uniform spherical d',
++C     1    'istribution',/1X,'#',16X,'Nuclear radius =',1P,E12.5,
++C     2    ' cm')
+         U1=R1**2
+         U2=0.0D0
+       ELSE IF(MNUCL.EQ.4.OR.MNUCL.EQ.3) THEN
+@@ -1764,16 +1764,16 @@
+           R1=R2
+           R2=STORE
+         ENDIF
+-        WRITE(IW,1105) R1*A0B,R2*A0B
+- 1105   FORMAT(1X,'#',/1X,'# Nuclear model: Helm''s Uu distribu',
+-     1    'tion',/1X,'#',16X,'  Inner radius =',1P,E12.5, ' cm',
+-     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
++C        WRITE(IW,1105) R1*A0B,R2*A0B
++C 1105   FORMAT(1X,'#',/1X,'# Nuclear model: Helm''s Uu distribu',
++C     1    'tion',/1X,'#',16X,'  Inner radius =',1P,E12.5, ' cm',
++C     2    /1X,'#',16X,'Skin thickness =',E12.5,' cm')
+         U1=R1**2
+         U2=R2**2
+-      ELSE
+-        WRITE(IW,1003)
+- 1003   FORMAT(1X,'#',/1X,'# Undefined nuclear charge density model.',
+-     1    /1X,'# The calculation was aborted by subroutine HEBRON.')
++C      ELSE
++C        WRITE(IW,1003)
++C 1003   FORMAT(1X,'#',/1X,'# Undefined nuclear charge density model.',
++C     1    /1X,'# The calculation was aborted by subroutine HEBRON.')
+       ENDIF
+ C
+       TH(1)=0.0D0
+@@ -1859,23 +1859,23 @@
+       ECS=ECS0
+       TCS1=2.0D0*ECS1
+       TCS2=6.0D0*(ECS1-ECS2)
+-      WRITE(IW,2013) ECS,ECS/A0B2
+- 2013 FORMAT(1X,'#',/1X,'# Total elastic cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2')
+-      WRITE(IW,2014) TCS1,TCS1/A0B2
+- 2014 FORMAT(1X,'# 1st transport cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2')
+-      WRITE(IW,2015) TCS2,TCS2/A0B2
+- 2015 FORMAT(1X,'# 2nd transport cross section =',1P,
+-     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
+-C
+-      WRITE(IW,'(1X,''#'')')
+-      WRITE(IW,'(1X,''# Differential cross section'',6X,
+-     1  ''MU=(1-COS(THETA))/2'')')
+-      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
+-     1  10X,''DCS'',8X,''Sherman'',7X,''error''/1X,''#  (deg)'',
+-     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
+-     3  /1X,''#'',71(''-''))')
++C      WRITE(IW,2013) ECS,ECS/A0B2
++C 2013 FORMAT(1X,'#',/1X,'# Total elastic cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2')
++C      WRITE(IW,2014) TCS1,TCS1/A0B2
++C 2014 FORMAT(1X,'# 1st transport cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2')
++C      WRITE(IW,2015) TCS2,TCS2/A0B2
++C 2015 FORMAT(1X,'# 2nd transport cross section =',1P,
++C     1     E12.5,' cm**2 =',E12.5,' a0**2',/1X,'#')
++C
++C      WRITE(IW,'(1X,''#'')')
++C      WRITE(IW,'(1X,''# Differential cross section'',6X,
++C     1  ''MU=(1-COS(THETA))/2'')')
++C      WRITE(IW,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
++C     1  10X,''DCS'',8X,''Sherman'',7X,''error''/1X,''#  (deg)'',
++C     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
++C     3  /1X,''#'',71(''-''))')
+       DO I=1,NTAB
+         SPOL(I)=0.0D0
+         ERROR(I)=1.0D-5
+@@ -2987,15 +2987,15 @@
+       CI=DCMPLX(0.0D0,1.0D0)
+       ISUMP=0
+ C
+-      OPEN(UNIT=98,FILE='dpwa.dat')
+-      WRITE(98,2000)
+- 2000 FORMAT(//2X,'**** PARTIAL WAVE ANALYSIS (DPWA0) ',
+-     1  42('*')/)
++C      OPEN(UNIT=98,FILE='dpwa.dat')
++C      WRITE(98,2000)
++C 2000 FORMAT(//2X,'**** PARTIAL WAVE ANALYSIS (DPWA0) ',
++C     1  42('*')/)
+ C
+       NDELT=NDELTA
+       IF(NDELT.GT.NDM) THEN
+-        WRITE(98,2001)
+- 2001   FORMAT(/2X,'WARNING: NDELTA IS TOO LARGE')
++C        WRITE(98,2001)
++C 2001   FORMAT(/2X,'WARNING: NDELTA IS TOO LARGE')
+         NDELT=NDM
+       ENDIF
+       IF(NDELT.LT.6) NDELT=6
+@@ -3021,21 +3021,21 @@
+       ENDDO
+       NRT=NVT
+ C
+-      WRITE(98,2002) EV
+- 2002 FORMAT(/2X,'KINETIC ENERGY =',1P,E12.5,' eV')
++C      WRITE(98,2002) EV
++C 2002 FORMAT(/2X,'KINETIC ENERGY =',1P,E12.5,' eV')
+       IF(E.LT.0.0D0) THEN
+-        WRITE(98,2003)
+-        WRITE(6,2003)
+- 2003   FORMAT(//2X,'NEGATIVE ENERGY. STOP.')
++C        WRITE(98,2003)
++C        WRITE(6,2003)
++C 2003   FORMAT(//2X,'NEGATIVE ENERGY. STOP.')
+         STOP
+       ENDIF
+       RK=DSQRT(E*(E+2.0D0*SL*SL))/SL
+ C
+-      IF(IZINF.EQ.1) WRITE(98,2004)
+- 2004 FORMAT(/2X,'ONLY INNER PHASE SHIFTS ARE TABULATED')
+-      WRITE(98,2005)
+- 2005 FORMAT(/6X,'L',7X,'PHASE(SPIN UP)',5X,'PHASE(SPIN DOWN)',
+-     1       /2X,47('-'))
++C      IF(IZINF.EQ.1) WRITE(98,2004)
++C 2004 FORMAT(/2X,'ONLY INNER PHASE SHIFTS ARE TABULATED')
++C      WRITE(98,2005)
++C 2005 FORMAT(/6X,'L',7X,'PHASE(SPIN UP)',5X,'PHASE(SPIN DOWN)',
++C     1       /2X,47('-'))
+       ISCH0=ISCH
+       IF(ISCH0.EQ.2.AND.EV.GT.1000.0D0) GO TO 1
+ C
+@@ -3046,8 +3046,8 @@
+       CALL DPHASE(E,EPS,PHP,-1,IER)
+       IF(IER.NE.0) STOP
+       PHM=0.0D0
+-      WRITE(98,2006) L,PHP,PHM
+-      WRITE(6,2006) L,PHP,PHM
++C      WRITE(98,2006) L,PHP,PHM
++C      WRITE(6,2006) L,PHP,PHM
+  2006 FORMAT(3X,I5,4X,1P,E16.8,4X,E16.8)
+       DP(1)=PHP
+       DM(1)=0.0D0
+@@ -3066,8 +3066,8 @@
+         DM(I)=PHM
+         TST=DMAX1(DABS(PHP),DABS(PHM),DABS(DP(I-1)))
+         NPH=I
+-        WRITE(98,2006) L,PHP,PHM
+-        WRITE(6,2006) L,PHP,PHM
++C        WRITE(98,2006) L,PHP,PHM
++C        WRITE(6,2006) L,PHP,PHM
+         IF(TST.LT.EPSCUT.AND.L.GT.10) GO TO 6
+ C  ****  When the last phase shift (spin up) differs in more than 20 per
+ C  cent from the quadratic extrapolation, accumulated roundoff errors
+@@ -3077,16 +3077,16 @@
+           DPMAX=MAX(ABS(DP(I-3)),ABS(DP(I-2)),ABS(DP(I-1)),ABS(DP(I)))
+           IF(ABS(DP(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+             NPH=I-1
+-            WRITE(98,2107)
+-            WRITE(6,2107)
+- 2107 FORMAT(/2X,'WARNING: Possible accumulation of round-off errors.')
++C            WRITE(98,2107)
++C            WRITE(6,2107)
++C 2107 FORMAT(/2X,'WARNING: Possible accumulation of round-off errors.')
+             GO TO 6
+           ENDIF
+         ENDIF
+       ENDDO
+-      WRITE(98,2007) TST
+-      WRITE(6,2007) TST
+- 2007 FORMAT(/2X,'WARNING: TST =',1P,E11.4,'. CHECK CONVERGENCE.')
++C      WRITE(98,2007) TST
++C      WRITE(6,2007) TST
++C 2007 FORMAT(/2X,'WARNING: TST =',1P,E11.4,'. CHECK CONVERGENCE.')
+       GO TO 6
+ C
+ C  ****  ISCH0=2, only inner phase shifts of orders L in a given grid
+@@ -3104,8 +3104,8 @@
+       CALL DPHASE(E,EPS,PHP,-1,IER)
+       IF(IER.NE.0) STOP
+       PHM=0.0D0
+-      WRITE(98,2006) L,PHP,PHM
+-      WRITE(6,2006) L,PHP,PHM
++C      WRITE(98,2006) L,PHP,PHM
++C      WRITE(6,2006) L,PHP,PHM
+       DP(1)=PHP
+       DM(1)=0.0D0
+ C
+@@ -3118,14 +3118,13 @@
+       IF(IER.NE.0) STOP
+       CALL DPHASE(E,EPS,PHM,L,IER)
+       IF(IER.NE.0) STOP
+-      WRITE(6,2006) L,PHP,PHM
++C      WRITE(6,2006) L,PHP,PHM
+ C
+       DP(L+1)=PHP
+       DM(L+1)=PHM
+ C
+-      IF(L.LT.95) THEN
+-        WRITE(98,2006) L,PHP,PHM
+-      ELSE
++      IF(L.GE.95) THEN
++C        WRITE(98,2006) L,PHP,PHM
+         IF(DMAX1(DABS(PHP),DABS(PHM)).LT.EPSCUT) GO TO 3
+         IND=IND+1
+         XL(IND)=L
+@@ -3164,8 +3163,8 @@
+      1          ABS(DPI(I)))
+           IF(ABS(DPI(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+             IND=I-1
+-            WRITE(98,2107)
+-            WRITE(6,2107)
++C           WRITE(98,2107)
++C           WRITE(6,2107)
+             GO TO 3
+           ENDIF
+           DMEXT=DMI(I-3)+3.0D0*(DMI(I-1)-DMI(I-2))
+@@ -3173,8 +3172,8 @@
+      1          ABS(DMI(I)))
+           IF(ABS(DMI(I)-DMEXT).GT.0.20D0*DMMAX) THEN
+             IND=I-1
+-            WRITE(98,2107)
+-            WRITE(6,2107)
++C           WRITE(98,2107)
++C           WRITE(6,2107)
+             GO TO 3
+           ENDIF
+         ENDIF
+@@ -3201,18 +3200,18 @@
+       NPH=L+1
+       TST=0.0D0
+       DO I=1,IND
+-        WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DMI(I)
+- 2008   FORMAT(3X,I5,4X,1P,E16.8,4X,E16.8,'  i')
++C       WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DMI(I)
++C2008   FORMAT(3X,I5,4X,1P,E16.8,4X,E16.8,'  i')
+         IF(I.GT.1) THEN
+           TST=MAX(TST,DABS(DPI(I)-DPI(I-1)),DABS(DMI(I)-DMI(I-1)))
+         ENDIF
+       ENDDO
+       IF(IND.LT.4) GO TO 6
+       IF(TST.GT.0.25D0*PI) THEN
+-        WRITE(98,2009)
+-        WRITE(6,2009)
+- 2009   FORMAT(/2X,'ERROR: DIRECTLY COMPUTED PHASE SHIFTS SHOW',
+-     1    ' LARGE DISCONTINUITIES.')
++C       WRITE(98,2009)
++C       WRITE(6,2009)
++C2009   FORMAT(/2X,'ERROR: DIRECTLY COMPUTED PHASE SHIFTS SHOW',
++C    1    ' LARGE DISCONTINUITIES.')
+         STOP
+       ENDIF
+ C
+@@ -3255,8 +3254,8 @@
+     5 CONTINUE
+       TST=DMAX1(DABS(DP(NPH)),DABS(DM(NPH)))
+       IF(TST.GT.10.0D0*EPSCUT) THEN
+-        WRITE(98,2007) TST
+-        WRITE(6,2007) TST
++C       WRITE(98,2007) TST
++C       WRITE(6,2007) TST
+       ENDIF
+ C
+ C  ************  Coefficients in the partial-wave expansion.
+@@ -3321,13 +3320,13 @@
+ C
+ C  ****  Scattering amplitudes and DCS.
+ C
+-      WRITE(98,2010)
+- 2010 FORMAT(//2X,'*** SCATTERING AMPLITUDES AND DIFFERENT',
+-     1  'IAL CROSS SECTION ***')
+-      WRITE(98,2011)
+- 2011 FORMAT(/4X,'ANGLE',6X,'DCS',7X,'ASYMMETRY',4X,'DIRECT AMPLITU',
+-     1  'DE',7X,'SPIN-FLIP AMPLITUDE',5X,'ERROR',/4X,'(deg)',3X,
+-     2  '(cm**2/sr)',22X,'(cm)',20X,'(cm)',/2X,91('-'))
++C     WRITE(98,2010)
++C2010 FORMAT(//2X,'*** SCATTERING AMPLITUDES AND DIFFERENT',
++C    1  'IAL CROSS SECTION ***')
++C     WRITE(98,2011)
++C2011 FORMAT(/4X,'ANGLE',6X,'DCS',7X,'ASYMMETRY',4X,'DIRECT AMPLITU',
++C    1  'DE',7X,'SPIN-FLIP AMPLITUDE',5X,'ERROR',/4X,'(deg)',3X,
++C    2  '(cm**2/sr)',22X,'(cm)',20X,'(cm)',/2X,91('-'))
+ C
+ C  ****  Angular grid (TH in deg).
+ C
+@@ -3369,9 +3368,9 @@
+         DCST(I)=DCS
+         ERROR(I)=DMAX1(ERR,1.0D-7)
+         SPOL(I)=SPL
+-        WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
+- 2012   FORMAT(1X,1P,E10.3,E12.5,1X,E10.3,2(1X,'(',E10.3,',',
+-     1    E10.3,')'),E10.2)
++C       WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
++C2012   FORMAT(1X,1P,E10.3,E12.5,1X,E10.3,2(1X,'(',E10.3,',',
++C    1    E10.3,')'),E10.2)
+       ENDDO
+ C
+ C  ************  Total and momentum transfer cross sections.
+@@ -3408,10 +3407,10 @@
+         ENDDO
+         TST=DMAX1(TST1,TST2)
+         TCS=ECS-TCS
+-        IF(TST.GT.1.0D-5.AND.NPH.GT.40) THEN
+-          WRITE(98,2007) TST
+-          WRITE(6,2007) TST
+-        ENDIF
++C       IF(TST.GT.1.0D-5.AND.NPH.GT.40) THEN
++C         WRITE(98,2007) TST
++C         WRITE(6,2007) TST
++C       ENDIF
+         ECS=ECS*A0B2
+         TCS=TCS*A0B2
+ C
+@@ -3421,34 +3420,34 @@
+         ECS1=FOURPI*RMOM(XT,DCST,NTAB,1)
+         ECS2=FOURPI*RMOM(XT,DCST,NTAB,2)
+         TST1=DABS(ECS-ECS0)/(DABS(ECS)+1.0D-35)
+-        WRITE(98,2013) ECS,ECS0,TST1
+-        WRITE(6,2013) ECS,ECS0,TST1
+- 2013   FORMAT(/2X,'TOTAL ELASTIC CROSS SECTION =',1P,E13.6,' cm**2',
+-     1         /2X,'             FROM DCS TABLE =',E13.6,
+-     2         '  (REL. DIF. =',E9.2,')')
++C       WRITE(98,2013) ECS,ECS0,TST1
++C       WRITE(6,2013) ECS,ECS0,TST1
++C2013   FORMAT(/2X,'TOTAL ELASTIC CROSS SECTION =',1P,E13.6,' cm**2',
++C    1         /2X,'             FROM DCS TABLE =',E13.6,
++C    2         '  (REL. DIF. =',E9.2,')')
+         TCS1=2.0D0*ECS1
+         TCS2=6.0D0*(ECS1-ECS2)
+         TST2=DABS(TCS-TCS1)/(DABS(TCS)+1.0D-35)
+-        WRITE(98,2014) TCS,TCS1,TST2
+-        WRITE(6,2014) TCS,TCS1,TST2
+- 2014   FORMAT(/2X,'1ST TRANSPORT CROSS SECTION =',1P,E13.6,' cm**2',
+-     1         /2X,'             FROM DCS TABLE =',E13.6,
+-     2         '  (REL. DIF. =',E9.2,')')
+-        WRITE(98,2015) TCS2
+-        WRITE(6,2015) TCS2
+- 2015   FORMAT(/2X,'2ND TRANSPORT CROSS SECTION =',1P,E13.6,' cm**2')
++C       WRITE(98,2014) TCS,TCS1,TST2
++C       WRITE(6,2014) TCS,TCS1,TST2
++C2014   FORMAT(/2X,'1ST TRANSPORT CROSS SECTION =',1P,E13.6,' cm**2',
++C    1         /2X,'             FROM DCS TABLE =',E13.6,
++C    2         '  (REL. DIF. =',E9.2,')')
++C       WRITE(98,2015) TCS2
++C       WRITE(6,2015) TCS2
++C2015   FORMAT(/2X,'2ND TRANSPORT CROSS SECTION =',1P,E13.6,' cm**2')
+         TST=DMAX1(TST1,TST2)
+-        IF(TST.GT.2.0D-3) THEN
+-          WRITE(98,2016)
+-          WRITE(6,2016)
+-        ENDIF
++C       IF(TST.GT.2.0D-3) THEN
++C         WRITE(98,2016)
++C         WRITE(6,2016)
++C       ENDIF
+       ENDIF
+  2016 FORMAT(/2X,'WARNING: RELATIVE DIFFERENCES ARE TOO LARGE.',
+      1       /11X,'THE DCS TABLE IS NOT CONSISTENT.')
+ C
+-      WRITE(98,2017)
+- 2017 FORMAT(/2X,'**** DPWA0 ENDED ',60('*')/)
+-      CLOSE(UNIT=98)
++C      WRITE(98,2017)
++C 2017 FORMAT(/2X,'**** DPWA0 ENDED ',60('*')/)
++C      CLOSE(UNIT=98)
+ C
+       RETURN
+       END
+--- elscata_orig.f	2020-09-18 08:35:53.881919027 +0200
++++ elscata.f	2020-09-18 08:35:53.886955475 +0200
+@@ -338,39 +338,39 @@
+       ENDIF
+       ECUT=MIN(20.0D3*IZ,2.0D6)
+ C
+-      OPEN(25,FILE='tcstable.dat')
+-      WRITE(25,1001)
+- 1001 FORMAT(1X,'#  Total cross section table (last run of',
+-     1  ' ''elscata'').', /1X,'#')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(25,1002) IZ
+- 1002   FORMAT(1X,'#  Z =',I4,',   projectile: electron')
+-      ELSE
+-        WRITE(25,1003) IZ
+- 1003   FORMAT(1X,'#  Z =',I4,',   projectile: positron')
+-      ENDIF
+-      WRITE(25,1004)
+- 1004 FORMAT(1X,'#',/1X,'#   Energy',9X,'ECS',9X,'TCS1',9X,'TCS2',
+-     1  9X,'ABSCS',6X,'error',/1X,'#',4X,'(eV)',8X,'(cm**2)',6X,
+-     2  '(cm**2)',6X,'(cm**2)',6X,'(cm**2)',/1X,'#',74('-'))
++C      OPEN(25,FILE='tcstable.dat')
++C      WRITE(25,1001)
++C 1001 FORMAT(1X,'#  Total cross section table (last run of',
++C     1  ' ''elscata'').', /1X,'#')
++C      IF(IELEC.EQ.-1) THEN
++C        WRITE(25,1002) IZ
++C 1002   FORMAT(1X,'#  Z =',I4,',   projectile: electron')
++C      ELSE
++C        WRITE(25,1003) IZ
++C 1003   FORMAT(1X,'#  Z =',I4,',   projectile: positron')
++C      ENDIF
++C      WRITE(25,1004)
++C 1004 FORMAT(1X,'#',/1X,'#   Energy',9X,'ECS',9X,'TCS1',9X,'TCS2',
++C     1  9X,'ABSCS',6X,'error',/1X,'#',4X,'(eV)',8X,'(cm**2)',6X,
++C     2  '(cm**2)',6X,'(cm**2)',6X,'(cm**2)',/1X,'#',74('-'))
+ C
+ C  ************  Partial-wave analysis.
+ C
+   300 CONTINUE
+       READ(BUFFER,*) EV
+-      WRITE(6,*) '   '
+-      WRITE(6,*) 'E (eV)=',EV
+-      IF(EV.LT.10.0D0) STOP 'The kinetic energy is too small'
+-C
+-      WRITE(BUFFER,'(1P,E12.5)') EV
+-      OFILE=BUFFER(2:2)//'p'//BUFFER(4:6)//'e'//BUFFER(11:12)
+-      OPEN(8,FILE='dcs_'//OFILE(1:8)//'.dat')
++C      WRITE(6,*) '   '
++C      WRITE(6,*) 'E (eV)=',EV
++C      IF(EV.LT.10.0D0) STOP 'The kinetic energy is too small'
++C
++C      WRITE(BUFFER,'(1P,E12.5)') EV
++C      OFILE=BUFFER(2:2)//'p'//BUFFER(4:6)//'e'//BUFFER(11:12)
++      OPEN(8,FILE='dcs.dat')
+ C
+       IF(MCPOL.NE.0) THEN
+         IF(EV.GT.1.0D4) THEN
+-          WRITE(6,*) 'WARNING: For E>10 keV the correlation-polari',
+-     1      'zation correction is'
+-          WRITE(6,*) '         switched off.'
++C          WRITE(6,*) 'WARNING: For E>10 keV the correlation-polari',
++C     1      'zation correction is'
++C          WRITE(6,*) '         switched off.'
+           MCPOLC=0
+           VPOLBC=0.0D0
+         ELSE
+@@ -387,8 +387,8 @@
+       ENDIF
+       IF(MABS.NE.0) THEN
+         IF(EV.GT.1.0D6) THEN
+-          WRITE(6,*) 'WARNING: For E>1 MeV, the absorption correc',
+-     1      'tion is switched off.'
++C          WRITE(6,*) 'WARNING: For E>1 MeV, the absorption correc',
++C     1      'tion is switched off.'
+           MABSC=0
+         ELSE
+           MABSC=MABS
+@@ -404,13 +404,13 @@
+       DO I=1,NTAB
+         ERRM=MAX(ERRM,ERROR(I))
+       ENDDO
+-      WRITE(25,1005) EV,ECS,TCS1,TCS2,ABCS,ERRM
+- 1005 FORMAT(1X,1P,5E13.5,E9.1)
++C      WRITE(25,1005) EV,ECS,TCS1,TCS2,ABCS,ERRM
++C 1005 FORMAT(1X,1P,5E13.5,E9.1)
+       CLOSE(8)
+ C
+       READ(5,'(A6,1X,A12)',END=9999) KWORD,BUFFER
+       IF(KWORD.EQ.'EV    ') GO TO 300
+ C
+  9999 CONTINUE
+-      CLOSE(25)
++C      CLOSE(25)
+       END

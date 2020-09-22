@@ -1,0 +1,25 @@
+#!/bin/bash
+
+ES_NUC=$1
+ES_EL=$2
+ES_EX=$3
+ATNUM=$4
+EV_IE=$5
+EV_HA=$(bc -l <<< ${EV_IE}/27.2114)
+ELS=$6
+
+if [ ${ELS} -eq 1 ]
+then
+echo "IZ      ${ATNUM}
+MNUCL   ${ES_NUC}
+MELEC   ${ES_EL}
+MEXCH   ${ES_EX}
+IELEC  -1
+EV      ${EV_IE}" > elsepa.in
+    elsepa < elsepa.in > /dev/null
+    cat dcs.dat |  sed '/#/d' | sed '/^\s*$/d' | awk '{print $1*3.14159265359/180" "$4}' > elast_cs.dat
+elif [ ${ELS} -eq 0 ]
+then
+    radial <<< "$ES_EL $ATNUM $EV_HA" > /dev/null
+    cat dcs.dat |  sed '/#/d' | sed '/^\s*$/d' | awk '{print $1*3.14159265359/180" "$4}' > elast_cs.dat
+fi
