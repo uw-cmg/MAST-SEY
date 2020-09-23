@@ -17,7 +17,7 @@ g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 unzip 5zzrz874tt-1.zip
 tar -xvf adus_v1_0.tar.gz
 ```
-4. Move the `elscata.patch` patch inside the `elsepa` directory and apply it:
+4. Move the `elsepa.patch` patch inside the `elsepa` directory and apply it:
 ```bash
 cd elsepa
 patch -p0 < elsepa.patch
