@@ -15,6 +15,7 @@ Compiling with `gcc` also works, although the code works twice slower, version >
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
+`-Ofast` and architecture specific optimization flags may be used but the performance is unlikely to get noticeably better.
 2. [Download the elsepa code](https://data.mendeley.com/datasets/5zzrz874tt/1#file-ac245c2b-053a-4fd7-9e5a-3f706e70a87f) (https://doi.org/10.1016/j.cpc.2004.09.006).
 3. Unzip the downloaded `5zzrz874tt-1.zip` file and unpack the file inside:
 ```bash
@@ -31,14 +32,13 @@ patch -p0 < elsepa.patch
 gfortran -o elsepa elscata.f
 ```
 6. Move the executables `mast_sey` and `elsepa` to a convenient location.
-7. Add that location to your PATH. You can add that line to your .bashrc of you dont want to execute it each time:
+7. Add that location to your PATH.
 ```bash
 export PATH=/complete/path/to/your/mast_sey:${PATH}
 ```    
-
 8. Make sure that the copied files are executable:
 ```bash
-chmod +x mast_sey elsepa
+chmod +x mast_sey elsepa getDDCS
 ```
 
 ## Usage
@@ -61,7 +61,7 @@ Executing mast sey with a `-h` flag (`mast_sey -h`) will display additional opti
 
 ### The "execute" step:
 ```bash
-mast_sey execute -e 350 -m 10000
+mast_sey execute -e 350 -m 10000 -qdep DFT
 ```
 The user should, again, be greeted with the default MAST-SEY output screen. Although slightly different than the previous ont, it too contains the basic info along with a short feedback on the chosen options and files used, as well as basic errors in input (if any). Again if all is correct, a progress bar should start filling up (although for a larga number of simulated electrons it may take a while for even the first bar to appear).
 
