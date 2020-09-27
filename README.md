@@ -7,7 +7,11 @@ For more detail please refer to the paper which this code accompanies: Comp. Mat
 
 ## Installation
 
-1. Download the source code and compile with `gcc`, version > 6.2 of `gcc` is required:
+1. Download the source code and compile. Optimal performance is achieved with Intel compilers:
+```bash
+icc -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
+```
+Compiling with `gcc` also works, although the code works twice slower, version > 6.2 of `gcc` is required:
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
