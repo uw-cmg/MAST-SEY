@@ -97,5 +97,16 @@ Optionally a file containing density of states can be provided. This file has tw
 
 See files in the `examples` directory for sample files.
 
+## Example
+
+The example found in `examples` directory allows to carry out an entire calculation of SEY curve for Copper. In includes two input files `elf.in`, which contains the q-dependent energy loss function, `material.in` with material constants, and `dos.in` with the density of states. All files as described in the `Input Files` section. 
+The first step prepares the input files for simulating SEY. In this example, we will prepare input up to incident energies of 1000 eV (which is limited by the provided ELF), starting from the Fermi Energy (default), in 250 logarithmically spaced steps (`-e 1000 250`). The inelastic cross sections used in integration will be divided into 300 equal intervals in the energy space and 100 intervals in q-space (`-i 300 100`). We request fot the sum rules to be calculated (`-sumr`), and elastic cross sections will be calculated with point, Thomas-Fermi-Dirac, and no exchange (`-elastic P TFD NO`). The `elf.in` contains fully DFT calculated q-dependece, and we will utilize it here (`-qdep DFT`). Therefore the entire command to be run is:
+```bash
+mast_sey prepare -e 1000 250 -i 300 100 -sumr -elastic P TFD NO -qdep DFT
+```
+We should see the following output, which should be self explanatory. The progress bar on the bottom will track progress of the code execution. This step takes around 25 minutes on a modern PC.
+
+Once the calculation is done,
+
 ## License
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
