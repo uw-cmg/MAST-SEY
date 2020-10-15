@@ -106,7 +106,9 @@ mast_sey prepare -e 1000 250 -i 300 100 -sumr -elastic P TFD NO -qdep DFT
 ```
 We should see the following output, which should be self explanatory. The progress bar on the bottom will track progress of the code execution. This step takes around 25 minutes on a modern PC.
 
-Once the calculation is done,
+Once the calculation is done, a couple of new files should be generated, from which `energies.in`, `elastic.in` and `inelastic.in` are the ones that serve as input to the MC simulation. Apart from those, a file `mfp.plot` and files `sumrules1/2.out` should appear as well. `mfp.plot` can be used to conveniently plot mean free paths, whule sumrules can be used to check the validity of the dielectric function.
+
+With the neccesary input files prepared, we can now run the MC algorithm to simulate SET. Each execution of the code allows to calculate the SEY for a single initial energy. This allows for a very efficient parallelization of the code execution by simply running the code multiple times at the same time.
 
 ## License
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
