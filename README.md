@@ -28,6 +28,10 @@ patch -p0 < elsepa.patch
 ```
 5. Compile the patched `elsepa`:
 ```bash
+ifort -o elsepa elscata.f
+```
+or
+```bash
 gfortran -o elsepa elscata.f
 ```
 6. Move the executables `mast_sey` and `elsepa` to a convenient location.
