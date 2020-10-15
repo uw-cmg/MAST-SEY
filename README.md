@@ -108,7 +108,15 @@ We should see the following output, which should be self explanatory. The progre
 
 Once the calculation is done, a couple of new files should be generated, from which `energies.in`, `elastic.in` and `inelastic.in` are the ones that serve as input to the MC simulation. Apart from those, a file `mfp.plot` and files `sumrules1/2.out` should appear as well. `mfp.plot` can be used to conveniently plot mean free paths, whule sumrules can be used to check the validity of the dielectric function.
 
-With the neccesary input files prepared, we can now run the MC algorithm to simulate SET. Each execution of the code allows to calculate the SEY for a single initial energy. This allows for a very efficient parallelization of the code execution by simply running the code multiple times at the same time.
+With the neccesary input files prepared, we can now run the MC algorithm to simulate SET. Each execution of the code allows to calculate the SEY for a single initial energy. This allows for a very efficient parallelization of the code execution by simply running the code multiple times at the same time. I highly recommend [GNU Parallel](https://www.gnu.org/software/parallel/) to help with this task.
+In this example, however, we will just run the code in a loop over different initial energies, from 25 eV to 975 eV in 25 eV increments, in order to produce an SEY curve as a function of initial energy. To save time a `-noang` flag will be used, which makes the code run around an order of magnitude faster due to approximation of inelastic scattering angles. In real applications this flag should be avoided to increase accuracy. We will also use a relatively small number of iterations (incoming electrons) `-m 10000` and in real applications the number of incoming electrons should be increased. For each initial energy we will pipe the output to `tee` to be able to track the progress and at the same time save the result to an output file. The `-dos` flag will make the code use the `dos.in` file and prepare the `jdos.in` file. The file will be prepared only once, on the first iteration ofthe loop, and will be reused in subsequent ones, which saves time.
+```bash
+for ene in $(seq 25 25 975)
+do 
+    mast_sey -e ${ene} -m 10000 -dos -noang | tee e-${ene}.out
+done
+```
+The entire loop should take just a couple of minutes. Now, the `e-XXX.out` countain the output of the simulation. Each individual file contains all the information about the used parameters, but the last line contains the final numbers. All but the last lines are commented out with a `#` so the output files can be simply concatenated for plotting. We can also extract just the last line and output it to a separate file, one example would be `sed '/^#/d' e-*.out | sort -g > sey.out` but theres unlimited ways to achieve the same.
 
 ## License
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
