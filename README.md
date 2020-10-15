@@ -120,7 +120,7 @@ do
     mast_sey -e ${ene} -m 10000 -dos -noang | tee e-${ene}.out
 done
 ```
-The entire loop should take just a couple of minutes. Now, the `e-XXX.out` countain the output of the simulation. Each individual file contains all the information about the used parameters, but the last line contains the final numbers. All but the last lines are commented out with a `#` so the output files can be simply concatenated for plotting. We can also extract just the last line and output it to a separate file, one example would be `sed '/^#/d' e-*.out | sort -g > sey.out` but theres unlimited ways to achieve the same.
+The entire loop should take just a couple of minutes. Now, the `e-XXX.out` files countain the output of the simulation. Each individual file contains all the information about the used parameters, but the last line contains the final numbers. All but the last lines are commented out with a `#` so the output files can be simply concatenated for plotting. We can also extract just the last line and output it to a separate file, one example would be `sed '/^#/d' e-*.out | sort -g > sey.out` but theres unlimited ways to achieve the same so feel free to use your own method.
 
 ## License
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)
