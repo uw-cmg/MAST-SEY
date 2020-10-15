@@ -11,7 +11,7 @@ For more detail please refer to the paper which this code accompanies: Comp. Mat
 ```bash
 icc -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
-Compiling with `gcc` also works, although the code works twice slower, version > 6.2 of `gcc` is required:
+Compiling with `gcc` is also possible, although the code works twice slower, version > 6.2 of `gcc` is required:
 ```bash
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
