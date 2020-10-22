@@ -352,7 +352,7 @@ int main(int argc, char** argv)
             exit(1);
         }
         checkSumRules(save_sumr);
-        print("# Starting mc_sey in \"prepare\" mode to get scattering properties");
+        print("# Starting mast_sey in \"prepare\" mode to get scattering properties");
         printProgress();
         int progress = 0;
         for (size_t i = 0; i < ie_arr.size(); i++)
@@ -448,7 +448,7 @@ int main(int argc, char** argv)
                 print("#");
             }
             print("# Input files read");
-            print("# Starting mc_sey in \"Simulation\" mode to get SEY\n#");
+            print("# Starting mast_sey in \"Simulation\" mode to get SEY\n#");
         }
         vector<Electron > elec_arr;
         ini_angle = asin(sin(ini_angle)*sqrt((erange-u0)/erange));
@@ -948,8 +948,8 @@ void printVersion(char** argv)
         cout << "-h       this message\n" << endl;
         cout << "\nPlease be careful when giving input arguments, there is no extensive input checks" << endl;
         cout << "Example executions:" << endl;
-        cout << "./mc_sey prepare -e 700 1000 -i 200 100 -elastic F TFD TF" << endl;
-        cout << "./mc_sey -e 350 -m 10000" << endl;
+        cout << "mast_sey prepare -e 700 1000 -i 200 100 -elastic F TFD TF" << endl;
+        cout << "mast_sey -e 350 -m 10000" << endl;
         exit(0);
     }
 }
