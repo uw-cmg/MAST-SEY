@@ -35,11 +35,15 @@ or
 ```bash
 gfortran -o elsepa elscata.f
 ```
-6. Make sure that the copied files are executable:
+6. Add write permissions to all density files for convenience:
+```bash
+chmod +w z_*
+```
+7. Make sure that the necessary files are executable:
 ```bash
 chmod +x /path/to/your/elsepa/elsepa /path/to/your/mastsey/mast_sey /path/to/your/mastsey/getDDCS
 ```
-7. Add the directories containing compiled elsepa and mast_sey to your PATH.
+8. Add the directories containing compiled elsepa and mast_sey to your PATH.
 ```bash
 export PATH=/path/to/your/elsepa:/path/to/your/mastsey:${PATH}
 ```    
