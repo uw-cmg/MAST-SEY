@@ -41,7 +41,7 @@ chmod +x /path/to/your/elsepa/elsepa /path/to/your/mastsey/mast_sey /path/to/you
 ```
 7. Add the directories containing compiled elsepa and mast_sey to your PATH.
 ```bash
-export PATH=/path/to/your/elsepa:/path/to/your/mastsey${PATH}
+export PATH=/path/to/your/elsepa:/path/to/your/mastsey:${PATH}
 ```    
 
 ## Usage
