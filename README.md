@@ -35,15 +35,14 @@ or
 ```bash
 gfortran -o elsepa elscata.f
 ```
-6. Move the executables `mast_sey` and `elsepa` to a convenient location.
-7. Add that location to your PATH.
+6. Make sure that the copied files are executable:
 ```bash
-export PATH=/complete/path/to/your/mast_sey:${PATH}
-```    
-8. Make sure that the copied files are executable:
-```bash
-chmod +x mast_sey elsepa getDDCS
+chmod +x /path/to/your/elsepa/elsepa /path/to/your/mastsey/mast_sey /path/to/your/mastsey/getDDCS
 ```
+7. Add the directories containing compiled elsepa and mast_sey to your PATH.
+```bash
+export PATH=/path/to/your/elsepa:/path/to/your/mastsey${PATH}
+```    
 
 ## Usage
 
