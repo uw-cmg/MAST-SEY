@@ -18,13 +18,13 @@ using namespace std;
 string code_version = "4.0 (22-12-2020)";
 vector<string> elems = {"XX","H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"};
 
-// SEED RANDOMS
+
 random_device rd;
 mt19937 mt(rd());
-//mt19937 mt(111);
+
 streambuf* orig_buf = cout.rdbuf();
 
-// GLOBAL VARIABLES
+
 vector<double> ie_arr, q_arr, de_arr;
 vector<vector<array<double,2> > > inel_arr, elas_arr, ene_elf, jdos_arr;
 vector<array<double,2> > elas_alloy_arr, dos_arr;
@@ -65,7 +65,7 @@ bool notir = false;
 bool test = false;
 double cc = 137.;
 
-// FUNCTION DEFINITION
+
 string getTime();
 void getInput(int argc, char** argv);
 void printVersion(char** argv);
@@ -151,9 +151,9 @@ class Electron
         }
         defl[0] = 0.0;
         defl[1] = 0.0;
-        imfp = IMFP();      //lbd^(-1)
-        emfp = EMFP();      //lbd^(-1)
-        tmfp = emfp+imfp;   //lbd^(-1)
+        imfp = IMFP();      
+        emfp = EMFP();      
+        tmfp = emfp+imfp;   
         inside = true;
         dead = false;
         secondary = sec;
@@ -178,7 +178,7 @@ class Electron
     }
 
     void determ_scatter()
-    {// true for elastic false for inelastic
+    {
         double rn = random01();
         if (rn < emfp/tmfp)
         {
@@ -241,13 +241,13 @@ class Electron
     }
 
     double EMFP()
-    {// inverse elastic mean free path
+    {
         double dcs = linterp2d(e,-1,ie_arr,elas_arr,true);
         return dcs/vol;
     }
 
     double IMFP()
-    {// inverse inelastic mean free path
+    {
         return linterp2d(e,-1,ie_arr,inel_arr,true);
     }
 
@@ -391,7 +391,7 @@ int main(int argc, char** argv)
     }
     else
     {
-        erange = erange+u0; // Initial energy is referenced to vacuum, so we have to reference it to our VB by adding wf+ef
+        erange = erange+u0; 
         ie_arr = read1colFile();
         if (erange>=ie_arr[ie_arr.size()-1])
         {
@@ -459,21 +459,21 @@ int main(int argc, char** argv)
             while (i < (int)elec_arr.size()-1)
             {
                 i++;
-                // check if still inside the material and has enough energy
+                
                 while (elec_arr[i].inside && ! elec_arr[i].dead)
                 {
-                    // make the e- travel
+                    
                     elec_arr[i].travel_s();
-                    // check if it escaped
+                    
                     elec_arr[i].escaped();
-                    // check if still inside the material and has enough energy
+                    
                     if (elec_arr[i].inside && ! elec_arr[i].dead)
                     {
-                        // determine the type of scattering based on MFP
+                        
                         elec_arr[i].determ_scatter();
                         if (elec_arr[i].scatter())
                         {
-                            // generate secondary from shell electron if energy high enough
+                            
                             if (elec_arr[i].de-eb>u0 && eb>0.001)
                             {
                                 s_ene = elec_arr[i].de-eb;
@@ -493,7 +493,7 @@ int main(int argc, char** argv)
                                 }
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
-                            // otherwise secondary from fermi sea
+                            
                             else if (elec_arr[i].de+elec_arr[i].s_ef>u0)
                             {
                                 s_ene = elec_arr[i].de+elec_arr[i].s_ef;
@@ -514,7 +514,7 @@ int main(int argc, char** argv)
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                         } 
-//                        elec_arr[i].rotdircos();
+
                         elec_arr[i].uvw = f_rotdircos(elec_arr[i].uvw,elec_arr[i].defl[0],elec_arr[i].defl[1]);
                     }
                 }
@@ -533,27 +533,27 @@ int main(int argc, char** argv)
             }
             if (! elec_arr[ei].inside)
             {
-                em++; // emitted
+                em++; 
                 if (elec_arr[ei].e < 50.*EV2HA)
                 {
-                    tem++; // true emitted (<50eV)
+                    tem++; 
                     if (distrib)
-                    {// ene,theta,phi,x,y,secondary
+                    {
                         ene_distrib.push_back({elec_arr[ei].e*HA2EV,elec_arr[ei].angles[0],elec_arr[ei].angles[1],elec_arr[ei].xyz[0],elec_arr[ei].xyz[1],(double)elec_arr[ei].secondary});
                     }
                 } else {
-                    bsc++; // backscattered (>50eV)
+                    bsc++; 
                 }
                 if (elec_arr[ei].secondary == 0 && elec_arr[ei].e > (erange-u0)-0.0001)
                 {
-                    e_bsc++; // elastically backscattered
+                    e_bsc++; 
                 }
                 if (elec_arr[ei].secondary == 0 && elec_arr[ei].e <= (erange-u0)-0.0001)
                 {
-                    d_prim++; // diffused primaries
+                    d_prim++; 
                 }
             } else {
-                nem++; // not emitted
+                nem++; 
             }
         }
         if (save_coords) { saveCoordVector(coord_vec,secondary_ind,"mc_coords.plot"); }
@@ -577,7 +577,7 @@ int main(int argc, char** argv)
 }
 
 string getTime()
-{// puts date to a global char[100] dirname
+{
     time_t now = time(0);
     tm *ltm = localtime(&now);
     string dt = to_string(ltm->tm_mday)+"."+to_string(1+ltm->tm_mon)+"."+to_string(-100+ltm->tm_year)+" at "+to_string(ltm->tm_hour)+":"+to_string(ltm->tm_min)+":"+to_string(ltm->tm_sec);
@@ -585,7 +585,7 @@ string getTime()
 }
 
 void getInput(int argc, char** argv)
-{// get arguments from the command line
+{
     if (argc == 1)
     {
         cerr << "No arguments specified, use \"-h\" flag for options.\nAt least the \"prepare\" keyword or \"-e\" flag is needed." << endl;
@@ -653,7 +653,7 @@ void getInput(int argc, char** argv)
             }
         }
 
-// true false section
+
         if (strcmp(argv[i], "-lin") == 0) { lin_prep = true; }
         if (strcmp(argv[i], "-coord") == 0) { save_coords = true; }
         if (strcmp(argv[i], "-distr") == 0) { distrib = true; }
@@ -937,7 +937,7 @@ void printVersion(char** argv)
     if (strcmp(argv[1], "-v") == 0)
     {
             cout << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-            cout << "Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX" << endl;
+            cout << "Cite as: https:
             cout << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
             cout << "Code version "<< code_version << endl;
             exit(0);
@@ -945,7 +945,7 @@ void printVersion(char** argv)
     else if (strcmp(argv[1], "-h") == 0)
     {
         cout << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-        cout << "Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX" << endl;
+        cout << "Cite as: https:
         cout << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
         cout << "\nInput options:\n" << endl;
         cout << "\"prepare\" as first argument will run input preparation from \"eps/elf.in\" and \"material.in\"" << endl;
@@ -957,11 +957,11 @@ void printVersion(char** argv)
         cout << "-qdep    [SPA/SSPA/DFT] specify type of q-dependence of ELF (def: SPA)" << endl;
         cout << "-sumr    output sum rules for plotting" << endl;
         cout << "-saveq   [E_grid q_grid q_max] save q-dependence for plotting" << endl;
-        //cout << "-radial  [TFM/DHFS] electron model to use in radial (def: DHFS)" << endl;
+        
         cout << "-elastic [nuclear electron exchange (SOLID LDA opt.)] models to use in elastic scattering (def: F TFM FM)" << endl;
         cout << "         nuclear: [P]oint/[U]niform/[F]ermi" << endl;
         cout << "         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater" << endl;
-        //cout << "         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater/[DF]Dirac-Fock" << endl;
+        
         cout << "         exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar" << endl;
         cout << "         (optional): [SOLID] muffin-tin model potential" << endl;
         cout << "         (optional): [LDA] LDA correlation–polarization potential model" << endl;
@@ -976,9 +976,9 @@ void printVersion(char** argv)
         cout << "-distr   save distribution of secondaries" << endl;
         cout << "-noang   use classical approach to inelastic angle scattering" << endl;
         cout << "-noout   supress all output" << endl;
-//        cout << "-sphsec  secondaries generated with spherical symmetry, not momentum conserv." << endl;
-//        cout << "-rndsec  secondaries generated with random angles, not spherically symetric" << endl;
-//        cout << "-notir     if not transmitted, absorbed (not reflected))" << endl;
+
+
+
         cout << "\n-v       display version of the code" << endl;
         cout << "-h       this message\n" << endl;
         cout << "\nPlease be careful when giving input arguments, there is no extensive input checks" << endl;
@@ -990,17 +990,17 @@ void printVersion(char** argv)
 }
 
 void readMaterialFile(string filename)
-{// read file with material info (atNo,athass,atDen,ferEne,wf)
+{
     ifstream infile(filename);
     if(!infile)
     {
         cerr << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-        cerr << "Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX" << endl;
+        cerr << "Cite as: https:
         cerr << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
         cerr << "Cannot open obligatory file " << filename << endl;
         cerr << "The file should have, line by line, the following information:" << endl;
         cerr << "Atomic Number, Unit Cell Volume [A^3], Fermi energy [eV], Work Function [eV]\n" << endl;
-//        cerr << "Atomic Number, Atomic Mass [a.u.], Unit Cell Volume [A^3], Fermi energy [eV], Work Function [eV]\n" << endl;
+
         exit(1);
     }
     int c_mat=1;
@@ -1041,7 +1041,7 @@ void readMaterialFile(string filename)
 }
 
 void readEpsFile(string filename)
-{// read file with q=0 dielectric function
+{
     ifstream epsfile("eps.in");
     ifstream elffile("elf.in");
     bool eps = true;
@@ -1136,7 +1136,7 @@ void checkSumRules(bool save_sumr)
 }
 
 vector<vector<array<double,2> > > readScatteringFile(string filename)
-{// read file with elastic cumulative integrals
+{
     ifstream infile(filename);
     if(!infile) {cerr << "Cannot open file: " << filename << endl; exit(1);}
     double x,y;
@@ -1156,7 +1156,7 @@ vector<vector<array<double,2> > > readScatteringFile(string filename)
 }
 
 vector<double> read1colFile(string filename)
-{// read file with inelastic cumulative integrals
+{
     ifstream infile(filename);
     if(!infile) {cerr << "Cannot open file: " << filename << endl; exit(1);}
     double x;
@@ -1169,7 +1169,7 @@ vector<double> read1colFile(string filename)
 }
 
 vector<array<double,2> > read2colFile(string filename)
-{// read file with dos cumulative integrals
+{
     ifstream infile(filename);
     if(!infile) {cerr << "Cannot open file: " << filename << endl; exit(1);}
     double x,y;
@@ -1204,9 +1204,9 @@ void prepareJDOS(const vector<array<double,2> > &dos)
 }
 
 void printInput()
-{// print input feedback
+{
     cout << "# MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-    cout << "# Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX" << endl;
+    cout << "# Cite as: https:
     cout << "# (c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
     cout << "# Code version " << code_version << "\n#" << endl;
     cout << "# Job started on " << getTime() << "\n#" << endl;
@@ -1273,7 +1273,7 @@ void printInput()
 }
 
 vector<double> range(double a, double b, int n)
-{// generange vector from a to b with n steps
+{
     vector<double> range;
     double d = (b-a)/n;
     for (int i = 0; i <= n; i++)
@@ -1284,7 +1284,7 @@ vector<double> range(double a, double b, int n)
 }
 
 vector<double> logrange(double a, double b, int n)
-{// generange vector from a to b with n steps
+{
     vector<double> range;
     a = log10(a);
     b = log10(b);
@@ -1308,7 +1308,7 @@ vector<double> getDeArr()
 }
 
 void saveVector(vector<double> arr, string filename)
-{// saves one column vector to a text file
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1316,7 +1316,7 @@ void saveVector(vector<double> arr, string filename)
     }
 }
 void saveVector(vector<array<double,2> > arr, string filename)
-{// saves two column vector
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1324,7 +1324,7 @@ void saveVector(vector<array<double,2> > arr, string filename)
     }
 }
 void saveVector(vector<array<double,3> > arr, string filename)
-{// saves two column vector
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1332,7 +1332,7 @@ void saveVector(vector<array<double,3> > arr, string filename)
     }
 }
 void saveVector(vector<vector<double> > arr, string filename, int ncols)
-{// saves two column vector
+{
     ofstream outfile(filename);
     if (ncols==2)
     {
@@ -1355,7 +1355,7 @@ void saveVector(vector<vector<double> > arr, string filename, int ncols)
     } else { cerr << "Something went wrong with saveVector" << endl; exit(1); }
 }
 void saveVector(vector<vector<array<double,2> > > arr, string filename)
-{// saves vector of vectors of vectors(tuples) to a text file
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1367,7 +1367,7 @@ void saveVector(vector<vector<array<double,2> > > arr, string filename)
     }
 }
 void saveVector(vector<vector<vector<array<double,2> > > > arr, string filename)
-{// saves vector of vectors of vectors(tuples) to a text file
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1393,7 +1393,7 @@ void saveMFP(string filename)
         outfile << "#Energy[eV] IMFP[A] EMFP[A]" << endl;
     }
     for (size_t ee = 0; ee < ie_arr.size(); ee++)
-    {// inelastic and elastic mean free path
+    {
         if (emfp_only)
         {
             double emfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
@@ -1431,7 +1431,7 @@ void saveQdep(int n_ene, int n_q, double q_max)
 }
 
 void saveCoordVector(vector<vector<array<double,3> > > arr, vector<int> second, string filename)
-{// saves vector of vectors of vectors(tuples) to a text file
+{
     ofstream outfile(filename);
     for (size_t i = 0; i < arr.size(); i++)
     {
@@ -1445,7 +1445,7 @@ void saveCoordVector(vector<vector<array<double,3> > > arr, vector<int> second, 
 }
 
 vector<array<double,2> > cumintVect(const vector<array<double,2> > &xyarr)
-{//cumulative vector of an array
+{
     double intgrl = 0.;
     double a,b,dx;
     vector<array<double,2> > int_arr;
@@ -1497,7 +1497,7 @@ array<double,3> f_rotdircos(array<double,3> uvw, double ang0, double ang1)
     }
     }
 
-    if (dircos_algo == 1) {//old
+    if (dircos_algo == 1) {
 
     if (abs(uvw[2])>0.99) {
         base_uvw[0]=sin(ang0)*cos(ang1);
@@ -1512,11 +1512,10 @@ array<double,3> f_rotdircos(array<double,3> uvw, double ang0, double ang1)
     }
     }
 
-    if (dircos_algo == 2) {//DingShimizu-Dapor
+    if (dircos_algo == 2) {
 
     double th0 = acos(uvw[2]);
     double ph0 = atan2(uvw[1],uvw[0]);
-    double theta,phi;
     double theta = acos(cos(th0)*cos(ang0)-sin(th0)*sin(ang0)*cos(ang1));
     double phi = asin(sin(ang0)*sin(ang1)/sin(theta))+ph0;
 
@@ -1529,7 +1528,7 @@ array<double,3> f_rotdircos(array<double,3> uvw, double ang0, double ang1)
 }
 
 vector<array<double,2> > int_elastic_ang(const vector<double> &xarr, const vector<double> &yarr, bool cumint)
-{// (cumulative) integral of the elastic differential cross section
+{
     double intgrl = 0.;
     double a,b,dx;
     vector<array<double,2> > int_arr;
@@ -1552,7 +1551,7 @@ vector<array<double,2> > int_elastic_ang(const vector<double> &xarr, const vecto
 }
 
 vector<array<double,2> > int_inelastic_ene(double (*f)(double,double,int), double x0, double x1, int ndiv, double args, bool cumint)
-{// trapezoid integration of function f on x0 to x1 range witn ndiv and one additional arg
+{
     double x = x0;
     double dx = (x1-x0)/ndiv;
     double a,b;
@@ -1613,7 +1612,7 @@ vector<array<double,2> > int_inelastic_ang(double (*f)(double,double,int), doubl
 }
 
 vector<array<double,2> > inel(double ie)
-{// calculate inelastic properties from ICS integration
+{
     vector<array<double,2> > imfpint;
     if (ie<1e-10)
     {
@@ -1630,7 +1629,7 @@ vector<array<double,2> > inel(double ie)
 }
 
 vector<vector<array<double,2> > > inelang(double ie)
-{// calculate inelastic properties from ICS integration
+{
     vector<array<double,2> > inangint;
     vector<vector<array<double,2> > > inangint_de;
     int nde = 100;
@@ -1645,7 +1644,7 @@ vector<vector<array<double,2> > > inelang(double ie)
 }
 
 vector<array<double,2> > elas(double ie, int at, double comp)
-{// inelastic properties from radial/elsepa outputs (angle integration of dcs)
+{
     vector<array<double,2> > elasint;
     elasint.reserve(606);
     if (ie<1e-10)
@@ -1686,7 +1685,7 @@ vector<array<double,2> > elas(double ie, int at, double comp)
 }
 
 double linterp(double x, const vector<array<double,2> > &xyarr, bool xfind)
-{//linear interpolation of a function to get value at arbitrary x or y if xfind=true
+{
     for (size_t i = 0; i < xyarr.size()-1; i++)
     {
         if (xfind)
@@ -1710,7 +1709,7 @@ double linterp(double x, const vector<array<double,2> > &xyarr, bool xfind)
 }
 
 double linterp2d(double x0,double y0, const vector<double> &xarr, const vector<vector<array<double,2> > > &ytuparr, bool total, bool xfind)
-{// linear interpolation of a vector of double vectors
+{
     vector<array<double,2> > ytup_intrp;
     if (!total)
     {
@@ -1762,33 +1761,33 @@ double fzero(double (*f)(double,double,double), double x0, double x1, double ww,
 }
 
 double sspa_elf(double w, double q)
-{// q-dep sspa
+{
     return (w-(q*q)/2.)/w*linterp(w-(q*q)/2.,ene_elf[0]);
 }
 
 double spa_dispers(double w0, double w, double q)
-{// dispersion to find a zero of for SPA
+{
     return w-sqrt(w0*w0+(1./3.)*pow((q*pow(0.75*PI,1./3.)*pow(w0,2./3.)),2)+pow(q,4)/4.);
 }
 double spa_elf(double w, double q)
-{// q-dep SPA
+{
     double omz = fzero(&spa_dispers,0.0,50.,w,q);
     return linterp(omz,ene_elf[0])/(1.+(PI*q*q)/(6.*pow(0.75*PI,1./3.)*pow(omz,2./3.)));
 }
 
 double fpa_elf(double w, double q)
-{// full penn approx
+{
     double integ = 0;
     return integ;
 }
 
 double dft_elf(double w, double q)
-{// dft interpolation elf at arb. w and q
+{
     return linterp2d(q,w,q_arr,ene_elf,false,false);
 }
 
 double elfq(double q, double om, int dq)
-{// q-dep elf function divided by 1/q/qq
+{
     if (qdep == 2)
     {
         if (dq==1) { return sspa_elf(om,q)/q; }
@@ -1818,15 +1817,15 @@ double elfq(double q, double om, int dq)
 }
 
 double qIntFun(double om, double ie, int dummy)
-{//integral over q to get IMFP and STPwr
-    double tp = ie;//+ef;
+{
+    double tp = ie;
     double c = pow((1.+(tp)/(137.*137.)),2)/(1.+tp/(2.*137.*137.))*1/(PI*tp);
     double qm = sqrt(tp*(2.+tp/(cc*cc)))-sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
     double qp = sqrt(tp*(2.+tp/(cc*cc)))+sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
-//  non-relativistic formula
-//    double c = 1./(PI*ie);
-//    double qm = sqrt(2.*ie)-sqrt(2.*(ie-om));
-//    double qp = sqrt(2.*ie)+sqrt(2.*(ie-om));
+
+
+
+
     vector<array<double,2> > qint = int_inelastic_ene(&elfq,qm,qp,qintgrid,om);
     return qint[0][1]*c;
 }
@@ -1837,21 +1836,21 @@ double jdos(double e, double de, double r)
 }
 
 void printVector(vector<double> &arr)
-{// saves one column vector to a text file
+{
     for (size_t i = 0; i < arr.size(); i++)
     {
         cout << setprecision(17) << arr[i] << endl;
     }
 }
 void printVector(vector<array<double,2> > &arr)
-{// saves one column vector to a text file
+{
     for (size_t i = 0; i < arr.size(); i++)
     {
         cout << arr[i][0] << " " << arr[i][1] << endl;
     }
 }
 void printVector(vector<vector<array<double,2> > > &arr)
-{// saves vector of vectors of vectors(tuples) to a text file
+{
     for (size_t i = 0; i < arr.size(); i++)
     {
         for (size_t j = 0; j < arr[0].size(); j++)
