@@ -1,19 +1,29 @@
-#!/bin/bash
+#!/bin/bash 
 
 ES_NUC=$1
 ES_EL=$2
 ES_EX=$3
-ATNUM=$4
-EV_IE=$5
+ES_MUF=$4
+ES_POL=$5
+ATNUM=$6
+EV_IE=$7
 EV_HA=$(bc -l <<< ${EV_IE}/27.2114)
-ELS=$6
-
+ELS=$8
+if [ ${ES_EL} -eq 4 ]
+then
+    if [ ! -f z_$(printf "%03d" ${ATNUM}).den ]
+    then
+        cp $(which elsepa | sed 's/elsepa$//')z_$(printf "%03d" ${ATNUM}).den .
+    fi
+fi
 if [ ${ELS} -eq 1 ]
 then
 echo "IZ      ${ATNUM}
 MNUCL   ${ES_NUC}
 MELEC   ${ES_EL}
 MEXCH   ${ES_EX}
+MUFFIN  ${ES_MUF}
+MCPOL   ${ES_POL}
 IELEC  -1
 EV      ${EV_IE}" > elsepa.in
     elsepa < elsepa.in > /dev/null

@@ -121,6 +121,7 @@ void print(string text, double num);
 void printProgress();
 int printStars(int progr, int is, int size);
 double rand01();
+string checkName (string name);
 
 class Electron
 {
@@ -556,10 +557,10 @@ int main(int argc, char** argv)
                 nem++; 
             }
         }
-        if (save_coords) { saveCoordVector(coord_vec,secondary_ind,"mc_coords.plot"); }
+        if (save_coords) { saveCoordVector(coord_vec,secondary_ind,checkName("mc_coords.plot")); }
         if (distrib)
         {
-            saveVector(ene_distrib,"mc_distrib.plot",6);
+            saveVector(ene_distrib,checkName("mc_distrib.plot"),6);
         }
         print("\n#");
         cout << fixed << setprecision(4) << setfill(' ');
@@ -954,14 +955,14 @@ void printVersion(char** argv)
         cout << "-e       [iniE(eV,optional) range(eV) grid] energy range and grid (def: 1000 500)" << endl;
         cout << "-lin     generate the energy grid on a linear scale (default is logarithmic)" << endl;
         cout << "-i       [ICS q-int] grids for ICS and q integration (def: 1000 100)" << endl;
-        cout << "-qdep    [SPA/SSPA/DFT] specify type of q-dependence of ELF (def: SPA)" << endl;
+        cout << "-qdep    [SPA/SSPA/CUSTOM] specify type of q-dependence of ELF (def: SPA)" << endl;
         cout << "-sumr    output sum rules for plotting" << endl;
         cout << "-saveq   [E_grid q_grid q_max] save q-dependence for plotting" << endl;
         
         cout << "-elastic [nuclear electron exchange (SOLID LDA opt.)] models to use in elastic scattering (def: F TFM FM)" << endl;
         cout << "         nuclear: [P]oint/[U]niform/[F]ermi" << endl;
-        cout << "         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater" << endl;
-        
+
+        cout << "         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater/[DF]Dirac-Fock" << endl;
         cout << "         exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar" << endl;
         cout << "         (optional): [SOLID] muffin-tin model potential" << endl;
         cout << "         (optional): [LDA] LDA correlation–polarization potential model" << endl;
@@ -1895,4 +1896,20 @@ double rand01()
 {
     uniform_real_distribution<double> dist(0.0, 1.0);
     return dist(mt);
+}
+string checkName(string name)
+{
+    int n = 1;
+    string new_name = name;
+    ifstream f;
+    f.open(new_name);
+    while (f)
+    {
+        f.close();
+        new_name = name+"_"+to_string(n);
+        f.open(new_name);
+        n++;
+    }
+    f.close();
+    return new_name;
 }
