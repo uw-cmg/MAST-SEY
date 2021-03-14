@@ -13,7 +13,8 @@ if [ ${ES_EL} -eq 4 ]
 then
     if [ ! -f z_$(printf "%03d" ${ATNUM}).den ]
     then
-        cp $(which elsepa | sed 's/elsepa$//')z_$(printf "%03d" ${ATNUM}).den .
+        #cp $(which elsepa | sed 's/elsepa$//')z_$(printf "%03d" ${ATNUM}).den .
+        cp $(find $(which elsepa | sed 's/elsepa$//') -name z_$(printf "%03d" ${ATNUM}).den) .
     fi
 fi
 if [ ${ELS} -eq 1 ]
