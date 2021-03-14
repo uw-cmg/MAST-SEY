@@ -41,7 +41,7 @@ gfortran -o elsepa elscata.f
 ```
 6. Add write permissions to all density files for convenience:
 ```bash
-chmod +w z_*
+chmod +w database/z_*
 ```
 7. Make sure that the necessary files are executable:
 ```bash
