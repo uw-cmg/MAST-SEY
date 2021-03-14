@@ -27,7 +27,7 @@ unzip elsepa-2020.zip
 4. Move the `elsepa2020.patch` patch inside the `elsepa-2020` directory and apply it:
 ```bash
 cd elsepa-2020
-patch < elsepa.patch
+patch < elsepa-2020.patch
 ```
 If for some reason you wish to use the old version of `elsepa` the `elsepa_old.patch` is available too.
 
