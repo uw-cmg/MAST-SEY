@@ -1,0 +1,2190 @@
+Binary files elsepa-2020/constants.mod and elsepa-2020mod/constants.mod differ
+Binary files elsepa-2020/elscata and elsepa-2020mod/elscata differ
+diff -ruN elsepa-2020/elscata.f elsepa-2020mod/elscata.f
+--- elsepa-2020/elscata.f	2020-08-24 17:34:10.000000000 +0200
++++ elsepa-2020mod/elscata.f	2021-03-14 06:53:58.345984139 +0100
+@@ -277,7 +277,7 @@
+       IF(KWORD.EQ.'IZ    ') THEN
+         READ(BUFFER,*) IZ
+         IF(IZ.LT.1.OR.IZ.GT.103) THEN
+-          WRITE(6,*) 'IZ =',IZ
++!          WRITE(6,*) 'IZ =',IZ
+           STOP 'Wrong atomic number.'
+         ENDIF
+       ELSE IF(KWORD.EQ.'MNUCL ') THEN
+@@ -287,7 +287,7 @@
+         READ(BUFFER,*) NELEC
+         IF(NELEC.LT.0) NELEC=IZ
+         IF(NELEC.GT.IZ) THEN
+-          WRITE(6,*) 'NELEC =',NELEC
++!          WRITE(6,*) 'NELEC =',NELEC
+           STOP 'Negative ion.'
+         ENDIF
+       ELSE IF(KWORD.EQ.'MELEC ') THEN
+@@ -329,7 +329,7 @@
+         IF(VMOL.LT.-1.0D-35) VMOL=VMOLE(IZ)
+         GO TO 200
+       ELSE
+-        WRITE(6,*) 'Unrecognized keyword.'
++!        WRITE(6,*) 'Unrecognized keyword.'
+         GO TO 100
+       ENDIF
+       GO TO 100
+@@ -343,7 +343,7 @@
+       IF(MUFFIN.EQ.1) THEN
+         IF(RMUF.LT.1.0D-9) RMUF=0.5D0*DNNEL(IZ)
+         IF(RMUF.LT.1.0D-9) THEN
+-          WRITE(6,*) 'RMUF = ',RMUF
++!          WRITE(6,*) 'RMUF = ',RMUF
+           STOP 'RMUF is too small.'
+         ENDIF
+         VMOL=VMOLE(IZ)
+@@ -365,14 +365,14 @@
+       IF(MCPOL.EQ.1) THEN
+         IF(VPOLA.LT.-1.0D-35) VPOLA=ATPOL(IZ)  ! Default value.
+         IF(VPOLA.LT.-1.0D-35) THEN
+-          WRITE(6,*) 'VPOLA = ',VPOLA
++!          WRITE(6,*) 'VPOLA = ',VPOLA
+           STOP 'VPOLA must be positive.'
+         ENDIF
+         IF(VPOLB.LT.1.0D-10) VPOLB=-10.0D0
+       ELSE IF(MCPOL.EQ.2) THEN
+         IF(VPOLA.LT.-1.0D-35) VPOLA=ATPOL(IZ)
+         IF(VPOLA.LT.-1.0D-35) THEN
+-          WRITE(6,*) 'VPOLA = ',VPOLA
++!          WRITE(6,*) 'VPOLA = ',VPOLA
+           STOP 'VPOLA must be positive.'
+         ENDIF
+         IF(VPOLB.LT.1.0D-10) VPOLB=-10.0D0
+@@ -404,25 +404,25 @@
+         VABSD=1.0D0
+       ENDIF
+ C
+-      OPEN(25,FILE='tcstable.dat')
+-      WRITE(25,1001)
++!      OPEN(25,FILE='tcstable.dat')
++!      WRITE(25,1001)
+  1001 FORMAT(1X,'#  Total cross section table (last run of',
+      1  ' ''elscata'').', /1X,'#')
+       IF(IELEC.EQ.-1) THEN
+-        WRITE(25,1002) IZ
++!        WRITE(25,1002) IZ
+  1002   FORMAT(1X,'#  Z =',I4,',   projectile: electron')
+       ELSE
+-        WRITE(25,1003) IZ
++!        WRITE(25,1003) IZ
+  1003   FORMAT(1X,'#  Z =',I4,',   projectile: positron')
+       ENDIF
+       IF((MUFFIN.EQ.1).AND.(MABS.EQ.1.OR.MABS.EQ.2)) THEN
+-        WRITE(25,1004)
++!        WRITE(25,1004)
+  1004   FORMAT(1X,'#',/1X,'#   Energy',9X,'ECS',9X,'TCS1',9X,'TCS2',
+      1    9X,'ABSCS',6X,'inel-MFP',5X,'error',/1X,'#',4X,'(eV)',
+      2    8X,'(cm**2)',6X,'(cm**2)',6X,'(cm**2)',6X,'(cm**2)',
+      3    7X,'(cm)',/1X,'#',87('-'))
+       ELSE
+-        WRITE(25,1005)
++!        WRITE(25,1005)
+  1005   FORMAT(1X,'#',/1X,'#   Energy',9X,'ECS',9X,'TCS1',9X,'TCS2',
+      1    9X,'ABSCS',6X,'error',/1X,'#',4X,'(eV)',8X,'(cm**2)',6X,
+      2    '(cm**2)',6X,'(cm**2)',6X,'(cm**2)',/1X,'#',74('-'))
+@@ -432,8 +432,8 @@
+ C
+   300 CONTINUE
+       READ(BUFFER,*) EV
+-      WRITE(6,*) '   '
+-      WRITE(6,'(A,1P,E15.7)') 'E (eV)=',EV
++!      WRITE(6,*) '   '
++!      WRITE(6,'(A,1P,E15.7)') 'E (eV)=',EV
+ C  ****  You may wish to comment off the next condition to run the
+ C  program for kinetic energies less that 5 eV. However, the results
+ C  for these energies may be highly inaccurate.
+@@ -441,9 +441,9 @@
+ C
+       IF(MCPOL.NE.0) THEN
+         IF(EV.GT.1.0D4) THEN
+-          WRITE(6,*) 'WARNING: For E>10 keV the correlation-polari',
+-     1      'zation correction is'
+-          WRITE(6,*) '         switched off.'
++!          WRITE(6,*) 'WARNING: For E>10 keV the correlation-polari',
++!     1      'zation correction is'
++!          WRITE(6,*) '         switched off.'
+           MCPOLC=0
+           VPOLBC=0.0D0
+         ELSE
+@@ -460,8 +460,8 @@
+       ENDIF
+       IF(MABS.NE.0) THEN
+         IF(EV.GT.1.0D6) THEN
+-          WRITE(6,*) 'WARNING: For E>1 MeV, the absorption correc',
+-     1      'tion is switched off.'
++!          WRITE(6,*) 'WARNING: For E>1 MeV, the absorption correc',
++!     1      'tion is switched off.'
+           MABSC=0
+         ELSE
+           MABSC=MABS
+@@ -472,41 +472,41 @@
+ C
+       WRITE(BUFFER,'(1P,E12.5)') EV
+       OFILE=BUFFER(2:2)//'p'//BUFFER(4:6)//'e'//BUFFER(11:12)
+-      OPEN(8,FILE='dcs_'//OFILE(1:8)//'.dat')
++      OPEN(8,FILE='dcs.dat')
+       CALL ELSEPA(IELEC,EV,IZ,NELEC,MNUCL,MELEC,MUFFIN,RMUF,VMOL,
+      1  MEXCH,MCPOLC,VPOLA,VPOLBC,MABSC,VABSA,VABSD,IHEF,8)
+       CLOSE(8)
+ C
+       ERRM=0.0D0
+-      OPEN(8,FILE='dcs.dat')
+-      WRITE(8,'(1X,''#'')')
+-      WRITE(8,'(1X,''# Differential cross section:'',15X,
+-     1  ''MU=(1-COS(THETA))/2'')')
+-      WRITE(8,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
+-     1  10X,''DCS'',8X,''Sherman''/1X,''#  (deg)'',
+-     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
+-     3  /1X,''#'',62(''-''))')
+-      DO I=1,NTAB
+-        ERRM=MAX(ERRM,ERROR(I))
+-        WRITE(8,1006) TH(I),XT(I),DCST(I),DCST(I)/A0B2,SPOL(I)
+- 1006   FORMAT(1X,1P,E10.3,E13.5,3E13.5,E9.1)
+-      ENDDO
+-      CLOSE(8)
++!      OPEN(8,FILE='dcs.dat')
++!      WRITE(8,'(1X,''#'')')
++!      WRITE(8,'(1X,''# Differential cross section:'',15X,
++!     1  ''MU=(1-COS(THETA))/2'')')
++!      WRITE(8,'(1X,''#'',/1X,''#  THETA'',8X,''MU'',10X,''DCS'',
++!     1  10X,''DCS'',8X,''Sherman''/1X,''#  (deg)'',
++!     2  17X,''(cm**2/sr)'',3X,''(a0**2/sr)'',4X,''function'',
++!     3  /1X,''#'',62(''-''))')
++!      DO I=1,NTAB
++!        ERRM=MAX(ERRM,ERROR(I))
++!        WRITE(8,1006) TH(I),XT(I),DCST(I),DCST(I)/A0B2,SPOL(I)
++! 1006   FORMAT(1X,1P,E10.3,E13.5,3E13.5,E9.1)
++!      ENDDO
++!      CLOSE(8)
+ C
+       IF((MUFFIN.EQ.1).AND.(MABS.EQ.1.OR.MABS.EQ.2)) THEN
+         AMFP=1.0D0/(VMOL*ABCS)
+-        WRITE(25,1007) EV,ECS,TCS1,TCS2,ABCS,AMFP,ERRM
++!        WRITE(25,1007) EV,ECS,TCS1,TCS2,ABCS,AMFP,ERRM
+  1007   FORMAT(1X,1P,6E13.5,E9.1)
+       ELSE
+-        WRITE(25,1008) EV,ECS,TCS1,TCS2,ABCS,ERRM
++!        WRITE(25,1008) EV,ECS,TCS1,TCS2,ABCS,ERRM
+  1008   FORMAT(1X,1P,5E13.5,E9.1)
+       ENDIF
+ C
+-      IF(MUFFIN.EQ.0.AND.MCPOL.EQ.0.AND.MABSC.EQ.0) THEN
+-        OPEN(8,FILE='dcsMott.dat')
+-        CALL MOTTSC(IELEC,IZ,EV,8)
+-        CLOSE(8)
+-      ENDIF
++!      IF(MUFFIN.EQ.0.AND.MCPOL.EQ.0.AND.MABSC.EQ.0) THEN
++!        OPEN(8,FILE='dcsMott.dat')
++!        CALL MOTTSC(IELEC,IZ,EV,8)
++!        CLOSE(8)
++!      ENDIF
+ C
+  400  CONTINUE
+       READ(5,'(A6,1X,A12)',END=9999) KWORD,BUFFER
+diff -ruN elsepa-2020/elsepa2020.f elsepa-2020mod/elsepa2020.f
+--- elsepa-2020/elsepa2020.f	2020-09-28 16:51:20.000000000 +0200
++++ elsepa-2020mod/elsepa2020.f	2021-03-14 06:42:39.849148816 +0100
+@@ -150,7 +150,7 @@
+ C
+ C  ****  Path to the ELSEPA database
+       CHARACTER*100 PATHE
+-      PATHE='./database/'
++      PATHE='./'
+ C
+ C  ----  Mott DCS and spin polarization (point unscreened nucleus)
+       IF(NELEC.EQ.0.AND.MNUCL.EQ.1) THEN
+@@ -183,8 +183,8 @@
+         WRITE(IW,*) 'NELEC =',NELEC
+         WRITE(IW,'(''  STOP. For muffin-tin atoms, NELEC '',
+      1    ''must equal IZ.'')')
+-        WRITE(6,*) '   IZ =',IZ
+-        WRITE(6,*) 'NELEC =',NELEC
++!        WRITE(6,*) '   IZ =',IZ
++!        WRITE(6,*) 'NELEC =',NELEC
+         STOP 'ELSEPA: For muffin-tin atoms, NELEC must equal IZ.'
+       ENDIF
+ C
+@@ -318,7 +318,7 @@
+           DEN(I)=DEN(I)+RHOU*FOURPI*RAD(I)**2
+         ENDDO
+         SUM=SMOMLL(RAD,DEN,RAD(1),RAD(NP),NP,0,0)
+-        WRITE(6,*) 'Electron density normalization =',SUM
++!        WRITE(6,*) 'Electron density normalization =',SUM
+ C
+         NMT=NP
+         ERE0=-RV(NMT)/RAD(NMT)
+@@ -448,7 +448,7 @@
+             RW(I)=0.0D0
+           ENDIF
+           RVPOL(I)=0.0D0
+-          WRITE(6,1503) I,RAD(I),RW(I)
++!          WRITE(6,1503) I,RAD(I),RW(I)
+  1503     FORMAT(1X,'i=',I4,',   r=',1P,E12.5,',   r*Wabs= ',E12.5)
+         ENDDO
+       ELSE IF(MABS.EQ.2.AND.VABSA.GT.1.0D-12.AND.EV.LT.1.001D6) THEN
+@@ -490,7 +490,7 @@
+             RW(I)=0.0D0
+           ENDIF
+           RVPOL(I)=0.0D0
+-          WRITE(6,1503) I,RAD(I),RW(I)
++!          WRITE(6,1503) I,RAD(I),RW(I)
+         ENDDO
+       ELSE
+         WRITE(IW,1514)
+@@ -641,7 +641,7 @@
+           ENDDO
+           IF(IMODE.EQ.0) THEN
+             WRITE(IW,1702)
+-            WRITE(6,1702)
++!            WRITE(6,1702)
+  1702       FORMAT(1X,'#',/1X,'# ERROR: The correlation and pol',
+      1        'arization potentials do not cross.')
+             STOP 'ELSEPA: V_corr and V_pol do not cross.'
+@@ -776,7 +776,7 @@
+           ENDIF
+         ENDDO
+         SCFILE=CS120
+-        WRITE(6,'(A)') SCFILE
++!        WRITE(6,'(A)') SCFILE
+ C
+         OPEN(99,FILE=SCFILE,STATUS='OLD',ERR=4)
+         READ(99,'(1X,A1)') NULL
+@@ -840,51 +840,51 @@
+ C
+       EEV=EV+ERE0*HREV
+ C
+-      OPEN(99,FILE='scfield.dat')
+-      WRITE(99,3001)
+- 3001 FORMAT(1X,'#  Scattering field.',/1X,'#  All quantities in',
+-     1  ' atomic units (a.u.), unless otherwise indicated.')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(99,3002) IZ,NELEC
+- 3002   FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
+-     1    ',   projectile: electron')
+-      ELSE
+-        WRITE(99,3003) IZ,NELEC
+- 3003   FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
+-     1    ',   projectile: positron')
+-      ENDIF
+-      WRITE(99,3004) EV/HREV,EV
+- 3004 FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' a.u. =',
+-     1    E12.5,' eV',/1X,'#')
+-      IF(NMT.GT.0) THEN
+-        WRITE(99,3005) NMT,RAD(NMT)
+- 3005   FORMAT(1X,'#  Muffin-tin radius = RAD(',I3,') =',
+-     1     1P,E12.5,' a.u.')
+-        WRITE(99,3105) VMOL
+- 3105   FORMAT(1X,'#  Atomic density    =',1P,E12.5,' 1/cm**3')
+-        WRITE(99,3006) ERE0,ERE0*HREV
+- 3006   FORMAT(1X,'#  Zero-energy shift = ',1P,E12.5,
+-     1     ' a.u. = ',E12.5,' eV')
+-        WRITE(99,3106) EIM,EIM*HREV
+- 3106   FORMAT(1X,'#  Background absorption potential = ',1P,E12.5,
+-     1     ' a.u. = ',E12.5,' eV')
+-        WRITE(99,3007) EEV/HREV,EEV
+- 3007   FORMAT(1X,'#  Effective kinetic energy =',1P,E12.5,
+-     1     ' a.u. =',E12.5,' eV',/1X,'#')
+-      ENDIF
+-      WRITE(99,3008)
+- 3008 FORMAT(1X,'#',3X,'i',7X,'r',11X,'r*V',9X,'r*Vst',8X,'r*Vex',7X,
+-     1      'r*Vpol',7X,'r*Wabs',8X,'rho_e',/1X,'#',96('-'))
+-      DO I=1,NP
+-        IF(IHEF0.GT.0) THEN
+-          RHO=0.0D0
+-        ELSE
+-          RHO=DEN(MAX(2,I))/(FOURPI*RAD(MAX(2,I))**2)
+-        ENDIF
+-        WRITE(99,'(2X,I4,1P,7E13.5)') I,RAD(I),RV(I),
+-     1    IELEC*RVST(I),RVEX(I),RVPOL(I),RW(I),RHO
+-      ENDDO
+-      CLOSE(99)
++!      OPEN(99,FILE='scfield.dat')
++!      WRITE(99,3001)
++! 3001 FORMAT(1X,'#  Scattering field.',/1X,'#  All quantities in',
++!     1  ' atomic units (a.u.), unless otherwise indicated.')
++!      IF(IELEC.EQ.-1) THEN
++!        WRITE(99,3002) IZ,NELEC
++! 3002   FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
++!     1    ',   projectile: electron')
++!      ELSE
++!        WRITE(99,3003) IZ,NELEC
++! 3003   FORMAT(1X,'#  Z =',I4,', NELEC =',I4,
++!     1    ',   projectile: positron')
++!      ENDIF
++!      WRITE(99,3004) EV/HREV,EV
++! 3004 FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' a.u. =',
++!     1    E12.5,' eV',/1X,'#')
++!      IF(NMT.GT.0) THEN
++!        WRITE(99,3005) NMT,RAD(NMT)
++! 3005   FORMAT(1X,'#  Muffin-tin radius = RAD(',I3,') =',
++!     1     1P,E12.5,' a.u.')
++!        WRITE(99,3105) VMOL
++! 3105   FORMAT(1X,'#  Atomic density    =',1P,E12.5,' 1/cm**3')
++!        WRITE(99,3006) ERE0,ERE0*HREV
++! 3006   FORMAT(1X,'#  Zero-energy shift = ',1P,E12.5,
++!     1     ' a.u. = ',E12.5,' eV')
++!        WRITE(99,3106) EIM,EIM*HREV
++! 3106   FORMAT(1X,'#  Background absorption potential = ',1P,E12.5,
++!     1     ' a.u. = ',E12.5,' eV')
++!        WRITE(99,3007) EEV/HREV,EEV
++! 3007   FORMAT(1X,'#  Effective kinetic energy =',1P,E12.5,
++!     1     ' a.u. =',E12.5,' eV',/1X,'#')
++!      ENDIF
++!      WRITE(99,3008)
++! 3008 FORMAT(1X,'#',3X,'i',7X,'r',11X,'r*V',9X,'r*Vst',8X,'r*Vex',7X,
++!     1      'r*Vpol',7X,'r*Wabs',8X,'rho_e',/1X,'#',96('-'))
++!      DO I=1,NP
++!        IF(IHEF0.GT.0) THEN
++!          RHO=0.0D0
++!        ELSE
++!          RHO=DEN(MAX(2,I))/(FOURPI*RAD(MAX(2,I))**2)
++!        ENDIF
++!        WRITE(99,'(2X,I4,1P,7E13.5)') I,RAD(I),RV(I),
++!     1    IELEC*RVST(I),RVEX(I),RVPOL(I),RW(I),RHO
++!      ENDDO
++!      CLOSE(99)
+ C
+ C  ************  Partial-wave analysis.
+ C
+@@ -1036,34 +1036,34 @@
+ C
+ C  ****  Scattering amplitudes.
+ C
+-      OPEN(99,FILE='scatamp.dat')
+-      WRITE(99,'(1X,''#  Scattering amplitudes (in cm)'',
+-     1  6X,''MU=(1-cos(TH))/2'')')
+-      IF(IELEC.EQ.-1) THEN
+-        WRITE(99,3010) IZ
+- 3010   FORMAT(1X,'#  Z =',I4,',   projectile: electron')
+-      ELSE
+-        WRITE(99,3011) IZ
+- 3011   FORMAT(1X,'#  Z =',I4,',   projectile: positron')
+-      ENDIF
+-      WRITE(99,3012) EV
+- 3012 FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' eV',/1X,'#')
+-      WRITE(99,'(1X,''# TH (deg)'',6X,''MU'',10X,''Re(F)'',8X,
+-     1  ''Im(F)'',8X,''Re(G)'',8X,''Im(G)'',/1X,''#'',
+-     2  74(''-''))')
+-      IF(IHEF0.NE.0) RETURN
+-      DO I=1,NTAB
+-        THRAD=TH(I)*PI/180.0D0
+-        IF(EV.LT.ECUT) THEN
+-          CALL DPWA(THRAD,CF,CG,DCS,SPL,ERRF,ERRG)
+-        ELSE
+-          CF=0.0D0
+-          CG=0.0D0
+-        ENDIF
+-        WRITE(99,3013) TH(I),XT(I),CF,CG
+-      ENDDO
+- 3013 FORMAT(1X,1P,E10.3,E13.5,4E13.5)
+-      CLOSE(99)
++!      OPEN(99,FILE='scatamp.dat')
++!      WRITE(99,'(1X,''#  Scattering amplitudes (in cm)'',
++!     1  6X,''MU=(1-cos(TH))/2'')')
++!      IF(IELEC.EQ.-1) THEN
++!        WRITE(99,3010) IZ
++! 3010   FORMAT(1X,'#  Z =',I4,',   projectile: electron')
++!      ELSE
++!        WRITE(99,3011) IZ
++! 3011   FORMAT(1X,'#  Z =',I4,',   projectile: positron')
++!      ENDIF
++!      WRITE(99,3012) EV
++! 3012 FORMAT(1X,'#  Kinetic energy =',1P,E12.5,' eV',/1X,'#')
++!      WRITE(99,'(1X,''# TH (deg)'',6X,''MU'',10X,''Re(F)'',8X,
++!     1  ''Im(F)'',8X,''Re(G)'',8X,''Im(G)'',/1X,''#'',
++!     2  74(''-''))')
++!      IF(IHEF0.NE.0) RETURN
++!      DO I=1,NTAB
++!        THRAD=TH(I)*PI/180.0D0
++!        IF(EV.LT.ECUT) THEN
++!          CALL DPWA(THRAD,CF,CG,DCS,SPL,ERRF,ERRG)
++!        ELSE
++!          CF=0.0D0
++!          CG=0.0D0
++!        ENDIF
++!        WRITE(99,3013) TH(I),XT(I),CF,CG
++!      ENDDO
++! 3013 FORMAT(1X,1P,E10.3,E13.5,4E13.5)
++!      CLOSE(99)
+ C
+       RETURN
+       END
+@@ -1155,7 +1155,7 @@
+ C
+ C  ****  Path to the ELSEPA database
+       CHARACTER*100 PATHE
+-      PATHE='./database/'
++      PATHE='./'
+ C
+       IF(IZ.LE.0) STOP 'EFIELD: Negative atomic number.'
+       IF(IZ.GT.103) STOP 'EFIELD: Atomic number larger than 103.'
+@@ -1352,7 +1352,7 @@
+             ENDIF
+           ENDDO
+           ELFILE=CS120
+-          WRITE(6,'(A)') ELFILE
++!          WRITE(6,'(A)') ELFILE
+         ELSE
+           ELFILE='density.usr'
+         ENDIF
+@@ -1495,7 +1495,7 @@
+      19.97225D-4/
+ C
+       IF(IZ.LE.0) THEN
+-        WRITE(6,100)
++!        WRITE(6,100)
+  100    FORMAT(5X,'*** TFD: Negative atomic number. STOP.')
+         STOP 'TFD: Negative atomic number.'
+       ENDIF
+@@ -1877,7 +1877,7 @@
+ C
+ C  ****  Path to the ELSEPA database
+       CHARACTER*100 PATHE
+-      PATHE='./database/'
++      PATHE='./'
+ C
+       WRITE(IW,1000)
+  1000 FORMAT(1X,'#',/1X,'# Subroutine HEBORN. Elastic scattering of ',
+@@ -1929,7 +1929,7 @@
+         ENDIF
+       ENDDO
+       SCFILE=CS120
+-      WRITE(6,'(A)') SCFILE
++!      WRITE(6,'(A)') SCFILE
+       OPEN(99,FILE=SCFILE,STATUS='OLD',ERR=4)
+       READ(99,'(1X,A1)') NULL
+       READ(99,'(1X,A1)') NULL
+@@ -2342,7 +2342,7 @@
+           XUP=4.0D0*Z*(Z+1.0D0)-1.0D-9
+           SUM=SUMGA(PLSTR,1.0D-10,XUP,TOL)
+           IF(IERGA.EQ.1) THEN
+-            WRITE(6,*) 'SUMGA error in XSFEG.'
++!            WRITE(6,*) 'SUMGA error in XSFEG.'
+             STOP 'XSFEG: SUMGA error (1).'
+           ENDIF
+           FPL(I)=1.0D0-SUM*(6.0D0/(16.0D0*PI))
+@@ -2363,7 +2363,7 @@
+           XUP=4.0D0*Z*(Z+1.0D0)-1.0D-9
+           SUM=SUMGA(PLSTR,XLOW,XUP,TOL)
+           IF(IERGA.EQ.1) THEN
+-            WRITE(6,*) 'SUMGA error in XSFEG.'
++!            WRITE(6,*) 'SUMGA error in XSFEG.'
+             STOP 'XSFEG: SUMGA error (2).'
+           ENDIF
+           BETHE=SUM*(6.0D0/(16.0D0*PI))
+@@ -2439,7 +2439,7 @@
+       TOL=1.0D-6
+       XSPL=0.0D0
+       IF(XE.LT.XP+1.0D-8) THEN
+-        WRITE(6,*) 'WARNING: X is less than XP (SPL0).'
++!        WRITE(6,*) 'WARNING: X is less than XP (SPL0).'
+         RETURN
+       ENDIF
+ C  ****  Minimum and maximum allowed Z-values.
+@@ -2568,8 +2568,8 @@
+             WRITE(99,'(I4,1P,5E14.6)') I,XPT(I),ZPT(I),FPL(I)
+           ENDDO
+           CLOSE(99)
+-          WRITE(6,*) 'Accumulated numerical errors...'
+-          WRITE(6,*) 'SUMGA error in SPL0.'
++!          WRITE(6,*) 'Accumulated numerical errors...'
++!          WRITE(6,*) 'SUMGA error in SPL0.'
+           STOP 'SPL0: SUMGA error.'
+         ENDIF
+       ELSE
+@@ -2668,7 +2668,7 @@
+       ENDIF
+       IF(NP.LT.3) THEN
+         XSEH=0.0D0
+-        WRITE(6,*) 'WARNING: NP is too small (SEH0).'
++!        WRITE(6,*) 'WARNING: NP is too small (SEH0).'
+         RETURN
+       ENDIF
+       DW(NP)=EXP(LOG(DW(NP-1))+LOG(DW(NP-1)/DW(NP-2))
+@@ -2712,14 +2712,14 @@
+         ZMINM=ZMIN+1.0D-7*(ZMAX-ZMIN)
+         SUM=SUMGA(SEH2,ZMINM,ZMAX,TOL)
+         IF(IERGA.EQ.1) THEN
+-          WRITE(6,*) 'SUMGA error in SEH1 (1).'
++!          WRITE(6,*) 'SUMGA error in SEH1 (1).'
+           STOP 'SUMGA error in SEH1 (1).'
+         ENDIF
+         SEH1=SUM
+       ELSE
+         SUM=SUMGA(SEH2,ZMIN,ZMAX,TOL)
+         IF(IERGA.EQ.1) THEN
+-          WRITE(6,*) 'SUMGA error in SEH1 (2).'
++!          WRITE(6,*) 'SUMGA error in SEH1 (2).'
+           STOP 'SUMGA error in SEH1 (2).'
+         ENDIF
+         SEH1=SUM
+@@ -3115,14 +3115,14 @@
+       CI=DCMPLX(0.0D0,1.0D0)
+       ISUMP=0
+ C
+-      OPEN(98,FILE='dpwa.dat')
+-      WRITE(98,2000)
++!      OPEN(98,FILE='dpwa.dat')
++!      WRITE(98,2000)
+  2000 FORMAT(//2X,'**** Partial wave analysis (DPWA0) ',
+      1  42('*')/)
+ C
+       NDELT=NDELTA
+       IF(NDELT.GT.NDM) THEN
+-        WRITE(98,2001)
++!        WRITE(98,2001)
+  2001   FORMAT(/2X,'Warning: NDELTA is too large.')
+         NDELT=NDM
+       ENDIF
+@@ -3144,12 +3144,12 @@
+         IZINF=0
+       ENDIF
+ C
+-      WRITE(98,2002) EV
++!      WRITE(98,2002) EV
+  2002 FORMAT(/2X,'Kinetic energy =',1P,E12.5,' eV')
+       IF(E.LT.0.0D0) THEN
+-        WRITE(6,2002) EV
+-        WRITE(98,2003)
+-        WRITE(6,2003)
++!        WRITE(6,2002) EV
++!        WRITE(98,2003)
++!        WRITE(6,2003)
+  2003   FORMAT(//2X,'Negative energy. Stop.')
+         STOP 'DPWA0: Negative energy.'
+       ENDIF
+@@ -3157,7 +3157,7 @@
+ C
+       IF(IZINF.EQ.1) WRITE(98,2004)
+  2004 FORMAT(/2X,'Only inner phase shifts are tabulated')
+-      WRITE(98,2005)
++!      WRITE(98,2005)
+  2005 FORMAT(/6X,'L',7X,'Phase(spin UP)',5X,'Phase(spin DOWN)',
+      1       /2X,47('-'))
+       ISCH0=ISCH
+@@ -3170,8 +3170,8 @@
+       CALL DFREE(E,EPS,PHP,-1,0)
+       IF(IER.NE.0) STOP 'DPWA0: Error in DFREE (1).'
+       PHM=0.0D0
+-      WRITE(98,2006) L,PHP,PHM
+-      WRITE(6,2006) L,PHP,PHM
++!      WRITE(98,2006) L,PHP,PHM
++!      WRITE(6,2006) L,PHP,PHM
+  2006 FORMAT(3X,I5,4X,1P,E16.8,4X,E16.8)
+       DP(1)=PHP
+       DM(1)=0.0D0
+@@ -3191,8 +3191,8 @@
+         DM(I)=PHM
+         TST=MAX(ABS(PHP),ABS(PHM),ABS(DP(I-1)))
+         NPH=I
+-        WRITE(98,2006) L,PHP,PHM
+-        WRITE(6,2006) L,PHP,PHM
++!        WRITE(98,2006) L,PHP,PHM
++!        WRITE(6,2006) L,PHP,PHM
+         IF(TST.LT.EPSCUT.AND.L.GT.10) GO TO 6
+ C  ****  When the last phase shift (spin up) differs in more than 20 per
+ C  cent from the quadratic extrapolation, accumulated roundoff errors
+@@ -3202,15 +3202,15 @@
+           DPMAX=MAX(ABS(DP(I-3)),ABS(DP(I-2)),ABS(DP(I-1)),ABS(DP(I)))
+           IF(ABS(DP(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+             NPH=I-1
+-            WRITE(98,2107)
+-            WRITE(6,2107)
++!            WRITE(98,2107)
++!            WRITE(6,2107)
+  2107 FORMAT(/2X,'WARNING: Possible accumulation of round-off errors.')
+             GO TO 6
+           ENDIF
+         ENDIF
+       ENDDO
+-      WRITE(98,2007) TST
+-      WRITE(6,2007) TST
++!      WRITE(98,2007) TST
++!      WRITE(6,2007) TST
+  2007 FORMAT(/2X,'WARNING: TST =',1P,E11.4,'. Check convergence.')
+       GO TO 6
+ C
+@@ -3230,8 +3230,8 @@
+       CALL DFREE(E,EPS,PHP,-1,0)
+       IF(IER.NE.0) STOP 'DPWA0: Error in DFREE (1).'
+       PHM=0.0D0
+-      WRITE(98,2006) L,PHP,PHM
+-      WRITE(6,2006) L,PHP,PHM
++!      WRITE(98,2006) L,PHP,PHM
++!      WRITE(6,2006) L,PHP,PHM
+       DP(1)=PHP
+       DM(1)=0.0D0
+ C
+@@ -3246,13 +3246,13 @@
+       IF(IER.NE.0) STOP 'DPWA0: Error in DFREE (2).'
+       CALL DFREE(E,EPS,PHM,L,0)
+       IF(IER.NE.0) STOP 'DPWA0: Error in DFREE (3).'
+-      WRITE(6,2006) L,PHP,PHM
++!      WRITE(6,2006) L,PHP,PHM
+ C
+       DP(L+1)=PHP
+       DM(L+1)=PHM
+ C
+       IF(L.LT.95) THEN
+-        WRITE(98,2006) L,PHP,PHM
++!        WRITE(98,2006) L,PHP,PHM
+       ELSE
+         IND=IND+1
+         NADD=NADD+1
+@@ -3282,8 +3282,8 @@
+             IF(ABS(DPI(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+               IND=I-1
+               L=XL(IND)+0.5D0
+-              WRITE(98,2107)
+-              WRITE(6,2107)
++!              WRITE(98,2107)
++!              WRITE(6,2107)
+               GO TO 3
+             ENDIF
+             DMEXT=DMI(I-3)+3.0D0*(DMI(I-1)-DMI(I-2))
+@@ -3292,8 +3292,8 @@
+             IF(ABS(DMI(I)-DMEXT).GT.0.20D0*DMMAX) THEN
+               IND=I-1
+               L=XL(IND)+0.5D0
+-              WRITE(98,2107)
+-              WRITE(6,2107)
++!              WRITE(98,2107)
++!              WRITE(6,2107)
+               GO TO 3
+             ENDIF
+           ENDIF
+@@ -3331,15 +3331,15 @@
+       NPH=XL(IND)+1.5D0
+       TST=0.0D0
+       DO I=1,IND
+-        WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DMI(I)
++!        WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DMI(I)
+  2008   FORMAT(3X,I5,4X,1P,E16.8,4X,E16.8,'  i')
+         IF(I.GT.1) THEN
+           TST=MAX(TST,ABS(DPI(I)-DPI(I-1)),ABS(DMI(I)-DMI(I-1)))
+         ENDIF
+       ENDDO
+       IF(TST.GT.0.25D0*PI) THEN
+-        WRITE(98,2009)
+-        WRITE(6,2009)
++!        WRITE(98,2009)
++!        WRITE(6,2009)
+  2009   FORMAT(/2X,'ERROR: Directly computed phase shifts show',
+      1    ' large discontinuities.')
+         STOP 'DPWA0: Phase shifts do not vary continuously with L.'
+@@ -3409,8 +3409,8 @@
+ C
+       TST=MAX(ABS(DP(NPH)),ABS(DM(NPH)))
+       IF(TST.GT.10.0D0*EPSCUT) THEN
+-        WRITE(98,2007) TST
+-        WRITE(6,2007) TST
++!        WRITE(98,2007) TST
++!        WRITE(6,2007) TST
+       ENDIF
+ C
+ C  ************  Coefficients in the partial-wave expansion.
+@@ -3495,10 +3495,10 @@
+ C
+ C  ****  Scattering amplitudes and DCS.
+ C
+-      WRITE(98,2010)
++!      WRITE(98,2010)
+  2010 FORMAT(//2X,'*** Scattering amplitudes and different',
+      1  'ial cross section ***')
+-      WRITE(98,2011)
++!      WRITE(98,2011)
+  2011 FORMAT(/4X,'Angle',6X,'DCS',7X,'Asymmetry',4X,'Direct amplitu',
+      1  'de',7X,'Spin-flip amplitude',5X,'error',/4X,'(deg)',3X,
+      2  '(cm**2/sr)',22X,'(cm)',20X,'(cm)',/2X,91('-'))
+@@ -3543,7 +3543,7 @@
+         DCST(I)=DCS
+         ERROR(I)=MAX(ERR,1.0D-7)
+         SPOL(I)=SPL
+-        WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
++!        WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
+  2012   FORMAT(1X,1P,E10.3,E12.5,1X,E10.3,2(1X,'(',E10.3,',',
+      1    E10.3,')'),E10.2)
+       ENDDO
+@@ -3583,8 +3583,8 @@
+         TST=MAX(TST1,TST2)
+         TCS=ECS-TCS
+         IF(TST.GT.1.0D-5.AND.NPH.GT.40) THEN
+-          WRITE(98,2007) TST
+-          WRITE(6,2007) TST
++!          WRITE(98,2007) TST
++!          WRITE(6,2007) TST
+         ENDIF
+         ECS=ECS*A0B2
+         TCS=TCS*A0B2
+@@ -3595,32 +3595,32 @@
+         ECS1=FOURPI*SMOMLL(XT,DCST,XT(1),XT(NTAB),NTAB,1,0)
+         ECS2=FOURPI*SMOMLL(XT,DCST,XT(1),XT(NTAB),NTAB,2,0)
+         TST1=ABS(ECS-ECS0)/(ABS(ECS)+1.0D-35)
+-        WRITE(98,2013) ECS,ECS0,TST1
+-        WRITE(6,2013) ECS,ECS0,TST1
++!        WRITE(98,2013) ECS,ECS0,TST1
++!        WRITE(6,2013) ECS,ECS0,TST1
+  2013   FORMAT(/2X,'Total elastic cross section =',1P,E13.6,' cm**2',
+      1         /2X,'             from DCS table =',E13.6,
+      2         '  (rel. dif. =',E9.2,')')
+         TCS1=2.0D0*ECS1
+         TCS2=6.0D0*(ECS1-ECS2)
+         TST2=ABS(TCS-TCS1)/(ABS(TCS)+1.0D-35)
+-        WRITE(98,2014) TCS,TCS1,TST2
+-        WRITE(6,2014) TCS,TCS1,TST2
++!        WRITE(98,2014) TCS,TCS1,TST2
++!        WRITE(6,2014) TCS,TCS1,TST2
+  2014   FORMAT(/2X,'1st transport cross section =',1P,E13.6,' cm**2',
+      1         /2X,'             from DCS table =',E13.6,
+      2         '  (rel. dif. =',E9.2,')')
+-        WRITE(98,2015) TCS2
+-        WRITE(6,2015) TCS2
++!        WRITE(98,2015) TCS2
++!        WRITE(6,2015) TCS2
+  2015   FORMAT(/2X,'2nd transport cross section =',1P,E13.6,' cm**2')
+         TST=MAX(TST1,TST2)
+         IF(TST.GT.2.0D-3) THEN
+-          WRITE(98,2016)
+-          WRITE(6,2016)
++!          WRITE(98,2016)
++!          WRITE(6,2016)
+         ENDIF
+       ENDIF
+  2016 FORMAT(/2X,'WARNING: relative differences are too large.',
+      1       /11X,'The dcs table is not consistent.')
+ C
+-      WRITE(98,2017)
++!      WRITE(98,2017)
+  2017 FORMAT(/2X,'**** DPWA0 ended ',60('*')/)
+       CLOSE(UNIT=98)
+ C
+@@ -4155,18 +4155,18 @@
+       IF(NP.LT.2) STOP 'SMOMLL: NP is too small.'
+       IF(X(1).LT.0.0D0.OR.Y(1).LT.0.0D0) THEN
+         I=1
+-        WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
++!        WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
+         STOP 'SMOMLL: Negative values in the table.'
+       ENDIF
+       DO I=2,NP
+         IF(X(I).LT.0.0D0.OR.Y(I).LT.0.0D0) THEN
+-          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
++!          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
+           STOP 'SMOMLL: Negative values in the table.'
+         ENDIF
+         IF(X(I).LT.X(I-1)*ONEM) THEN
+           J=I-1
+-          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',J,X(J),Y(J)
+-          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
++!          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',J,X(J),Y(J)
++!          WRITE(6,'(A,I5,1P,2E15.7)') 'I,X(I),Y(I) =',I,X(I),Y(I)
+           STOP 'SMOMLL: X values are in decreasing order.'
+         ENDIF
+       ENDDO
+@@ -4176,8 +4176,8 @@
+       XUP=XU
+ C
+       IF(XLOW.GT.XUP) THEN
+-        WRITE(6,*) 'SMOMLL (warning): XLOW is greater than XUP.'
+-        WRITE(6,'(A,1P,E15.7,A,E15.7)') ' XLOW =',XLOW,', XUP =',XUP
++!        WRITE(6,*) 'SMOMLL (warning): XLOW is greater than XUP.'
++!        WRITE(6,'(A,1P,E15.7,A,E15.7)') ' XLOW =',XLOW,', XUP =',XUP
+         SMOMLL=0.0D0
+         RETURN
+       ENDIF
+@@ -4385,14 +4385,14 @@
+       CI=DCMPLX(0.0D0,1.0D0)
+       ISUMP=0
+ C
+-      OPEN(98,FILE='dpwai.dat')
+-      WRITE(98,2000)
++!      OPEN(98,FILE='dpwai.dat')
++!      WRITE(98,2000)
+  2000 FORMAT(//2X,'**** Partial wave analysis (DPWAI0) ',
+      1  42('*')/)
+ C
+       NDELT=NDELTA
+       IF(NDELT.GT.NDM) THEN
+-        WRITE(98,2001)
++!        WRITE(98,2001)
+  2001   FORMAT(/2X,'WARNING: NDELTA is too large')
+         NDELT=NDM
+       ENDIF
+@@ -4418,12 +4418,12 @@
+         IZINF=0
+       ENDIF
+ C
+-      WRITE(98,2002) EV
++!      WRITE(98,2002) EV
+  2002 FORMAT(/2X,'Kinetic energy =',1P,E12.5,' eV')
+       IF(E.LT.0.0D0) THEN
+-        WRITE(6,2002) EV
+-        WRITE(98,2003)
+-        WRITE(6,2003)
++!        WRITE(6,2002) EV
++!        WRITE(98,2003)
++!        WRITE(6,2003)
+  2003   FORMAT(//2X,'Negative energy. Stop.')
+         STOP 'DPWAI0: Negative energy.'
+       ENDIF
+@@ -4431,7 +4431,7 @@
+ C
+       IF(IZINF.EQ.1) WRITE(98,2004)
+  2004 FORMAT(/2X,'Only inner phase shifts are tabulated')
+-      WRITE(98,2005)
++!      WRITE(98,2005)
+  2005 FORMAT(/14X,'--------- Spin UP ---------',6X,
+      1  '-------- Spin DOWN --------',/6X,'L',9X,
+      2  'Re(phase)      Im(phase)',9X,'Re(phase)      Im(phase)',
+@@ -4460,8 +4460,8 @@
+         CXP(1)=CDEXP(2.0D0*(CI*PHPR-PHPI))
+       ENDIF
+       IF(IER.NE.0) STOP 'DPWAI0: Error in ZDPHAS (1).'
+-      WRITE(98,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
+-      WRITE(6,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
++!      WRITE(98,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
++!      WRITE(6,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
+  2006 FORMAT(3X,I5,4X,1P,E16.8,1X,E12.5,4X,E16.8,1X,E12.5)
+       NPH=1
+ C
+@@ -4498,8 +4498,8 @@
+         ENDIF
+         IF(IER.NE.0) STOP 'DPWAI0: Error in ZDPHAS (3).'
+         NPH=I
+-        WRITE(98,2006) L,DP(I),DPJ(I),DM(I),DMJ(I)
+-        WRITE(6,2006) L,DP(I),DPJ(I),DM(I),DMJ(I)
++!        WRITE(98,2006) L,DP(I),DPJ(I),DM(I),DMJ(I)
++!        WRITE(6,2006) L,DP(I),DPJ(I),DM(I),DMJ(I)
+         TST=MAX(SQRT(DP(I)**2+DPJ(I)**2),SQRT(DM(I)**2+DMJ(I)**2),
+      1    SQRT(DP(I-1)**2+DM(I-1)**2))
+         IF(TST.LT.EPSCUT.AND.L.GT.10) GO TO 6
+@@ -4512,15 +4512,15 @@
+      1              ABS(DP(I)))
+           IF(ABS(DP(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+             NPH=I-1
+-            WRITE(98,2107)
+-            WRITE(6,2107)
++!            WRITE(98,2107)
++!            WRITE(6,2107)
+  2107 FORMAT(/2X,'WARNING: Possible accumulation of round-off errors.')
+             GO TO 6
+           ENDIF
+         ENDIF
+       ENDDO
+-      WRITE(98,2007) TST
+-      WRITE(6,2007) TST
++!      WRITE(98,2007) TST
++!      WRITE(6,2007) TST
+  2007 FORMAT(/2X,'WARNING: TST =',1P,E11.4,'. Check convergence.')
+       GO TO 6
+ C
+@@ -4554,8 +4554,8 @@
+         CXP(1)=CDEXP(2.0D0*(CI*PHPR-PHPI))
+       ENDIF
+       IF(IER.NE.0) STOP 'DPWAI0: Error in ZDPHAS (4).'
+-      WRITE(98,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
+-      WRITE(6,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
++!      WRITE(98,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
++!      WRITE(6,2006) L,DP(1),DPJ(1),DM(1),DMJ(1)
+ C
+       LMAX=NDELT-1
+       IND=0
+@@ -4590,10 +4590,10 @@
+         CXM(L+1)=CDEXP(2.0D0*(CI*PHMR-PHMI))
+       ENDIF
+       IF(IER.NE.0) STOP 'DPWAI0: Error in ZDPHAS (6).'
+-      WRITE(6,2006) L,DP(L+1),DPJ(L+1),DM(L+1),DMJ(L+1)
++!      WRITE(6,2006) L,DP(L+1),DPJ(L+1),DM(L+1),DMJ(L+1)
+ C
+       IF(L.LT.95) THEN
+-        WRITE(98,2006) L,DP(L+1),DPJ(L+1),DM(L+1),DMJ(L+1)
++!        WRITE(98,2006) L,DP(L+1),DPJ(L+1),DM(L+1),DMJ(L+1)
+       ELSE
+         IND=IND+1
+         NADD=NADD+1
+@@ -4625,8 +4625,8 @@
+             IF(ABS(DPI(I)-DPEXT).GT.0.20D0*DPMAX) THEN
+               IND=I-1
+               L=XL(IND)+0.5D0
+-              WRITE(98,2107)
+-              WRITE(6,2107)
++!              WRITE(98,2107)
++!              WRITE(6,2107)
+               GO TO 3
+             ENDIF
+             DMEXT=DMI(I-3)+3.0D0*(DMI(I-1)-DMI(I-2))
+@@ -4635,8 +4635,8 @@
+             IF(ABS(DMI(I)-DMEXT).GT.0.20D0*DMMAX) THEN
+               IND=I-1
+               L=XL(IND)+0.5D0
+-              WRITE(98,2107)
+-              WRITE(6,2107)
++!              WRITE(98,2107)
++!              WRITE(6,2107)
+               GO TO 3
+             ENDIF
+           ENDIF
+@@ -4674,15 +4674,15 @@
+       NPH=XL(IND)+1.5D0
+       TST=0.0D0
+       DO I=1,IND
+-        WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DPJI(I),DMI(I),DMJI(I)
++!        WRITE(98,2008) INT(XL(I)+0.5D0),DPI(I),DPJI(I),DMI(I),DMJI(I)
+  2008   FORMAT(3X,I5,4X,1P,E16.8,1X,E12.5,4X,E16.8,1X,E12.5,'  i')
+         IF(I.GT.1) THEN
+           TST=MAX(TST,ABS(DPI(I)-DPI(I-1)),ABS(DMI(I)-DMI(I-1)))
+         ENDIF
+       ENDDO
+       IF(TST.GT.0.25D0*PI) THEN
+-        WRITE(98,2009)
+-        WRITE(6,2009)
++!        WRITE(98,2009)
++!        WRITE(6,2009)
+  2009   FORMAT(/2X,'ERROR: Directly computed phase shifts show',
+      1    ' large discontinuities.')
+         STOP 'DPWAI0: Phase shifts do not vary continuously with L.'
+@@ -4802,8 +4802,8 @@
+ C
+       TST=MAX(ABS(DP(NPH)),ABS(DM(NPH)))
+       IF(TST.GT.10.0D0*EPSCUT) THEN
+-        WRITE(98,2007) TST
+-        WRITE(6,2007) TST
++!        WRITE(98,2007) TST
++!        WRITE(6,2007) TST
+       ENDIF
+       DO I=1,NPH
+         CXP(I)=CDEXP(2.0D0*CI*DCMPLX(DP(I),DPJ(I)))
+@@ -4886,10 +4886,10 @@
+ C
+ C  ****  Scattering amplitudes and DCS.
+ C
+-      WRITE(98,2010)
++!      WRITE(98,2010)
+  2010 FORMAT(//2X,'*** Scattering amplitudes and different',
+      1  'ial cross section ***')
+-      WRITE(98,2011)
++!      WRITE(98,2011)
+  2011 FORMAT(/4X,'Angle',6X,'DCS',7X,'Asymmetry',4X,'Direct amplitu',
+      1  'de',7X,'Spin-flip amplitude',5X,'Error',/4X,'(deg)',3X,
+      2  '(cm**2/sr)',22X,'(cm)',20X,'(cm)',/2X,91('-'))
+@@ -4934,7 +4934,7 @@
+         DCST(I)=DCS
+         ERROR(I)=MAX(ERR,1.0D-7)
+         SPOL(I)=SPL
+-        WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
++!        WRITE(98,2012) TH(I),DCST(I),SPOL(I),CF,CG,ERROR(I)
+  2012   FORMAT(1X,1P,E10.3,E12.5,1X,E10.3,2(1X,'(',E10.3,',',
+      1    E10.3,')'),E10.2)
+       ENDDO
+@@ -4974,8 +4974,8 @@
+         TST=MAX(TST1,TST2)
+         TCS=ECS-TCS
+         IF(TST.GT.1.0D-5.AND.NPH.GT.40) THEN
+-          WRITE(98,2007) TST
+-          WRITE(6,2007) TST
++!          WRITE(98,2007) TST
++!          WRITE(6,2007) TST
+         ENDIF
+         ECS=ECS*A0B2
+         TCS=TCS*A0B2
+@@ -4986,26 +4986,26 @@
+         ECS1=FOURPI*SMOMLL(XT,DCST,XT(1),XT(NTAB),NTAB,1,0)
+         ECS2=FOURPI*SMOMLL(XT,DCST,XT(1),XT(NTAB),NTAB,2,0)
+         TST1=ABS(ECS-ECS0)/(ABS(ECS)+1.0D-35)
+-        WRITE(98,2013) ECS,ECS0,TST1
+-        WRITE(6,2013) ECS,ECS0,TST1
++!        WRITE(98,2013) ECS,ECS0,TST1
++!        WRITE(6,2013) ECS,ECS0,TST1
+  2013   FORMAT(/2X,'Total elastic cross section =',1P,E13.6,' cm**2',
+      1         /2X,'             From DCS table =',E13.6,
+      2         '  (Rel. dif. =',E9.2,')')
+         TCS1=2.0D0*ECS1
+         TCS2=6.0D0*(ECS1-ECS2)
+         TST2=ABS(TCS-TCS1)/(ABS(TCS)+1.0D-35)
+-        WRITE(98,2014) TCS,TCS1,TST2
+-        WRITE(6,2014) TCS,TCS1,TST2
++!        WRITE(98,2014) TCS,TCS1,TST2
++!        WRITE(6,2014) TCS,TCS1,TST2
+  2014   FORMAT(/2X,'1ST transport cross section =',1P,E13.6,' cm**2',
+      1         /2X,'             From DCS table =',E13.6,
+      2         '  (REL. DIF. =',E9.2,')')
+-        WRITE(98,2015) TCS2
+-        WRITE(6,2015) TCS2
++!        WRITE(98,2015) TCS2
++!        WRITE(6,2015) TCS2
+  2015   FORMAT(/2X,'2ND transport cross section =',1P,E13.6,' cm**2')
+         TST=MAX(TST1,TST2)
+         IF(TST.GT.2.0D-3) THEN
+-          WRITE(98,2016)
+-          WRITE(6,2016)
++!          WRITE(98,2016)
++!          WRITE(6,2016)
+         ENDIF
+  2016   FORMAT(/2X,'WARNING: Relative differences are too large.',
+      1         /11X,'The DCS table is not consistent.')
+@@ -5015,15 +5015,15 @@
+         CALL DPWA(0.0D0,CF,CG,DCS,SPL,ERRF,ERRG)
+         TOTCS=(FOURPI*(A0B/RK))*(-CI*CF)
+         ABCS=TOTCS-ECS
+-        WRITE(98,2018) TOTCS
+-        WRITE(6,2018) TOTCS
++!        WRITE(98,2018) TOTCS
++!        WRITE(6,2018) TOTCS
+  2018   FORMAT(/2X,'  Grand total cross section =',1P,E13.6,' cm**2')
+-        WRITE(98,2019) ABCS
+-        WRITE(6,2019) ABCS
++!        WRITE(98,2019) ABCS
++!        WRITE(6,2019) ABCS
+  2019   FORMAT(2X,'   Absorption cross section =',1P,E13.6,' cm**2')
+       ENDIF
+ C
+-      WRITE(98,2017)
++!      WRITE(98,2017)
+  2017 FORMAT(/2X,'**** DPWAI0 ended ',60('*')/)
+       CLOSE(UNIT=98)
+ C
+diff -ruN elsepa-2020/radial.f elsepa-2020mod/radial.f
+--- elsepa-2020/radial.f	2018-08-08 10:31:00.000000000 +0200
++++ elsepa-2020mod/radial.f	2021-03-14 06:24:46.880440255 +0100
+@@ -297,27 +297,27 @@
+       DIMENSION R(NV),RV(NV)
+ C
+       IF(NV.GT.NDIM) THEN
+-        WRITE(6,2101) NV,NDIM
++!        WRITE(6,2101) NV,NDIM
+  2101   FORMAT(1X,'*** Error in VINT: input potential grid with NV = ',
+      1    I5,' data points.',/5X,'NV must be less than NDIM = ',I5,'.')
+         STOP
+       ENDIF
+       IF(NV.LT.4) THEN
+-        WRITE(6,2102) NV
++!        WRITE(6,2102) NV
+  2102   FORMAT(1X,'*** Error in VINT: the input potential grid must ',
+      1    /5X,'have more than 4 data points. NV =',I5,'.')
+         STOP
+       ENDIF
+       IF(R(1).LT.0.0D0) THEN
+-        WRITE(6,2103)
++!        WRITE(6,2103)
+  2103   FORMAT(1X,'*** Error in VINT: R(1).LT.0.')
+-        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
++!        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
+         STOP
+       ENDIF
+       IF(R(1).GT.1.0D-15) THEN
+-        WRITE(6,2104)
++!        WRITE(6,2104)
+  2104   FORMAT(1X,'*** Error in VINT: R(1).GT.0.')
+-        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
++!        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
+         STOP
+       ENDIF
+ C
+@@ -327,7 +327,7 @@
+         RT(I)=R(I)
+         VT(I)=RV(I)
+         IF(RT(I-1)-RT(I).GT.EPS*MAX(ABS(RT(I)),ABS(RT(I-1)))) THEN
+-          WRITE(6,2105)
++!          WRITE(6,2105)
+  2105     FORMAT(1X,'*** Error in VINT: R values in',
+      1      'decreasing order.',
+      2      /5X,'Details in file ''VINT-error.dat''.')
+@@ -477,26 +477,26 @@
+       IER=0
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in SBOUND: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(N.LT.1) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in SBOUND: N.LT.1.')
+         STOP
+       ENDIF
+ C
+       IF(L.LT.0) THEN
+-        WRITE(6,2102)
++!        WRITE(6,2102)
+  2102   FORMAT(1X,'*** Error in SBOUND: L.LT.0.')
+         STOP
+       ENDIF
+ C
+       IF(L.GE.N) THEN
+-        WRITE(6,2103)
++!        WRITE(6,2103)
+  2103   FORMAT(1X,'*** Error in SBOUND: L.GE.N.')
+         STOP
+       ENDIF
+@@ -510,7 +510,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2104) NDIM
++!        WRITE(6,2104) NDIM
+  2104   FORMAT(1X,'*** Error in SBOUND: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -563,7 +563,7 @@
+       ENDDO
+       IF(EMIN.GT.-1.0D-35) THEN
+         IER=1
+-        WRITE(6,1001)
++!        WRITE(6,1001)
+  1001   FORMAT(1X,'*** Error 1 in SBOUND: EMIN.GE.0.'/5X,
+      1    '(Use a denser grid. If the error persists then probably',
+      2    /6X,'such a bound state does not exist).')
+@@ -589,7 +589,7 @@
+  2    CONTINUE
+       IF(E.GT.-1.0D-16) THEN
+         IER=2
+-        WRITE(6,1002)
++!        WRITE(6,1002)
+  1002   FORMAT(1X,'*** Error 2 in SBOUND: E=0.',
+      1    /5X,'(Probably this bound state does not exist).')
+         RETURN
+@@ -607,7 +607,7 @@
+       IOTP=IOTP+1
+       IF(IOTP.GT.NRT-1) THEN
+         IER=3
+-        WRITE(6,1003)
++!        WRITE(6,1003)
+  1003   FORMAT(1X,'*** Error 3 in SBOUND: RAD(NGP) is too small.'
+      1    /5X,'(Extend the grid to larger radii).')
+         RETURN
+@@ -618,7 +618,7 @@
+       CALL SOUTW(E,EPS,SUMOUT,L,NR,NZERO,IOTP,ISUM)
+       IF(NZMAX.GT.1.AND.NZERO.LE.NR) THEN
+         IER=4
+-        WRITE(6,1004)
++!        WRITE(6,1004)
+  1004   FORMAT(1X,'*** Error 4 in SBOUND: Several zeros of P(R)',
+      1    /5X,'in a single interval (Use a denser grid).')
+         RETURN
+@@ -631,15 +631,15 @@
+         ICMAX=1
+         E=0.5D0*(EMIN+E)
+         IF(IWR.NE.0) THEN
+-          WRITE(6,2000) N,L
+-          WRITE(6,2001) NR,NZERO,IOTP,NRT
+-          WRITE(6,2002) E
+-          WRITE(6,2004) EMIN,EMAX
++!          WRITE(6,2000) N,L
++!          WRITE(6,2001) NR,NZERO,IOTP,NRT
++!          WRITE(6,2002) E
++!          WRITE(6,2004) EMIN,EMAX
+         ENDIF
+ C
+         IF(EMAX-EMIN.LT.DELL*ABS(EMIN)) THEN
+           IER=5
+-          WRITE(6,1005)
++!          WRITE(6,1005)
+           RETURN
+         ENDIF
+ C
+@@ -651,15 +651,15 @@
+         EMIN=E
+         E=0.5D0*(E+EMAX)
+         IF(IWR.NE.0) THEN
+-          WRITE(6,2000) N,L
+-          WRITE(6,2001) NR,NZERO,IOTP,NRT
+-          WRITE(6,2002) E
+-          WRITE(6,2004) EMIN,EMAX
++!          WRITE(6,2000) N,L
++!          WRITE(6,2001) NR,NZERO,IOTP,NRT
++!          WRITE(6,2002) E
++!          WRITE(6,2004) EMIN,EMAX
+         ENDIF
+ C
+         IF(EMAX-EMIN.LT.DELL*ABS(EMIN)) THEN
+           IER=5
+-          WRITE(6,1005)
++!          WRITE(6,1005)
+           RETURN
+         ENDIF
+ C
+@@ -712,22 +712,22 @@
+       IF(EP.GT.ESUP) EP=0.5D0*(ESUP+E)
+ C
+       IF(IWR.NE.0) THEN
+-        WRITE(6,2000) N,L
++!        WRITE(6,2000) N,L
+  2000   FORMAT(/2X,'Subroutine SBOUND.   N =',I3,'   L =',I3)
+-        WRITE(6,2001) NR,NZERO,IOTP,NRT
++!        WRITE(6,2001) NR,NZERO,IOTP,NRT
+  2001   FORMAT(2X,'NR =',I3,'   NZERO =',I3,'   IOTP = ',I5,
+      1    '   NGP =',I5)
+-        WRITE(6,2002) EP
++!        WRITE(6,2002) EP
+  2002   FORMAT(2X,'E new = ',1P,D22.15)
+-        WRITE(6,2003) E,DE
++!        WRITE(6,2003) E,DE
+  2003   FORMAT(2X,'E old = ',1P,D22.15,'   DE = ',D11.4)
+-        WRITE(6,2004) EMIN,EMAX
++!        WRITE(6,2004) EMIN,EMAX
+  2004   FORMAT(2X,'EMIN = ',1P,D12.5,'   EMAX = ',D12.5)
+       ENDIF
+ C
+       IF(EP.GE.ESUP.AND.ABS(E-ESUP).LT.DELL*ABS(ESUP)) THEN
+         IER=5
+-        WRITE(6,1005)
++!        WRITE(6,1005)
+  1005   FORMAT(1X,'*** Error 5 in SBOUND: E out of range.'/5X,
+      1    '(Accumulated round-off errors?).')
+         RETURN
+@@ -767,7 +767,7 @@
+ C
+       IF(ABS(PT(NRT)).GT.1.0D-5*ABS(PT(IOTP))) THEN
+         IER=3
+-        WRITE(6,1003)
++!        WRITE(6,1003)
+       ENDIF
+ C
+       RLOC=R(ILAST)
+@@ -797,32 +797,32 @@
+       IER=0
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in DBOUND: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(N.LT.1) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in DBOUND: N.LT.1.')
+         STOP
+       ENDIF
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,2102)
++!        WRITE(6,2102)
+  2102   FORMAT(1X,'*** Error in DBOUND: K.EQ.0.')
+         STOP
+       ENDIF
+ C
+       IF(K.LT.-N) THEN
+-        WRITE(6,2103)
++!        WRITE(6,2103)
+  2103   FORMAT(1X,'*** Error in DBOUND: K.LT.-N.')
+         STOP
+       ENDIF
+ C
+       IF(K.GE.N) THEN
+-        WRITE(6,2104)
++!        WRITE(6,2104)
+  2104   FORMAT(1X,'*** Error in DBOUND: K.GE.N.')
+         STOP
+       ENDIF
+@@ -842,7 +842,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2105) NDIM
++!        WRITE(6,2105) NDIM
+  2105   FORMAT(1X,'*** Error in DBOUND: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -895,7 +895,7 @@
+       ENDDO
+       IF(EMIN.GT.-1.0D-35) THEN
+         IER=1
+-        WRITE(6,1001)
++!        WRITE(6,1001)
+  1001   FORMAT(1X,'*** Error 1 in DBOUND: EMIN.GE.0.'/5X,
+      1    '(Use a denser grid. If the error persists then probably',
+      2    /6X,'such a bound state does not exist).')
+@@ -922,7 +922,7 @@
+  2    CONTINUE
+       IF(E.GT.-1.0D-16) THEN
+         IER=2
+-        WRITE(6,1002)
++!        WRITE(6,1002)
+  1002   FORMAT(1X,'*** Error 2 in DBOUND: E=0.',
+      1    /5X,'(probably this bound state does not exist).')
+         RETURN
+@@ -940,7 +940,7 @@
+       IOTP=IOTP+1
+       IF(IOTP.GT.NRT-1) THEN
+         IER=3
+-        WRITE(6,1003)
++!        WRITE(6,1003)
+  1003   FORMAT(1X,'*** Error 3 in DBOUND: RAD(NGP) is too small.'
+      1    /5X,'(Extend the grid to larger radii).')
+         RETURN
+@@ -951,7 +951,7 @@
+       CALL DOUTW(E,EPS,SUMOUT,K,NR,NZERO,IOTP,ISUM)
+       IF(NZMAX.GT.1.AND.NZERO.LE.NR) THEN
+         IER=4
+-        WRITE(6,1004)
++!        WRITE(6,1004)
+  1004   FORMAT(1X,'*** Error 4 in DBOUND: Several zeros of P(R)',
+      1    /5X,'in a single interval (Use a denser grid).')
+         RETURN
+@@ -964,15 +964,15 @@
+         ICMAX=1
+         E=0.5D0*(EMIN+E)
+         IF(IWR.NE.0) THEN
+-          WRITE(6,2000) N,K
+-          WRITE(6,2001) NR,NZERO,IOTP,NRT
+-          WRITE(6,2002) E
+-          WRITE(6,2004) EMIN,EMAX
++!          WRITE(6,2000) N,K
++!          WRITE(6,2001) NR,NZERO,IOTP,NRT
++!          WRITE(6,2002) E
++!          WRITE(6,2004) EMIN,EMAX
+         ENDIF
+ C
+         IF(EMAX-EMIN.LT.DELL*ABS(EMIN)) THEN
+           IER=5
+-          WRITE(6,1005)
++!          WRITE(6,1005)
+           RETURN
+         ENDIF
+ C
+@@ -984,15 +984,15 @@
+         EMIN=E
+         E=0.5D0*(E+EMAX)
+         IF(IWR.NE.0) THEN
+-          WRITE(6,2000) N,K
+-          WRITE(6,2001) NR,NZERO,IOTP,NRT
+-          WRITE(6,2002) E
+-          WRITE(6,2004) EMIN,EMAX
++!          WRITE(6,2000) N,K
++!          WRITE(6,2001) NR,NZERO,IOTP,NRT
++!          WRITE(6,2002) E
++!          WRITE(6,2004) EMIN,EMAX
+         ENDIF
+ C
+         IF(EMAX-EMIN.LT.DELL*ABS(EMIN)) THEN
+           IER=5
+-          WRITE(6,1005)
++!          WRITE(6,1005)
+           RETURN
+         ENDIF
+ C
+@@ -1045,22 +1045,22 @@
+       IF(EP.GT.ESUP) EP=0.5D0*(ESUP+E)
+ C
+       IF(IWR.NE.0) THEN
+-        WRITE(6,2000) N,K
++!        WRITE(6,2000) N,K
+  2000   FORMAT(/2X,'Subroutine DBOUND.   N =',I3,'   K =',I3)
+-        WRITE(6,2001) NR,NZERO,IOTP,NRT
++!        WRITE(6,2001) NR,NZERO,IOTP,NRT
+  2001   FORMAT(2X,'NR =',I3,'   NZERO =',I3,'   IOTP = ',I5,
+      1    '   NGP =',I5)
+-        WRITE(6,2002) EP
++!        WRITE(6,2002) EP
+  2002   FORMAT(2X,'E new = ',1P,D22.15)
+-        WRITE(6,2003) E,DE
++!        WRITE(6,2003) E,DE
+  2003   FORMAT(2X,'E old = ',1P,D22.15,'   DE = ',D11.4)
+-        WRITE(6,2004) EMIN,EMAX
++!        WRITE(6,2004) EMIN,EMAX
+  2004   FORMAT(2X,'EMIN = ',1P,D12.5,'   EMAX = ',D12.5)
+       ENDIF
+ C
+       IF(EP.GT.ESUP.AND.ABS(E-ESUP).LT.DELL*ABS(ESUP)) THEN
+         IER=5
+-        WRITE(6,1005)
++!        WRITE(6,1005)
+  1005   FORMAT(1X,'*** Error 5 in DBOUND: E out of range.'/5X,
+      1    '(Accumulated round-off errors?).')
+         RETURN
+@@ -1100,7 +1100,7 @@
+ C
+       IF(ABS(PT(NRT)).GT.1.0D-5*ABS(PT(IOTP))) THEN
+         IER=3
+-        WRITE(6,1003)
++!        WRITE(6,1003)
+       ENDIF
+ C
+       RLOC=R(ILAST)
+@@ -1134,14 +1134,14 @@
+       IER=0
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in SFREE: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(L.LT.0) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in SFREE: L.LT.0.')
+         STOP
+       ENDIF
+@@ -1149,7 +1149,7 @@
+ C
+       IF(E.LT.0.0001D0) THEN
+         IER=7
+-        WRITE(6,1007)
++!        WRITE(6,1007)
+  1007   FORMAT(1X,'*** Error 7 in SFREE: E.LT.0.0001')
+         RETURN
+       ENDIF
+@@ -1158,7 +1158,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2102) NDIM
++!        WRITE(6,2102) NDIM
+  2102   FORMAT(1X,'*** Error in SFREE: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -1255,18 +1255,18 @@
+         CALL FINDI(R(NRT),RG,NVT,J)
+         IND(NRT)=J
+         IF(IWARN.EQ.0) THEN
+-          WRITE(6,1008)
++!          WRITE(6,1008)
+  1008     FORMAT(1X,'*** Warning (SFREE): RAD(NGP) is too small.'
+      1      /5X,'Tentatively, it is moved outwards to')
+           IWARN=1
+         ENDIF
+-        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
++!        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
+         IF(R(NRT).LT.1.0D4) GO TO 2
+       ENDIF
+ C
+       IF(IWARN.EQ.1.AND.IRWF.NE.0) THEN
+         IER=8
+-        WRITE(6,1009) R(NRT)
++!        WRITE(6,1009) R(NRT)
+  1009   FORMAT(1X,'*** Error 8 in SFREE: RAD(NGP) is too small.'
+      1    /5X,'Extend the grid to radii larger than',1P,E13.6)
+         RETURN
+@@ -1370,21 +1370,21 @@
+       IER=0
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in DFREE: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in DFREE: K.EQ.0.')
+         STOP
+       ENDIF
+ C
+       IF(E.LT.0.0001D0) THEN
+         IER=7
+-        WRITE(6,1007)
++!        WRITE(6,1007)
+  1007   FORMAT(1X,'*** Error 7 in DFREE: E.LT.0.0001')
+         RETURN
+       ENDIF
+@@ -1402,7 +1402,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2102) NDIM
++!        WRITE(6,2102) NDIM
+  2102   FORMAT(1X,'*** Error in DFREE: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -1501,18 +1501,18 @@
+         CALL FINDI(R(NRT),RG,NVT,J)
+         IND(NRT)=J
+         IF(IWARN.EQ.0) THEN
+-          WRITE(6,1008)
++!          WRITE(6,1008)
+  1008     FORMAT(1X,'*** Warning (DFREE): RAD(NGP) is too small.'
+      1      /5X,'Tentatively, it is moved outwards to')
+           IWARN=1
+         ENDIF
+-        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
++!        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
+         IF(R(NRT).LT.1.0D4) GO TO 2
+       ENDIF
+ C
+       IF(IWARN.EQ.1.AND.IRWF.NE.0) THEN
+         IER=8
+-        WRITE(6,1009) R(NRT)
++!        WRITE(6,1009) R(NRT)
+  1009   FORMAT(1X,'*** Error 8 in DFREE: RAD(NGP) is too small.'
+      1    /5X,'Extend the grid to radii larger than',1P,E13.6)
+         RETURN
+@@ -1678,7 +1678,7 @@
+       CMU=2.0D0*RN*(RVN-E*RN)+AL*(AL+1)
+       IF(CMU.LE.0.0D0) THEN
+         IER=6
+-        WRITE(6,1006)
++!        WRITE(6,1006)
+  1006   FORMAT(1X,'*** Error 6 in SBOUND: RV(NGP)<<0 OR E>0.',
+      1    /5X,'(Check the input potential values).')
+         RETURN
+@@ -1839,7 +1839,7 @@
+       CMU=FACT*RN*(RVN-E*RN)+AL*(AL+1)
+       IF(CMU.LE.0.0D0) THEN
+         IER=6
+-        WRITE(6,1006)
++!        WRITE(6,1006)
+  1006   FORMAT(1X,'*** Error 6 in DBOUND: RV(NGP)<<0 OR E>0.',
+      1    /5X,'(Check the input potential values).')
+         RETURN
+@@ -2475,27 +2475,27 @@
+       DIMENSION R(NV),RV(NV),RW(NV)
+ C
+       IF(NV.GT.NDIM) THEN
+-        WRITE(6,2101) NV,NDIM
++!        WRITE(6,2101) NV,NDIM
+  2101   FORMAT(1X,'*** Error in ZVINT: input potential grid with NV = ',
+      1    I5,' data points.',/5X,'NV must be less than NDIM = ',I5,'.')
+         STOP
+       ENDIF
+       IF(NV.LT.4) THEN
+-        WRITE(6,2102) NV
++!        WRITE(6,2102) NV
+  2102   FORMAT(1X,'*** Error in ZVINT: the input potential grid must ',
+      1    /5X,'have more than 4 data points. NV =',I5,'.')
+         STOP
+       ENDIF
+       IF(R(1).LT.0.0D0) THEN
+-        WRITE(6,2103)
++!        WRITE(6,2103)
+  2103   FORMAT(1X,'*** Error in ZVINT: R(1).LT.0.')
+-        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
++!        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
+         STOP
+       ENDIF
+       IF(R(1).GT.1.0D-15) THEN
+-        WRITE(6,2104)
++!        WRITE(6,2104)
+  2104   FORMAT(1X,'*** Error in ZVINT: R(1).GT.0.')
+-        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
++!        WRITE(6,'(5X,''R(1) = '',1PE14.7)') R(1)
+         STOP
+       ENDIF
+ C
+@@ -2507,7 +2507,7 @@
+         VT(I)=RV(I)
+         WT(I)=RW(I)
+         IF(RT(I-1)-RT(I).GT.EPS*MAX(ABS(RT(I)),ABS(RT(I-1)))) THEN
+-          WRITE(6,2105)
++!          WRITE(6,2105)
+  2105     FORMAT(1X,'*** Error in ZVINT: X values in',
+      1      'decreasing order.',
+      2      /5X,'Details in file ''ZVINT-error.dat''.')
+@@ -2687,14 +2687,14 @@
+       ZI=DCMPLX(0.0D0,1.0D0)
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in ZSFREE: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(L.LT.0) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in ZSFREE: L.LT.0.')
+         STOP
+       ENDIF
+@@ -2702,7 +2702,7 @@
+ C
+       IF(E.LT.0.0001D0) THEN
+         IER=7
+-        WRITE(6,1007)
++!        WRITE(6,1007)
+  1007   FORMAT(1X,'*** Error 7 in ZSFREE: E.LT.0.0001')
+         RETURN
+       ENDIF
+@@ -2711,7 +2711,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2102) NDIM
++!        WRITE(6,2102) NDIM
+  2102   FORMAT(1X,'*** Error in ZSFREE: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -2810,18 +2810,18 @@
+         CALL FINDI(R(NRT),RG,NVT,J)
+         IND(NRT)=J
+         IF(IWARN.EQ.0) THEN
+-          WRITE(6,1008)
++!          WRITE(6,1008)
+  1008     FORMAT(1X,'*** Warning (ZSFREE): RAD(NGP) is too small.'
+      1      /5X,'Tentatively, it is moved outwards to')
+           IWARN=1
+         ENDIF
+-        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
++!        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
+         IF(R(NRT).LT.1.0D4) GO TO 2
+       ENDIF
+ C
+       IF(IWARN.EQ.1.AND.IRWF.NE.0) THEN
+         IER=8
+-        WRITE(6,1009) R(NRT)
++!        WRITE(6,1009) R(NRT)
+  1009   FORMAT(1X,'*** Error 8 in ZSFREE: RAD(NGP) is too small.'
+      1    /5X,'Extend the grid to radii larger than',1P,E13.6)
+         RETURN
+@@ -3205,21 +3205,21 @@
+       ZI=DCMPLX(0.0D0,1.0D0)
+ C
+       IF(EPS.LT.1.0D-15) THEN
+-        WRITE(6,2100) EPS
++!        WRITE(6,2100) EPS
+  2100   FORMAT(1X,'*** Error in ZDFREE: EPS =',1P,E13.6,
+      1    ' is too small.')
+         STOP
+       ENDIF
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,2101)
++!        WRITE(6,2101)
+  2101   FORMAT(1X,'*** Error in ZDFREE: K.EQ.0.')
+         STOP
+       ENDIF
+ C
+       IF(E.LT.0.0001D0) THEN
+         IER=7
+-        WRITE(6,1007)
++!        WRITE(6,1007)
+  1007   FORMAT(1X,'*** Error 7 in ZDFREE: E.LT.0.0001')
+         RETURN
+       ENDIF
+@@ -3237,7 +3237,7 @@
+ C  ****  Merge the 'RG' and 'RAD' grids.
+ C
+       IF(NGP.GT.NDIM) THEN
+-        WRITE(6,2102) NDIM
++!        WRITE(6,2102) NDIM
+  2102   FORMAT(1X,'*** Error in ZDFREE: User radial grid with',
+      1    ' more than ',I5,' data points.')
+         STOP
+@@ -3338,18 +3338,18 @@
+         CALL FINDI(R(NRT),RG,NVT,J)
+         IND(NRT)=J
+         IF(IWARN.EQ.0) THEN
+-          WRITE(6,1008)
++!          WRITE(6,1008)
+  1008     FORMAT(1X,'*** Warning (ZDFREE): RAD(NGP) is too small.'
+      1      /5X,'Tentatively, it is moved outwards to')
+           IWARN=1
+         ENDIF
+-        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
++!        WRITE(6,'(7X,''R(NRT) ='',1P,E13.6)') R(NRT)
+         IF(R(NRT).LT.1.0D4) GO TO 2
+       ENDIF
+ C
+       IF(IWARN.EQ.1.AND.IRWF.NE.0) THEN
+         IER=8
+-        WRITE(6,1009) R(NRT)
++!        WRITE(6,1009) R(NRT)
+  1009   FORMAT(1X,'*** Error 8 in ZDFREE: RAD(NGP) is too small.'
+      1    /5X,'Extend the grid to radii larger than',1P,E13.6)
+         RETURN
+@@ -3857,13 +3857,13 @@
+       DIMENSION X(100),Y(100),AF(NP,NP),BF(NP),PAR(NP),NN(100)
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,'('' K ='',I6)') K
++!        WRITE(6,'('' K ='',I6)') K
+         STOP 'QNTDEF: The K value is not allowed'
+       ENDIF
+ C
+       ZINF=RVG(NVT)
+       IF(ZINF.GT.-0.5D0) THEN
+-        WRITE(6,'('' ZINF ='',1P,E16.8)') ZINF
++!        WRITE(6,'('' ZINF ='',1P,E16.8)') ZINF
+         STOP 'QNTDEF: The Coulomb tail is too weak.'
+       ENDIF
+ C
+@@ -3890,10 +3890,10 @@
+       N=N+1
+       CALL DBOUND(E,EPS,N,K)
+       IF(IER.NE.0) THEN
+-        WRITE(6,*) '    This error is harmless.'
+-        WRITE(6,*) ' '
+-        WRITE(6,*) '    The following calculation may be quite slow.'
+-        WRITE(6,*) '    Please, be patient...'
++!        WRITE(6,*) '    This error is harmless.'
++!        WRITE(6,*) ' '
++!        WRITE(6,*) '    The following calculation may be quite slow.'
++!        WRITE(6,*) '    Please, be patient...'
+         GO TO 101
+       ENDIF
+       RNEF=ABS(ZINF/SL)*(E+SL2)/(SQRT(-E*(E+TSL2)))
+@@ -3902,7 +3902,7 @@
+       X(NDAT)=E
+       Y(NDAT)=RMU
+       NN(NDAT)=N
+-      WRITE(6,'(1P,2E16.8,I4)') E,RMU,N
++!      WRITE(6,'(1P,2E16.8,I4)') E,RMU,N
+       IF(N.LT.45) GO TO 100
+  101  CONTINUE
+       IF(ABS(RMU).LT.1.0D-9) THEN
+@@ -3941,7 +3941,7 @@
+       X(NDAT)=E
+       Y(NDAT)=DEL
+       NN(NDAT)=0
+-      WRITE(6,'(1P,2E16.8)') E,DEL
++!      WRITE(6,'(1P,2E16.8)') E,DEL
+       IF(NF.LT.5) GO TO 200
+ C
+ C  ****  Quantum-defect function. Least-squares fit.
+@@ -4443,22 +4443,22 @@
+       IMPLICIT DOUBLE PRECISION (A-H,O-Z), INTEGER*4 (I-N)
+ C
+       IF(Z.GE.0.0D0) THEN
+-        WRITE(6,2100) Z
++!        WRITE(6,2100) Z
+  2100   FORMAT(1X,'*** Error in SCOULB: Z =',1P,E13.6,'  .GE.0.0')
+         STOP
+       ENDIF
+       IF(N.LE.0) THEN
+-        WRITE(6,2101) DBLE(N)
++!        WRITE(6,2101) DBLE(N)
+  2101   FORMAT(1X,'*** Error in SCOULB: N =',1P,E13.6,'  .LE.0')
+         STOP
+       ENDIF
+       IF(L.LT.0) THEN
+-        WRITE(6,2102) DBLE(L)
++!        WRITE(6,2102) DBLE(L)
+  2102   FORMAT(1X,'*** Error in SCOULB: L =',1P,E13.6,'  .LT.0')
+         STOP
+       ENDIF
+       IF(L.GT.N-1) THEN
+-        WRITE(6,2103) DBLE(L),DBLE(N)
++!        WRITE(6,2103) DBLE(L),DBLE(N)
+  2103   FORMAT(1X,'*** Error in SCOULB: L.GT.N-1',/5X,
+      1    1P,'L =',E13.6,',  N =',E13.6)
+         STOP
+@@ -4515,29 +4515,29 @@
+       IMPLICIT DOUBLE PRECISION (A-H,O-Z), INTEGER*4 (I-N)
+ C
+       IF(Z.GE.0.0D0) THEN
+-        WRITE(6,2100) Z
++!        WRITE(6,2100) Z
+  2100   FORMAT(1X,'*** Error in DCOULB: Z =',1P,E13.6,'  .GE.0.0')
+         STOP
+       ENDIF
+       IF(N.LE.0) THEN
+-        WRITE(6,2101) DBLE(N)
++!        WRITE(6,2101) DBLE(N)
+  2101   FORMAT(1X,'*** Error in DCOULB: N =',1P,E13.6,'  .LE.0')
+         STOP
+       ENDIF
+       IF(K.EQ.0) THEN
+-        WRITE(6,*) ' K =',K
+-        WRITE(6,2102)
++!        WRITE(6,*) ' K =',K
++!        WRITE(6,2102)
+  2102   FORMAT(1X,'*** Error in DCOULB: K = 0.')
+         STOP
+       ENDIF
+       IF(K.LT.-N) THEN
+-        WRITE(6,2103) DBLE(K),DBLE(N)
++!        WRITE(6,2103) DBLE(K),DBLE(N)
+  2103   FORMAT(1X,'*** Error in DCOULB: K.LT.-N',/5X,
+      1    1P,'K =',E13.6,',  N =',E13.6)
+         STOP
+       ENDIF
+       IF(K.GT.N-1) THEN
+-        WRITE(6,2104) DBLE(K),DBLE(N)
++!        WRITE(6,2104) DBLE(K),DBLE(N)
+  2104   FORMAT(1X,'*** Error in DCOULB: K.GT.N-1',/5X,
+      1    1P,'K =',E13.6,',  N =',E13.6)
+         STOP
+@@ -4669,7 +4669,7 @@
+       PARAMETER (PI=3.1415926535897932D0)
+ C
+       IF(RLAMB.LT.-0.999D0) THEN
+-        WRITE(6,2100) RLAMB
++!        WRITE(6,2100) RLAMB
+  2100   FORMAT(1X,'*** Error in FCRS: RLAMB =',1P,E13.6,'  .LT.-0.999')
+         STOP
+       ENDIF
+@@ -4750,7 +4750,7 @@
+       PARAMETER (PTOL=1.0D-10)
+ C
+       IF(RLAMB.LT.-0.999D0) THEN
+-        WRITE(6,2100) RLAMB
++!        WRITE(6,2100) RLAMB
+  2100   FORMAT(1X,'*** Error in FCOUL: RLAMB =',1P,E13.6,'  .LT.-0.999')
+         STOP
+       ENDIF
+@@ -4839,7 +4839,7 @@
+         TST=ABS(FB1)
+         IF(TST.LT.1.0D-25) THEN
+           IF(INULL.GT.0) THEN
+-            WRITE(6,2200)
++!            WRITE(6,2200)
+  2200       FORMAT(1X,'*** Warning (FCOUL): multiple null factors (1).')
+           ENDIF
+           INULL=1
+@@ -4938,7 +4938,7 @@
+ C
+         IF(TST.LT.1.0D-25) THEN
+           IF(INULL.GT.0) THEN
+-            WRITE(6,2300)
++!            WRITE(6,2300)
+  2300       FORMAT(1X,'*** Warning (FCOUL): multiple null factors (2).')
+           ENDIF
+           INULL=1
+@@ -5187,7 +5187,7 @@
+ C
+       IMPLICIT DOUBLE PRECISION (A-H,O-Z), INTEGER*4 (I-N)
+       IF(X.LT.0) THEN
+-        WRITE(6,1000)
++!        WRITE(6,1000)
+  1000   FORMAT(1X,'*** Negative argument in function SBESJN.')
+         STOP
+       ENDIF
+@@ -5356,17 +5356,17 @@
+       DIMENSION BPP(MNT)
+ C
+       IF(E.GT.-1.0D-6) THEN
+-        WRITE(6,'('' E ='',1P,E16.8)') E
++!        WRITE(6,'('' E ='',1P,E16.8)') E
+         STOP 'SBAS0: The energy value, E, must be less than -1.0D-4.'
+       ENDIF
+ C
+       IF(Z.GT.0.0D0) THEN
+-        WRITE(6,'('' Z ='',1P,E16.8)') Z
++!        WRITE(6,'('' Z ='',1P,E16.8)') Z
+         STOP 'SBAS0: The Coulomb charge, Z, must be negative.'
+       ENDIF
+ C
+       IF(L.LT.0) THEN
+-        WRITE(6,'('' L ='',I6)') L
++!        WRITE(6,'('' L ='',I6)') L
+         STOP 'SBAS0: L.LT.0'
+       ENDIF
+ C
+@@ -5476,7 +5476,7 @@
+ C
+       IF(IEIGEN.EQ.1) THEN
+         IF(TST.GT.EPS) THEN
+-          WRITE(6,1000)
++!          WRITE(6,1000)
+  1000     FORMAT(/1X,'*** Warning (SBAS0): Eigenstate radial function',
+      1      ' did not converge.')
+           EE=0.99D0*EE
+@@ -5617,12 +5617,12 @@
+       DIMENSION F(2,MNT),G(2,MNT)
+ C
+       IF(E.LT.1.0D-6) THEN
+-        WRITE(6,'('' E ='',1P,E16.8)') E
++!        WRITE(6,'('' E ='',1P,E16.8)') E
+         STOP 'SFAS0: The energy value, E, must be less than -1.0D-4.'
+       ENDIF
+ C
+       IF(L.LT.0) THEN
+-        WRITE(6,'('' L ='',I6)') L
++!        WRITE(6,'('' L ='',I6)') L
+         STOP 'SFAS0: L.LT.0'
+       ENDIF
+ C
+@@ -5649,8 +5649,8 @@
+       RTURN=(ETA+SQRT(ETA**2+RLAMB*(RLAMB+1.0D0)))/WAVNUM
+       RACN=MAX(0.75D0*RTURN,RCI)
+       IF(RACN.LT.1.0D-6) THEN
+-        WRITE(6,'('' RTURN ='',1P,E16.8)') RTURN
+-        WRITE(6,'(''   RCI ='',1P,E16.8)') RCI
++!        WRITE(6,'('' RTURN ='',1P,E16.8)') RTURN
++!        WRITE(6,'(''   RCI ='',1P,E16.8)') RCI
+         STOP 'SFAS0: RCI is less than 1.0D-6 (?).'
+       ENDIF
+ C
+@@ -5810,17 +5810,17 @@
+       DIMENSION DPP(MNT),DQP(MNT)
+ C
+       IF(E.GT.-1.0D-6) THEN
+-        WRITE(6,'('' E ='',1P,E16.8)') E
++!        WRITE(6,'('' E ='',1P,E16.8)') E
+         STOP 'DBAS0: The energy value, E, must be less than -1.0D-4.'
+       ENDIF
+ C
+       IF(Z.GT.0.0D0) THEN
+-        WRITE(6,'('' Z ='',1P,E16.8)') Z
++!        WRITE(6,'('' Z ='',1P,E16.8)') Z
+         STOP 'DBAS0: The Coulomb charge, Z, must be negative.'
+       ENDIF
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,'('' K ='',I4)') K
++!        WRITE(6,'('' K ='',I4)') K
+         STOP 'DBAS0: The K (kappa) value cannot be zero.'
+       ENDIF
+ C
+@@ -6104,12 +6104,12 @@
+       DIMENSION F(2,MNT),G(2,MNT)
+ C
+       IF(E.LT.1.0D-6) THEN
+-        WRITE(6,'('' E ='',1P,E16.8)') E
++!        WRITE(6,'('' E ='',1P,E16.8)') E
+         STOP 'DBAS0: The energy value, E, must be less than -1.0D-4.'
+       ENDIF
+ C
+       IF(K.EQ.0) THEN
+-        WRITE(6,'('' K ='',I4)') K
++!        WRITE(6,'('' K ='',I4)') K
+         STOP 'DBAS0: The K (kappa) value cannot be zero.'
+       ENDIF
+ C
+@@ -6141,8 +6141,8 @@
+       RTURN=(ETA+SQRT(ETA**2+RLAMB*(RLAMB+1.0D0)))/WAVNUM
+       RACN=MAX(0.75D0*RTURN,RCI)
+       IF(RACN.LT.1.0D-6) THEN
+-        WRITE(6,'('' RTURN ='',1P,E16.8)') RTURN
+-        WRITE(6,'(''   RCI ='',1P,E16.8)') RCI
++!        WRITE(6,'('' RTURN ='',1P,E16.8)') RTURN
++!        WRITE(6,'(''   RCI ='',1P,E16.8)') RCI
+         STOP 'DFAS0: RCI is less than 1.0D-6 (?).'
+       ENDIF
+ C
+@@ -6384,7 +6384,7 @@
+  2    CONTINUE
+ C
+       IF(NP.LT.2) THEN
+-        WRITE(6,10)
++!        WRITE(6,10)
+  10     FORMAT(1X,'*** Error in SPLINE: More than 2 coinciding ',
+      1    'abscissas.',/5X,'Interpolation is not possible.')
+         OPEN(33,FILE='SPLINE-error.dat')
+@@ -6424,11 +6424,11 @@
+         DP(3)=DP(1)
+       ELSE
+         IF(NP.GT.NM) THEN
+-          WRITE(6,11)
++!          WRITE(6,11)
+  11       FORMAT(1X,'*** Error in SPLINE: too many grid points ',
+      1      'between two',/5X,'discontinuities of Y(X). ',
+      2      /5X,'Details in file ''SPLIN0-error.dat''.')
+-          WRITE(6,*) '     NP =',NP
++!          WRITE(6,*) '     NP =',NP
+           STOP 'SPLINE: NP is larger than NPM.'
+         ENDIF
+         IF(IO.EQ.1) THEN
+@@ -6482,7 +6482,7 @@
+       DIMENSION X(N),Y(N),A(N),B(N),C(N),D(N)
+ C
+       IF(N.LT.4) THEN
+-        WRITE(6,10) N
++!        WRITE(6,10) N
+  10     FORMAT(1X,'*** Error in SPLIN0: interpolation cannot be ',
+      1    'performed with',I4,' points.',
+      2    /5X,'Details in file ''SPLIN0-error.dat''.')
+@@ -6499,7 +6499,7 @@
+       DO I=1,N1
+         A(I)=X(I+1)-X(I)  ! h_i
+         IF(A(I).LT.EPS*MAX(ABS(X(I)),ABS(X(I+1)))) THEN
+-          WRITE(6,11)
++!          WRITE(6,11)
+  11       FORMAT(1X,'*** Error in SPLIN0: X values not in',
+      1      'increasing order.',
+      2      /5X,'Details in file ''SPLIN0-error.dat''.')
+@@ -6677,14 +6677,14 @@
+       IME=0
+ C
+       IF(N.LT.5) THEN
+-        WRITE(6,10) N
++!        WRITE(6,10) N
+  10     FORMAT(1X,'*** SPLERR: input table with N = ',I5,
+      1    ' data points.',/5X,'N must be greater than 4.')
+         RETURN
+       ENDIF
+ C
+       IF(N.GT.NM) THEN
+-        WRITE(6,11) N,NM
++!        WRITE(6,11) N,NM
+  11     FORMAT(1X,'*** Error in SPLERR: input table with N = ',I5,
+      1    ' data points.',/5X,'N must be less than NM = ',I5,'.')
+         STOP 'SPLERR: Too many data points.'
+@@ -6828,13 +6828,13 @@
+       TTOL=MAX(1.0D-8,TOL)
+       NFFIX=MAX(NFIX,0)
+       IF(NPM.LE.NFFIX+ABS(NU).OR.N.GT.NPM) THEN
+-        WRITE(6,10)
++!        WRITE(6,10)
+  10     FORMAT(1X,'*** Error in SPLSET: The physical dimension ',
+      1    'NPM is too small.')
+-        WRITE(6,*) ' NPM =',NPM
+-        WRITE(6,*) 'NFIX =',NFFIX
+-        WRITE(6,*) '  NU =',ABS(NU)
+-        WRITE(6,*) ' NPR =',MAX(NFFIX+ABS(NU),N)
++!        WRITE(6,*) ' NPM =',NPM
++!        WRITE(6,*) 'NFIX =',NFFIX
++!        WRITE(6,*) '  NU =',ABS(NU)
++!        WRITE(6,*) ' NPR =',MAX(NFFIX+ABS(NU),N)
+         STOP 'SPLSET: NPM must be larger than NPR.'
+       ENDIF
+       IF(XU.LT.XL) THEN
+@@ -6844,12 +6844,12 @@
+       ENDIF
+       XUC=XL+1.0D5*EPS*MAX(ABS(XL),ABS(XU))
+       IF(XU.LT.XUC) THEN
+-        WRITE(6,11)
++!        WRITE(6,11)
+  11     FORMAT(1X,'*** Error in SPLSET: the interval endpoints ',
+      1    ' are not sufficiently spaced.')
+-        WRITE(6,*) ' XL =',XL
+-        WRITE(6,*) ' XU =',XU
+-        WRITE(6,*) 'XUC =',XUC
++!        WRITE(6,*) ' XL =',XL
++!        WRITE(6,*) ' XU =',XU
++!        WRITE(6,*) 'XUC =',XUC
+         STOP 'SPLSET: XU must be large than XUC.'
+       ENDIF
+ C
+@@ -7197,11 +7197,11 @@
+ C
+       IF(N.GT.-4.AND.N.LT.0) THEN
+         IF(MIN(ABS(X),ABS(X+DX)).LT.1.0D-60) THEN
+-          WRITE(6,10)
++!          WRITE(6,10)
+  10       FORMAT(1X,'*** Error in SPLINT: negative or zero argumen',
+      1      't to LOG.')
+-          WRITE(6,'(A,1P,E14.6)') '  X =',X
+-          WRITE(6,'(A,1P,E14.6)') ' DX =',DX
++!          WRITE(6,'(A,1P,E14.6)') '  X =',X
++!          WRITE(6,'(A,1P,E14.6)') ' DX =',DX
+           STOP 'SPLINT: LOG of a small or negative number.'
+         ENDIF
+       ENDIF
+@@ -7293,40 +7293,40 @@
+  1000 FORMAT(' RN=',1P,E13.6,', R2=',E13.6,', DRN=',E13.6,', N=',I6)
+       RRN=RN
+       IF(RRN.LT.1.0D-5) THEN
+-        WRITE(6,'(/1X,''*** Error in SGRID: RN is .LT. 1.0E-5.'')')
+-        WRITE(6,1000) RRN,R2,DRN,N
++!        WRITE(6,'(/1X,''*** Error in SGRID: RN is .LT. 1.0E-5.'')')
++!        WRITE(6,1000) RRN,R2,DRN,N
+         IER=1
+         RETURN
+       ENDIF
+ C
+       RR2=R2
+       IF(RR2.LT.1.0D-8) THEN
+-        WRITE(6,'(/1X,''*** Warning (SGRID): R2 is .LT. 1.0E-8.'')')
+-        WRITE(6,1000) RRN,RR2,DRN,N
++!        WRITE(6,'(/1X,''*** Warning (SGRID): R2 is .LT. 1.0E-8.'')')
++!        WRITE(6,1000) RRN,RR2,DRN,N
+         RR2=1.0D-8
+-        WRITE(6,1000) RRN,RR2,DRN,N
++!        WRITE(6,1000) RRN,RR2,DRN,N
+       ENDIF
+ C
+       IF(RR2.GE.1.0D-2*RRN) THEN
+-        WRITE(6,'(/1X,''*** Warning (SGRID): R2 is .GE. 1.0E-2*RN.'')')
+-        WRITE(6,1000) RRN,RR2,DRN,N
++!        WRITE(6,'(/1X,''*** Warning (SGRID): R2 is .GE. 1.0E-2*RN.'')')
++!        WRITE(6,1000) RRN,RR2,DRN,N
+         RR2=1.0D-2
+-        WRITE(6,1000) RRN,RR2,DRN,N
++!        WRITE(6,1000) RRN,RR2,DRN,N
+       ENDIF
+ C
+       IF(RR2.GE.RRN) THEN
+-        WRITE(6,'(/1X,''*** Error in SGRID: R2 is .GE. RN.'')')
+-        WRITE(6,1000) RRN,RR2,DRN,N
++!        WRITE(6,'(/1X,''*** Error in SGRID: R2 is .GE. RN.'')')
++!        WRITE(6,1000) RRN,RR2,DRN,N
+         IER=2
+         RETURN
+       ENDIF
+ C
+       RDRN=DRN
+       IF(RDRN.LE.RR2) THEN
+-        WRITE(6,'(/1X,''*** Warning (SGRID): DRN is .LE. R2.'')')
+-        WRITE(6,1000) RRN,RR2,RDRN,N
++!        WRITE(6,'(/1X,''*** Warning (SGRID): DRN is .LE. R2.'')')
++!        WRITE(6,1000) RRN,RR2,RDRN,N
+         RDRN=MAX(2.0D0*(RRN-RR2)/MAX(N,10),RR2)
+-        WRITE(6,1000) RRN,RR2,RDRN,N
++!        WRITE(6,1000) RRN,RR2,RDRN,N
+       ENDIF
+ C
+       NR=MAX(N,10)
+@@ -7339,17 +7339,17 @@
+         NLOW=RLOW
+       ENDIF
+       IF(NR.LT.NLOW) THEN
+-        WRITE(6,'(/1X,''*** Warning (SGRID): NR is .LT. NLOW.'')')
+-        WRITE(6,'('' NLOW ='',I8)') NLOW
+-        WRITE(6,1000) RRN,RR2,RDRN,NR
++!        WRITE(6,'(/1X,''*** Warning (SGRID): NR is .LT. NLOW.'')')
++!        WRITE(6,'('' NLOW ='',I8)') NLOW
++!        WRITE(6,1000) RRN,RR2,RDRN,NR
+         NR=NLOW
+-        WRITE(6,1000) RRN,RR2,RDRN,NR
++!        WRITE(6,1000) RRN,RR2,RDRN,NR
+       ENDIF
+ C
+       IF(NR.GT.NMAX) THEN
+-        WRITE(6,'(/1X,''*** Error in SGRID: NR is .GT. NMAX.'')')
+-        WRITE(6,1000) RRN,RR2,RDRN,NR
+-        WRITE(6,'('' NMAX ='',I8)') NMAX
++!        WRITE(6,'(/1X,''*** Error in SGRID: NR is .GT. NMAX.'')')
++!        WRITE(6,1000) RRN,RR2,RDRN,NR
++!        WRITE(6,'('' NMAX ='',I8)') NMAX
+         IER=3
+         RETURN
+       ENDIF
+@@ -7369,9 +7369,9 @@
+           D=0.0D0
+           GO TO 3
+         ENDIF
+-        WRITE(6,'(/1X,''*** Error in SGRID: NR is .GT. NHIGH.'')')
+-        WRITE(6,'('' NHIGH ='',I8)') NHIGH
+-        WRITE(6,1000) RRN,RR2,RDRN,NR
++!        WRITE(6,'(/1X,''*** Error in SGRID: NR is .GT. NHIGH.'')')
++!        WRITE(6,'('' NHIGH ='',I8)') NHIGH
++!        WRITE(6,1000) RRN,RR2,RDRN,NR
+         IER=4
+         RETURN
+       ENDIF
+@@ -7388,9 +7388,9 @@
+           D=0.0D0
+           GO TO 3
+         ENDIF
+-        WRITE(6,'(/1X,''*** Error in SGRID: AG is out of range.'')')
+-        WRITE(6,1000) RRN,RR2,RDRN,NR
+-        WRITE(6,'('' AG ='',1P,E13.6)') AG
++!        WRITE(6,'(/1X,''*** Error in SGRID: AG is out of range.'')')
++!        WRITE(6,1000) RRN,RR2,RDRN,NR
++!        WRITE(6,'('' AG ='',1P,E13.6)') AG
+         IER=5
+         RETURN
+       ENDIF
+@@ -7429,9 +7429,9 @@
+         DR(I)=(RR+C)/(A*(RR+C)+B)
+         IF(DR(I).LT.DR(I-1)) THEN
+ C  **** The grid spacing does not increase with I.
+-          WRITE(6,'(/1X,''*** Error in SGRID: non-increasing grid '',
+-     1      ''spacing.'')')
+-          WRITE(6,1000) RRN,RR2,RDRN,NR
++!          WRITE(6,'(/1X,''*** Error in SGRID: non-increasing grid '',
++!     1      ''spacing.'')')
++!          WRITE(6,1000) RRN,RR2,RDRN,NR
+           IER=6
+           RETURN
+         ENDIF
