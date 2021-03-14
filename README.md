@@ -28,6 +28,7 @@ cd elsepa-2020
 patch < elsepa.patch
 ```
 If for some reason you wish to use the old version of `elsepa` the `elsepa_old.patch` is available too.
+
 5. Compile the patched `elsepa`:
 ```bash
 ifort -o elsepa elscata.f
