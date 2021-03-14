@@ -16,7 +16,9 @@ Compiling with `gcc` is also possible, although the code works twice slower, ver
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
 `-Ofast` and architecture specific optimization flags may be used but the performance is unlikely to get noticeably better.
+
 2. [Download the elsepa code](https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/w4hm5vymym-1.zip) (https://doi.org/10.1016/j.cpc.2004.09.006, https://doi.org/10.1016/j.cpc.2020.107704).
+
 3. Unzip the downloaded `w4hm5vymym-1.zip` file and unpack the file inside:
 ```bash
 unzip w4hm5vymym-1.zip
