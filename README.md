@@ -16,17 +16,18 @@ Compiling with `gcc` is also possible, although the code works twice slower, ver
 g++ -std=c++11 -g -O3 -o mast_sey mast_sey.cpp
 ```
 `-Ofast` and architecture specific optimization flags may be used but the performance is unlikely to get noticeably better.
-2. [Download the elsepa code](https://data.mendeley.com/datasets/5zzrz874tt/1#file-ac245c2b-053a-4fd7-9e5a-3f706e70a87f) (https://doi.org/10.1016/j.cpc.2004.09.006).
-3. Unzip the downloaded `5zzrz874tt-1.zip` file and unpack the file inside:
+2. [Download the elsepa code](https://md-datasets-cache-zipfiles-prod.s3.eu-west-1.amazonaws.com/w4hm5vymym-1.zip) (https://doi.org/10.1016/j.cpc.2004.09.006, https://doi.org/10.1016/j.cpc.2020.107704).
+3. Unzip the downloaded `w4hm5vymym-1.zip` file and unpack the file inside:
 ```bash
-unzip 5zzrz874tt-1.zip
-tar -xvf adus_v1_0.tar.gz
+unzip w4hm5vymym-1.zip
+unzip elsepa-2020.zip
 ```
-4. Move the `elsepa.patch` patch inside the `elsepa` directory and apply it:
+4. Move the `elsepa2020.patch` patch inside the `elsepa-2020` directory and apply it:
 ```bash
-cd elsepa
-patch -p0 < elsepa.patch
+cd elsepa-2020
+patch < elsepa.patch
 ```
+If for some reason you wish to use the old version of `elsepa` the `elsepa_old.patch` is available too.
 5. Compile the patched `elsepa`:
 ```bash
 ifort -o elsepa elscata.f
