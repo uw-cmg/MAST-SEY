@@ -938,7 +938,7 @@ void printVersion(char** argv)
     if (strcmp(argv[1], "-v") == 0)
     {
             cout << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-            cout << "Cite as: https:
+            cout << "Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
             cout << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
             cout << "Code version "<< code_version << endl;
             exit(0);
