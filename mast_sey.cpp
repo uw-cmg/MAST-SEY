@@ -958,10 +958,8 @@ void printVersion(char** argv)
         cout << "-qdep    [SPA/SSPA/CUSTOM] specify type of q-dependence of ELF (def: SPA)" << endl;
         cout << "-sumr    output sum rules for plotting" << endl;
         cout << "-saveq   [E_grid q_grid q_max] save q-dependence for plotting" << endl;
-        
         cout << "-elastic [nuclear electron exchange (SOLID LDA opt.)] models to use in elastic scattering (def: F TFM FM)" << endl;
         cout << "         nuclear: [P]oint/[U]niform/[F]ermi" << endl;
-
         cout << "         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater/[DF]Dirac-Fock" << endl;
         cout << "         exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar" << endl;
         cout << "         (optional): [SOLID] muffin-tin model potential" << endl;
@@ -977,9 +975,6 @@ void printVersion(char** argv)
         cout << "-distr   save distribution of secondaries" << endl;
         cout << "-noang   use classical approach to inelastic angle scattering" << endl;
         cout << "-noout   supress all output" << endl;
-
-
-
         cout << "\n-v       display version of the code" << endl;
         cout << "-h       this message\n" << endl;
         cout << "\nPlease be careful when giving input arguments, there is no extensive input checks" << endl;
@@ -996,7 +991,7 @@ void readMaterialFile(string filename)
     if(!infile)
     {
         cerr << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-        cerr << "Cite as: https:
+        cerr << "Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
         cerr << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
         cerr << "Cannot open obligatory file " << filename << endl;
         cerr << "The file should have, line by line, the following information:" << endl;
@@ -1207,7 +1202,7 @@ void prepareJDOS(const vector<array<double,2> > &dos)
 void printInput()
 {
     cout << "# MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-    cout << "# Cite as: https:
+    cout << "# Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
     cout << "# (c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
     cout << "# Code version " << code_version << "\n#" << endl;
     cout << "# Job started on " << getTime() << "\n#" << endl;
