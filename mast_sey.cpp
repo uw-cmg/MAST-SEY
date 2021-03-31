@@ -938,16 +938,16 @@ void printVersion(char** argv)
     if (strcmp(argv[1], "-v") == 0)
     {
             cout << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-            cout << "Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
-            cout << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
+            cout << "Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
+            cerr << "(c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
             cout << "Code version "<< code_version << endl;
             exit(0);
     }
     else if (strcmp(argv[1], "-h") == 0)
     {
         cout << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-        cout << "Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
-        cout << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
+        cout << "Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
+        cout << "(c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
         cout << "\nInput options:\n" << endl;
         cout << "\"prepare\" as first argument will run input preparation from \"eps/elf.in\" and \"material.in\"" << endl;
         cout << "otherwise, the \"simulate\" version will be executed" << endl;
@@ -991,8 +991,8 @@ void readMaterialFile(string filename)
     if(!infile)
     {
         cerr << "MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-        cerr << "Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
-        cerr << "(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
+        cerr << "Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
+        cerr << "(c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
         cerr << "Cannot open obligatory file " << filename << endl;
         cerr << "The file should have, line by line, the following information:" << endl;
         cerr << "Atomic Number, Unit Cell Volume [A^3], Fermi energy [eV], Work Function [eV]\n" << endl;
