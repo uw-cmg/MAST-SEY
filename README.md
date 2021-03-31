@@ -3,7 +3,7 @@
 
 
 MAST-SEY is an open-source Monte Carlo code capable of predicting secondary electron emission using input data generated entirely from first principle (density functional theory) calculations. It utilises the complex dielectric function and Penn's theory for inelastic scattering processes, and relativistic Schrödinger theory by means of partial-wave expansion method to govern elastic scattering. It allows to not only use the momentum independent (q=0) dielectric function but also to include explicitly calculated momentum dependence, as well as to utilise first-principle density of states in secondary electron generation.  
-For more detail please refer to the paper which this code accompanies: Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comp. Mat. Sci. XXX, xx, (2021) (https://doi.org/10.1016/xx.xx.xx), which is to be cited whenever the code is used.
+For more detail please refer to the paper which this code accompanies: Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193**, 110281, (2021) (https://doi.org/10.1016/j.commatsci.2021.110281), which is to be cited whenever the code is used.
 
 ## Installation
 
