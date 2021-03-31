@@ -69,7 +69,7 @@ The user should be greeted with the default MAST-SEY output screen. It contains 
 
 These examples showcase most of the capabilities of the code.
 They serve as a tutorial for thr code and also allow to reproduce the results presented in the paper which this code accompanies:
-Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comp. Mat. Sci. XXX, xx, (2021) (https://doi.org/10.1016/xx.xx.xx)
+Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193** (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)
 
 Two material systems are considered: copper and aluminium.
 
