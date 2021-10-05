@@ -68,7 +68,7 @@ mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
 These examples showcase most of the capabilities of the code.
-They serve as a tutorial for thr code and also allow to reproduce the results presented in the paper which this code accompanies:
+They serve as a tutorial for the code and also allow to reproduce the results presented in the paper which this code accompanies:
 Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193** (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)
 
 Two material systems are considered: copper and aluminium.
