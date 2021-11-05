@@ -67,7 +67,54 @@ mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 ```
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
-These examples showcase most of the capabilities of the code.
+A detailed list of options is given upon execution of the code with the `-h` flag:
+```bash
+MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)
+Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX
+(c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan
+
+Input options:
+
+"prepare" as first argument will run input preparation from "eps/elf.in" and "material.in"
+otherwise, the "simulate" version will be executed
+
+"prepare" options:
+-e       [iniE(eV,optional) range(eV) grid] energy range and grid (def: 1000 500)
+-lin     generate the energy grid on a linear scale (default is logarithmic)
+-i       [ICS q-int] grids for ICS and q integration (def: 1000 100)
+-qdep    [SPA/SSPA/CUSTOM] specify type of q-dependence of ELF (def: SPA)
+-sumr    output sum rules for plotting
+-saveq   [E_grid q_grid q_max] save q-dependence for plotting
+-elastic [nuclear electron exchange (SOLID LDA opt.)] models to use in elastic scattering (def: F TFM FM)
+         nuclear: [P]oint/[U]niform/[F]ermi
+         electron: [TFM]Thomas–Fermi–Moliere/[TFD]Thomas-Fermi-Dirac/[DHFS]Dirac–Hartree–Fock–Slater/[DF]Dirac-Fock
+         exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar
+         (optional): [SOLID] muffin-tin model potential
+         (optional): [LDA] LDA correlation–polarization potential model
+
+"simulate" options:
+-e       [incident_energy(eV)] energy of incident energy
+-m       [number_of_e-] number of incident electrons (def: 1000)
+-core    [energy(eV)] allow secondaries to come from bound states
+-dos     [FEG (optional)] generate secondaries from joint DOS from prepared "jdos.in"
+         or from parabolic free electron gas approximation (FEG)
+-pa      [angle(deg)] angle of incident electrons with respect to surface normal
+-coord   save travel paths of e-
+-distr   save distribution of secondaries
+-noang   use classical approach to inelastic angle scattering
+-noout   supress all output
+
+-v       display version of the code
+-h       this message
+
+
+Please be careful when giving input arguments, there is no extensive input checks
+Example executions:
+./mast_sey prepare -e 700 1000 -i 200 100 -elastic F TFD TF
+./mast_sey -e 350 -m 10000
+```
+
+Thee examples directory contains examples that showcase most of the capabilities of the code.
 They serve as a tutorial for the code and also allow to reproduce the results presented in the paper which this code accompanies:
 Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193** (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)
 
