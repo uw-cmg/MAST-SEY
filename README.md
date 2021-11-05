@@ -68,7 +68,7 @@ mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
 A detailed list of options is given upon execution of the code with the `-h` flag:
-```bash
+```
 MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)
 Cite as: https://doi.org/10.1016/j.commatsci.2020.XXXXXX
 (c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan
@@ -114,11 +114,11 @@ Example executions:
 ./mast_sey -e 350 -m 10000
 ```
 
-Thee examples directory contains examples that showcase most of the capabilities of the code.
+The [examples directory] (https://github.com/uw-cmg/MAST-SEY/tree/master/examples) contains examples that showcase most of the capabilities of the code.
 They serve as a tutorial for the code and also allow to reproduce the results presented in the paper which this code accompanies:
 Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193** (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)
 
-Two material systems are considered: copper and aluminium.
+Two material systems are considered: [copper] and [aluminium].
 
 Each directory contains all the neccessary input files and a set of commands that should be executed. It also contains a directory with the calculations already completed, for comparison.
 
