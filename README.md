@@ -114,7 +114,7 @@ Example executions:
 ./mast_sey -e 350 -m 10000
 ```
 
-The [examples directory] (https://github.com/uw-cmg/MAST-SEY/tree/master/examples) contains examples that showcase most of the capabilities of the code.
+The [examples directory](https://github.com/uw-cmg/MAST-SEY/tree/master/examples) contains examples that showcase most of the capabilities of the code.
 They serve as a tutorial for the code and also allow to reproduce the results presented in the paper which this code accompanies:
 Maciej P. Polak and Dane Morgan, *MAST-SEY: MAterial Simulation Toolkit for Secondary Electron Yield. A Monte Carlo Approach to Secondary Electron Emission Based On Complex Dielectric Functions*, Comput. Mater. Sci. **193** (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)
 
