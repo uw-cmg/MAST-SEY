@@ -1467,7 +1467,7 @@ array<double,3> f_rotdircos(array<double,3> uvw, double ang0, double ang1)
     double cdf = cos(ang1);
     double dxy = uvw[0]*uvw[0]+uvw[1]*uvw[1];
     double dxyz = dxy+uvw[2]*uvw[2];
-    if (abs(dxyz-1.0 > 1e-9)) {
+    if (abs(dxyz-1.0) > 1e-9) {
         double fnorm = 1.0/sqrt(dxyz);
         uvw[0] = fnorm*uvw[0];
         uvw[1] = fnorm*uvw[1];
