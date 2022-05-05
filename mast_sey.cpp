@@ -15,7 +15,7 @@
 #define BOHR2ANG 0.5291772109
 
 using namespace std;
-string code_version = "4.0 (22-12-2020)";
+string code_version = "4.1 (04-05-2022)";
 vector<string> elems = {"XX","H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"};
 
 
@@ -1202,8 +1202,8 @@ void prepareJDOS(const vector<array<double,2> > &dos)
 void printInput()
 {
     cout << "# MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-    cout << "# Cite as: https://doi.org/10.1016/j.commatsci.2021.XXXXXX" << endl;
-    cout << "# (c) 2020 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan" << endl;
+    cout << "Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
+    cout << "(c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
     cout << "# Code version " << code_version << "\n#" << endl;
     cout << "# Job started on " << getTime() << "\n#" << endl;
     cout << "#  Input feedback:\n#" << endl;
