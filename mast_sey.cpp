@@ -1202,8 +1202,8 @@ void prepareJDOS(const vector<array<double,2> > &dos)
 void printInput()
 {
     cout << "# MAterials Simulation Toolkit for Secondary Electron Emission (MAST-SEY)" << endl;
-    cout << "Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
-    cout << "(c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
+    cout << "# Cite as: Comput. Mater. Sci. 193 (2021), 110281 (https://doi.org/10.1016/j.commatsci.2021.110281)" << endl;
+    cout << "# (c) 2021 Maciej P. Polak (mppolak@wisc.edu) & Dane Morgan\n" << endl;
     cout << "# Code version " << code_version << "\n#" << endl;
     cout << "# Job started on " << getTime() << "\n#" << endl;
     cout << "#  Input feedback:\n#" << endl;
