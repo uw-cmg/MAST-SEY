@@ -7,6 +7,7 @@
 #include <ctime>
 #include <chrono>
 #include <string.h>
+#include <array>
 
 #define PI 3.14159265359
 #define HA2EV 27.21138602
@@ -1417,7 +1418,7 @@ void saveQdep(int n_ene, int n_q, double q_max)
         ee = 0;
         for (int j = 0; j <= n_ene; j++)
         {
-            elfq_arr.push_back({ee,qq,elfq(qq,ee,0)});
+            elfq_arr.push_back({ee*HA2EV,qq,elfq(qq,ee,0)});
             ee += de;
         }
         qq += dq;
@@ -1588,11 +1589,11 @@ vector<array<double,2> > int_inelastic_ang(double (*f)(double,double,int), doubl
         }
         q2 = 4.*ie-2.*de-4.*sqrt(ie*(ie-de))*cos(x);
         q = sqrt(q2);
-        a = 1./(PI*PI*ie)*(*f)(q,de,2)*sqrt(ie*(ie-de))*sin(x);
+        a = 1./(PI*PI*ie)*(*f)(q*ANG2BOHR,de,2)*sqrt(ie*(ie-de))*sin(x);
 
         q2 = 4.*ie-2.*de-4.*sqrt(ie*(ie-de))*cos(x+dx);
         q = sqrt(q2);
-        b = 1./(PI*PI*ie)*(*f)(q,de,2)*sqrt(ie*(ie-de))*sin(x+dx);
+        b = 1./(PI*PI*ie)*(*f)(q*ANG2BOHR,de,2)*sqrt(ie*(ie-de))*sin(x+dx);
 
         intgrl += (a+b)*dx*0.5;
         x = x+dx;
