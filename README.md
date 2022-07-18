@@ -77,10 +77,32 @@ Example `material.in` file for insulators containing (the atomic number, volume 
 1.3
 ```
 
+The `elf.in` file with the custom q-dependency has the following structure:
+```
+energy[1] ELF[1][q[1]] 
+energy[2] ELF[2][q[1]] 
+... ...
+energy[n] ELF[n][q[1]] 
+q[1] q[1]
+99999999 99999999
+energy[1] ELF[1][q[2]] 
+energy[2] ELF[2][q[2]] 
+... ...
+energy[n] ELF[n][q[2]] 
+q[2] q[2]
+99999999 99999999
+.....
+energy[1] ELF[1][q[k]] 
+energy[2] ELF[2][q[k]] 
+... ...
+energy[n] ELF[n][q[k]] 
+q[k] q[k]
+```
+
 The command below is an example of how to run the "prepare" step:
 ```bash
 mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
-mast_sey prepare -ins -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM // for insulators
+mast_sey prepare -ins -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
 ```
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
