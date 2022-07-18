@@ -61,9 +61,26 @@ The code is executed in two steps:
 ### The "prepare" step
 This step postprocesses the input files to a form convenient for the second step to use. It takes the dielectric function `eps.in` or the energy loss function `elf.in`, and using the parameters contained in `material.in`, prepares the cumulative integrals of cross sections. These results are stored in `inelastic.in` and `elastic.in`. Additionally a file `mfp.plot` is generated, and allows for a convenient plotting of the inelastic and elastic mean free paths, which are generated in this step as well. This step is performed only once for each case.
 
+Example `material.in` file for metals containing (the atomic number, volume (A^3), the Fermi energy (eV), the work function (eV)):
+```
+79
+16.929
+9.0
+5.1
+```
+Example `material.in` file for insulators containing (the atomic number, volume (A^3), the band gap energy (eV), the width of the valence band (eV), the electron affinity (eV)):
+```
+79
+16.929
+6.7
+15.8
+1.3
+```
+
 The command below is an example of how to run the "prepare" step:
 ```bash
 mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
+mast_sey prepare -ins -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM // for insulators
 ```
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
@@ -79,6 +96,7 @@ Input options:
 otherwise, the "simulate" version will be executed
 
 "prepare" options:
+-ins     calculate properties for insulators
 -e       [iniE(eV,optional) range(eV) grid] energy range and grid (def: 1000 500)
 -lin     generate the energy grid on a linear scale (default is logarithmic)
 -i       [ICS q-int] grids for ICS and q integration (def: 1000 100)
@@ -93,6 +111,7 @@ otherwise, the "simulate" version will be executed
          (optional): [LDA] LDA correlation–polarization potential model
 
 "simulate" options:
+-ins     simulate for insulators
 -e       [incident_energy(eV)] energy of incident energy
 -m       [number_of_e-] number of incident electrons (def: 1000)
 -core    [energy(eV)] allow secondaries to come from bound states
@@ -112,6 +131,9 @@ Please be careful when giving input arguments, there is no extensive input check
 Example executions:
 ./mast_sey prepare -e 700 1000 -i 200 100 -elastic F TFD TF
 ./mast_sey -e 350 -m 10000
+
+./mast_sey prepare -ins -e 700 1000 -i 200 100 -elastic F TFD TF
+./mast_sey -ins -e 350 -m 10000
 ```
 
 The [examples directory](https://github.com/uw-cmg/MAST-SEY/tree/master/examples) contains examples that showcase most of the capabilities of the code.
