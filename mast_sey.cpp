@@ -66,6 +66,8 @@ bool notir = false;
 bool test = false;
 double cc = 137.;
 
+bool ins = false;
+double eg, evb, chi;
 
 string getTime();
 void getInput(int argc, char** argv);
@@ -127,7 +129,7 @@ string checkName (string name);
 class Electron
 {
     public:
-        double e,de,imfp,emfp,tmfp,s_ef,s_u0;
+        double e,de,iimfp,iemfp,itmfp,s_ef,s_u0, pathlength;
         int secondary;
         double angles[2];
         double defl[2];
@@ -153,17 +155,20 @@ class Electron
         }
         defl[0] = 0.0;
         defl[1] = 0.0;
-        imfp = IMFP();      
-        emfp = EMFP();      
-        tmfp = emfp+imfp;   
+        iimfp = IIMFP();      
+        iemfp = IEMFP();      
+        itmfp = iemfp+iimfp;   
         inside = true;
         dead = false;
         secondary = sec;
+
+        pathlength = 0.0;
     }
     void travel_s()
     {
         double rn = random01();
-        double s = -(1./tmfp)*log(rn);
+        double s = -(1./itmfp)*log(rn);
+        pathlength += s;
         xyz[0]=xyz[0]+uvw[0]*s;
         xyz[1]=xyz[1]+uvw[1]*s;
         xyz[2]=xyz[2]+uvw[2]*s;
@@ -182,7 +187,7 @@ class Electron
     void determ_scatter()
     {
         double rn = random01();
-        if (rn < emfp/tmfp)
+        if (rn < iemfp/itmfp)
         {
             sc_type_el = true;
             sc_type_elinel[0]++;
@@ -222,33 +227,40 @@ class Electron
             died();
             if (! dead)
             {
-                imfp = IMFP();
-                emfp = EMFP();
-                tmfp = emfp+imfp;
+                iimfp = IIMFP();
+                iemfp = IEMFP();
+                itmfp = iemfp+iimfp;
             }
             if (use_dos) 
             {
                 if (feg_dos)
                 {
-                    s_ef = fzero(&jdos,0.,ef,de,rn4);
+                    if (ins) {
+                        s_ef = fzero(&jdos,0.,evb,de,rn4);
+                    } else {
+                        s_ef = fzero(&jdos,0.,ef,de,rn4);
+                    }
                 } else {
                     double s_ef_int = linterp2d(de,-1,de_arr,jdos_arr,true);
                     s_ef = linterp2d(de,rn4*s_ef_int,de_arr,jdos_arr,false,true);
                 }
             } else {
-                s_ef = ef;
+                if (ins)
+                    s_ef = evb;
+                else
+                    s_ef = ef;
             }
             return true;
         }
     }
 
-    double EMFP()
+    double IEMFP()
     {
         double dcs = linterp2d(e,-1,ie_arr,elas_arr,true);
         return dcs/vol;
     }
 
-    double IMFP()
+    double IIMFP()
     {
         return linterp2d(e,-1,ie_arr,inel_arr,true);
     }
@@ -316,9 +328,16 @@ class Electron
 int main(int argc, char** argv)
 {
     printVersion(argv);
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-ins") == 0) {
+            ins = true;
+        }
+    }
     readMaterialFile();
     getInput(argc,argv);
-    readEpsFile();
+    // ===================================
+    readEpsFile(); // ??? we call it later for prep, delete?
+    // ===================================
     if(noout) {
         cout.rdbuf(NULL);
     }
@@ -475,7 +494,7 @@ int main(int argc, char** argv)
                         elec_arr[i].determ_scatter();
                         if (elec_arr[i].scatter())
                         {
-                            
+                            // ionisation
                             if (elec_arr[i].de-eb>u0 && eb>0.001)
                             {
                                 s_ene = elec_arr[i].de-eb;
@@ -495,7 +514,7 @@ int main(int argc, char** argv)
                                 }
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
-                            
+                            // valence band interaction
                             else if (elec_arr[i].de+elec_arr[i].s_ef>u0)
                             {
                                 s_ene = elec_arr[i].de+elec_arr[i].s_ef;
@@ -588,12 +607,19 @@ string getTime()
 
 void getInput(int argc, char** argv)
 {
+    double elow;
     if (argc == 1)
     {
         cerr << "No arguments specified, use \"-h\" flag for options.\nAt least the \"prepare\" keyword or \"-e\" flag is needed." << endl;
         exit(1);
     }
     if (strcmp(argv[1], "prepare") == 0) { prep = true; }
+
+    if (ins) {
+        elow = eg+evb+1e-4;
+    } else {
+        elow = ef+1e-4;
+    }
     for (int i = 1; i < argc; i++)
     {
         if (strcmp(argv[i], "-e") == 0 && prep)
@@ -606,18 +632,25 @@ void getInput(int argc, char** argv)
                     ebeg = stod(argv[i+1])*EV2HA;
                     erange = stod(argv[i+2])*EV2HA;
                     egrid = stoi(argv[i+3]);
-                    if (ebeg <= ef+1e-4)
+                    if (ebeg <= elow)
                     {
-                        cout << "# WARNING: Initial energy too low, setting to E_fermi = " << ef*HA2EV << "\n#" << endl;
-                        ebeg = ef+1e-4;
+                        if (ins) {
+                            cout << "# WARNING: Initial energy too low, setting to E_gap + E_vb = " << (eg+evb)*HA2EV << "\n#" << endl;
+                        } else {
+                            cout << "# WARNING: Initial energy too low, setting to E_fermi = " << ef*HA2EV << "\n#" << endl;
+                        }
+                        ebeg = elow;
                     }
                 } else if (argv[i+1][0] != '-' && argv[i+2][0] != '-' && argv[i+3][0] == '-')
                 {
-                    ebeg = ef+1e-4;
+                    ebeg = elow;
                     erange = stod(argv[i+1])*EV2HA;
                     egrid = stoi(argv[i+2]);
-                    if (erange <= ef+1e-4) {
-                        cerr << "Energy range lower than E_fermi, stopping." << endl;
+                    if (erange <= elow) {
+                        if (ins)
+                            cerr << "Energy range lower than E_gap + E_vb, stopping." << endl;
+                        else
+                            cerr << "Energy range lower than E_fermi, stopping." << endl;
                         exit(1);
                     }
                 } else {
@@ -628,7 +661,7 @@ void getInput(int argc, char** argv)
             {
                 if (argv[i+1][0] != '-' && argv[i+2][0] != '-')
                 {
-                    ebeg = ef+1e-4;
+                    ebeg = elow;
                     erange = stod(argv[i+1])*EV2HA;
                     egrid = stoi(argv[i+2]);
                 } else {
@@ -654,7 +687,6 @@ void getInput(int argc, char** argv)
                 exit(1);
             }
         }
-
 
         if (strcmp(argv[i], "-lin") == 0) { lin_prep = true; }
         if (strcmp(argv[i], "-coord") == 0) { save_coords = true; }
@@ -1029,12 +1061,21 @@ void readMaterialFile(string filename)
         cerr << "Where Comp1+Comp2+...+CompN = 1.0" << endl;
         exit(1);
     }
-    infile >> vol >> ef >> wf;
+    if (ins) {
+        infile >> vol >> eg >> evb >> chi;
+        eg = EV2HA*eg;
+        evb = EV2HA*evb;
+        chi = EV2HA*chi;
+        u0 = eg+evb+chi;
+        ebeg = eg+evb+1e-4;
+    } else {
+        infile >> vol >> ef >> wf;
+        ef = EV2HA*ef;
+        wf = EV2HA*wf;
+        u0 = ef+wf;
+        ebeg = ef+1e-4;
+    }
     vol = vol*ANG2BOHR*ANG2BOHR*ANG2BOHR;
-    ef = EV2HA*ef;
-    wf = EV2HA*wf;
-    u0 = ef+wf;
-    ebeg = ef+1e-4;
 }
 
 void readEpsFile(string filename)
@@ -1080,7 +1121,7 @@ void readEpsFile(string filename)
                 if (e == 99999999 && re == 99999999)
                 {
                     ene_elf_tmp.pop_back();
-                    q_arr.push_back(ene_elf_tmp[ene_elf_tmp.size()-1][0]*HA2EV);
+                    q_arr.push_back(ene_elf_tmp[ene_elf_tmp.size()-1][0]*HA2EV*BOHR2ANG);
                     ene_elf_tmp.pop_back();
                     ene_elf.push_back(ene_elf_tmp);
                     ene_elf_tmp.clear();
@@ -1219,26 +1260,50 @@ void printInput()
                 cout << elems[atnum[i]] << atcomp[i];
             }
             cout << endl << "#" << endl;
-            cout << "#" << setw(9) << "Volume" << setw(9) << "EFermi" << endl;
-            cout << "#" << setw(9) << "[A^3]" << setw(9) << "[eV]" << endl;
-            cout << "#" << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << ef*HA2EV << setw(9) << "\n#" << endl;
+            if (ins) {
+                cout << "#" << setw(9) << "Volume" << setw(9) << "Eg" << setw(9) << "Evb" << endl;
+                cout << "#" << setw(9) << "[A^3]" << setw(9) << "[eV]" << setw(9) << "[eV]" << endl;
+                cout << "#" << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << eg*HA2EV << setw(9) << evb*HA2EV << setw(9) << "\n#" << endl;
+            } else {
+                cout << "#" << setw(9) << "Volume" << setw(9) << "EFermi" << endl;
+                cout << "#" << setw(9) << "[A^3]" << setw(9) << "[eV]" << endl;
+                cout << "#" << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << ef*HA2EV << setw(9) << "\n#" << endl;
+            }
         } else {
-            cout << "#" << setw(9) << "Elem" << setw(9) << "Volume" << setw(9) << "EFermi" << endl;
-            cout << "#" << setw(9) << " " << setw(9) << "[A^3]" << setw(9) << "[eV]" << endl;
-            cout << "#" << setw(9) << elems[atnum[0]] << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << ef*HA2EV << setw(9) << "\n#" << endl;
+            if (ins) {
+                cout << "#" << setw(9) << "Elem" << setw(9) << "Volume" << setw(9) << "Eg" << setw(9) << "Evb" << endl;
+                cout << "#" << setw(9) << " " << setw(9) << "[A^3]" << setw(9) << "[eV]" << setw(9) << "[eV]" << endl;
+                cout << "#" << setw(9) << elems[atnum[0]] << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << eg*HA2EV << setw(9) << evb*HA2EV << setw(9) << "\n#" << endl;
+            } else {
+                cout << "#" << setw(9) << "Elem" << setw(9) << "Volume" << setw(9) << "EFermi" << endl;
+                cout << "#" << setw(9) << " " << setw(9) << "[A^3]" << setw(9) << "[eV]" << endl;
+                cout << "#" << setw(9) << elems[atnum[0]] << setw(9) << vol*BOHR2ANG*BOHR2ANG*BOHR2ANG << setw(9) << ef*HA2EV << setw(9) << "\n#" << endl;
+            }
         }
     } else
     {
         if (eb>0.01)
         {
-            cout << "#" << setw(9) << "EFermi" << setw(9) << "WorkFun" << setw(9) << "BindEne" << setw(9) << "IncAng "<< endl;
-            cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
-            cout << "#" << setw(9) << ef*HA2EV << setw(9) << wf*HA2EV << setw(9) << eb*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            if (ins) {
+                cout << "#" << setw(9) << "Eg" << setw(9) << "Evb" << setw(9) << "Affinity" << setw(9) << "BindEne" << setw(9) << "IncAng "<< endl;
+                cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
+                cout << "#" << setw(9) << eg*HA2EV << setw(9) << evb*HA2EV << setw(9) << chi*HA2EV << setw(9) << eb*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            } else {
+                cout << "#" << setw(9) << "EFermi" << setw(9) << "WorkFun" << setw(9) << "BindEne" << setw(9) << "IncAng "<< endl;
+                cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
+                cout << "#" << setw(9) << ef*HA2EV << setw(9) << wf*HA2EV << setw(9) << eb*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            }
         } else
         {
-            cout << "#" << setw(9) << "EFermi" << setw(9) << "WorkFun" << setw(9) << "IncAng" << endl;
-            cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
-            cout << "#" << setw(9) << ef*HA2EV << setw(9) << wf*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            if (ins) {
+                cout << "#" << setw(9) << "Eg" << setw(9) << "Evb" << setw(9) << "Affinity" << setw(9) << "IncAng" << endl;
+                cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
+                cout << "#" << setw(9) << eg*HA2EV << setw(9) << evb*HA2EV << setw(9) << chi*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            } else {
+                cout << "#" << setw(9) << "EFermi" << setw(9) << "WorkFun" << setw(9) << "IncAng" << endl;
+                cout << "#" << setw(9) << "[eV]" << setw(9) << "[eV]" << setw(9) << "[deg]" << endl;
+                cout << "#" << setw(9) << ef*HA2EV << setw(9) << wf*HA2EV << setw(9) << ini_angle*180./PI << "\n#" << endl;
+            }
         }
     }
 
@@ -1393,12 +1458,12 @@ void saveMFP(string filename)
     {
         if (emfp_only)
         {
-            double emfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
-            outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./emfp_e*BOHR2ANG << endl;
+            double iemfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
+            outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./iemfp_e*BOHR2ANG << endl;
         } else {
-            double emfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
-            double imfp_e = linterp2d(ie_arr[ee],-1,ie_arr,inel_arr,true);
-            outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./imfp_e*BOHR2ANG << " " << setprecision(17) << 1./emfp_e*BOHR2ANG << endl;
+            double iemfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
+            double iimfp_e = linterp2d(ie_arr[ee],-1,ie_arr,inel_arr,true);
+            outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./iimfp_e*BOHR2ANG << " " << setprecision(17) << 1./iemfp_e*BOHR2ANG << endl;
         }
     }
 }
@@ -1589,11 +1654,11 @@ vector<array<double,2> > int_inelastic_ang(double (*f)(double,double,int), doubl
         }
         q2 = 4.*ie-2.*de-4.*sqrt(ie*(ie-de))*cos(x);
         q = sqrt(q2);
-        a = 1./(PI*PI*ie)*(*f)(q*ANG2BOHR,de,2)*sqrt(ie*(ie-de))*sin(x);
+        a = 1./(PI*PI*ie)*(*f)(q,de,2)*sqrt(ie*(ie-de))*sin(x);
 
         q2 = 4.*ie-2.*de-4.*sqrt(ie*(ie-de))*cos(x+dx);
         q = sqrt(q2);
-        b = 1./(PI*PI*ie)*(*f)(q*ANG2BOHR,de,2)*sqrt(ie*(ie-de))*sin(x+dx);
+        b = 1./(PI*PI*ie)*(*f)(q,de,2)*sqrt(ie*(ie-de))*sin(x+dx);
 
         intgrl += (a+b)*dx*0.5;
         x = x+dx;
@@ -1610,19 +1675,23 @@ vector<array<double,2> > int_inelastic_ang(double (*f)(double,double,int), doubl
 
 vector<array<double,2> > inel(double ie)
 {
-    vector<array<double,2> > imfpint;
+    vector<array<double,2> > iimfpint;
     if (ie<1e-10)
     {
         for (int i = 0; i <= icsintgrid; i++)
         {
-            imfpint.push_back({0.0,0.0});
+            iimfpint.push_back({0.0,0.0});
         }
     }
     else
     {
-        imfpint = int_inelastic_ene(&qIntFun,1e-5,ie-ef,icsintgrid,ie,true);
+        if (ins) {
+            iimfpint = int_inelastic_ene(&qIntFun,eg,ie-eg-evb,icsintgrid,ie,true);
+        } else {
+            iimfpint = int_inelastic_ene(&qIntFun,1e-5,ie-ef,icsintgrid,ie,true);
+        }
     }
-    return imfpint;
+    return iimfpint;
 }
 
 vector<vector<array<double,2> > > inelang(double ie)
@@ -1630,9 +1699,14 @@ vector<vector<array<double,2> > > inelang(double ie)
     vector<array<double,2> > inangint;
     vector<vector<array<double,2> > > inangint_de;
     int nde = 100;
+    double de;
     for (int d = 0; d <= nde; d++)
     {
-        double de = (double)d/(double)nde*(ie-ef);
+        if (ins) {
+            de = eg + (double)d/(double)nde*(ie-eg-evb);
+        } else {
+            de = (double)d/(double)nde*(ie-ef);
+        }
         inangint = int_inelastic_ang(&elfq,0.0,PI/2.,nde,ie,de,true);
         inangint_de.push_back(inangint);
         inangint.clear();
@@ -1816,12 +1890,21 @@ double elfq(double q, double om, int dq)
 double qIntFun(double om, double ie, int dummy)
 {
     double tp = ie;
-    double c = pow((1.+(tp)/(137.*137.)),2)/(1.+tp/(2.*137.*137.))*1/(PI*tp);
-    double qm = sqrt(tp*(2.+tp/(cc*cc)))-sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
-    double qp = sqrt(tp*(2.+tp/(cc*cc)))+sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
+    double qm, qp, c;
+    if (ins)
+    {
+        c = pow((1.+(tp - eg)/(137.*137.)),2)/(1.+(tp - eg)/(2.*137.*137.))*1/(PI*(tp - eg));
 
-
-
+        qm = sqrt((tp - eg)*(2.+(tp - eg)/(cc*cc)))-sqrt((tp-eg-om)*(2.+(tp-eg-om)/(cc*cc)));
+        qp = sqrt((tp - eg)*(2.+(tp - eg)/(cc*cc)))+sqrt((tp-eg-om)*(2.+(tp-eg-om)/(cc*cc)));
+    }
+    else
+    {
+        c = pow((1.+(tp)/(137.*137.)),2)/(1.+tp/(2.*137.*137.))*1/(PI*tp);
+    
+        qm = sqrt(tp*(2.+tp/(cc*cc)))-sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
+        qp = sqrt(tp*(2.+tp/(cc*cc)))+sqrt((tp-om)*(2.+(tp-om)/(cc*cc)));
+    }
 
     vector<array<double,2> > qint = int_inelastic_ene(&elfq,qm,qp,qintgrid,om);
     return qint[0][1]*c;
