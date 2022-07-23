@@ -27,7 +27,7 @@ streambuf* orig_buf = cout.rdbuf();
 
 
 vector<double> ie_arr, q_arr, de_arr;
-vector<vector<array<double,2> > > inel_arr, elas_arr, ene_elf, jdos_arr;
+vector<vector<array<double,2> > > inel_arr, phon_arr, elas_arr, ene_elf, jdos_arr;
 vector<array<double,2> > elas_alloy_arr, dos_arr;
 
 int dircos_algo = 0;
@@ -68,11 +68,15 @@ double cc = 137.;
 
 bool ins = false;
 double eg, evb, chi;
+bool ph = false;
+double eps_zero, eps_inf;
+vector <double> ph_loss;
 
 string getTime();
 void getInput(int argc, char** argv);
 void printVersion(char** argv);
-void readMaterialFile(string filename="material.in");;
+void readMaterialFile(string filename="material.in");
+void readPhononFile(string filename="ph.in");
 void readEpsFile(string filename="eps.in");
 vector<double> read1colFile(string filename="energies.in");
 vector<array<double,2> > read2colFile(string filename="dos.in");
@@ -85,6 +89,7 @@ vector<double> getDeArr();
 
 vector<array<double,2> > elas(double ie, int at=0, double comp=1.0);
 vector<array<double,2> > inel(double ie);
+vector<array<double,2> > phonon(double ie);
 vector<array<double,2> > int_elastic_ang(const vector<double> &xarr, const vector<double> &yarr, bool cumint=false);
 vector<array<double,2> > int_inelastic_ene(double (*f)(double,double,int), double x0, double x1, int ndiv, double args, bool cumint=false);
 vector<array<double,2> > int_inelastic_ang(double (*f)(double,double,int), double x0, double x1, int ndiv, double ie, double de, bool cumint=false);
@@ -129,7 +134,7 @@ string checkName (string name);
 class Electron
 {
     public:
-        double e,de,iimfp,iemfp,itmfp,s_ef,s_u0, pathlength;
+        double e,de,iimfp,iemfp,itmfp,iphmfp,s_ef,s_u0, pathlength;
         int secondary;
         double angles[2];
         double defl[2];
@@ -156,7 +161,7 @@ class Electron
         defl[0] = 0.0;
         defl[1] = 0.0;
         iimfp = IIMFP();      
-        iemfp = IEMFP();      
+        iemfp = IEMFP();  
         itmfp = iemfp+iimfp;   
         inside = true;
         dead = false;
@@ -265,6 +270,11 @@ class Electron
         return linterp2d(e,-1,ie_arr,inel_arr,true);
     }
 
+    double IPHMFP()
+    {
+        return linterp2d(e,-1,ie_arr,phon_arr,true);
+    }
+
     void escaped()
     {
         double rn = random01();
@@ -335,6 +345,10 @@ int main(int argc, char** argv)
     }
     readMaterialFile();
     getInput(argc,argv);
+    if (ph)
+    {
+        readPhononFile();
+    }
     // ===================================
     readEpsFile(); // ??? we call it later for prep, delete?
     // ===================================
@@ -382,6 +396,10 @@ int main(int argc, char** argv)
             if(!emfp_only)
             {
                 inel_arr.push_back(inel(ie_arr[i]));
+                if (ph)
+                {
+                    phon_arr.push_back(phonon(ie_arr[i]));
+                }
             }
         }
         if (preprange)
@@ -392,6 +410,10 @@ int main(int argc, char** argv)
             if(!emfp_only)
             {
                 saveVector(inel_arr, "inelastic_"+er_str+".in");
+                if (ph)
+                {
+                    saveVector(phon_arr, "phonon_"+er_str+".in");
+                }
             }
             saveMFP("mfp_"+er_str+".plot");
             cout << "\nFinished preparing input files, results in \"elastic_"+er_str+".in\", \"inelastic_"+er_str+".in\" and \"energies_"+er_str+".in\"" << endl;
@@ -402,6 +424,10 @@ int main(int argc, char** argv)
             if(!emfp_only)
             {
                 saveVector(inel_arr, "inelastic.in");
+                if (ph)
+                {
+                    saveVector(phon_arr, "phonon.in");
+                }
             }
             saveMFP("mfp.plot");
             cout << "\nFinished preparing input files, results in \"elastic.in\", \"inelastic.in\" and \"energies.in\"" << endl;
@@ -701,6 +727,11 @@ void getInput(int argc, char** argv)
         if (strcmp(argv[i], "-emfp") == 0) { emfp_only = true; }
         if (strcmp(argv[i], "SOLID") == 0) { es_muffin = 1; }
         if (strcmp(argv[i], "LDA") == 0) { es_mcpol = 2; }
+
+        if (strcmp(argv[i], "-ph") == 0)
+        {
+            ph = true;
+        }
 
         if (strcmp(argv[i], "-dircos") == 0)
         {
@@ -1078,6 +1109,18 @@ void readMaterialFile(string filename)
     vol = vol*ANG2BOHR*ANG2BOHR*ANG2BOHR;
 }
 
+void readPhononFile(string filename)
+{
+    ifstream infile(filename);
+    double ph_tmp;
+    while ( infile.peek() != '\n' )
+    {
+        infile >> ph_tmp;
+        ph_loss.push_back(ph_tmp);
+    }
+    infile >> eps_zero >> eps_inf;
+}
+
 void readEpsFile(string filename)
 {
     ifstream epsfile("eps.in");
@@ -1451,6 +1494,8 @@ void saveMFP(string filename)
     if (emfp_only)
     {
         outfile << "#Energy[eV] EMFP[A]" << endl;
+    } else if (ph) {
+        outfile << "#Energy[eV] IMFP[A] EMFP[A] PHMFP[A]" << endl;
     } else {
         outfile << "#Energy[eV] IMFP[A] EMFP[A]" << endl;
     }
@@ -1463,7 +1508,14 @@ void saveMFP(string filename)
         } else {
             double iemfp_e = linterp2d(ie_arr[ee],-1,ie_arr,elas_arr,true)/vol;
             double iimfp_e = linterp2d(ie_arr[ee],-1,ie_arr,inel_arr,true);
-            outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./iimfp_e*BOHR2ANG << " " << setprecision(17) << 1./iemfp_e*BOHR2ANG << endl;
+            if (ph)
+            {
+                double iphmfp_e = linterp2d(ie_arr[ee],-1,ie_arr,phon_arr,true);
+                outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./iimfp_e*BOHR2ANG << " " << setprecision(17) << 1./iemfp_e*BOHR2ANG << " " << setprecision(17) << 1./iphmfp_e*BOHR2ANG << endl;
+            }
+            else {
+                outfile << setprecision(17) << ie_arr[ee]*HA2EV << " " << setprecision(17) << 1./iimfp_e*BOHR2ANG << " " << setprecision(17) << 1./iemfp_e*BOHR2ANG << endl;
+            }
         }
     }
 }
@@ -1692,6 +1744,37 @@ vector<array<double,2> > inel(double ie)
         }
     }
     return iimfpint;
+}
+
+vector<array<double,2> > phonon(double ie)
+{
+    double t = 300.0;
+    double k_b = 8.617e-5;
+    double n_lo, ln_plus, ln_minus, term_plus, term_minus;
+    vector<array<double,2> > iphmfp;
+    double iphmfp_plus = 0.0;
+    double iphmfp_minus = 0.0;
+    if (ie<1e-10)
+    {
+        iphmfp.push_back({0.0,0.0});
+    }
+    else
+    {
+        for (size_t i = 0; i < ph_loss.size(); i++)
+        {
+            n_lo = 1.0/(exp(ph_loss[i]/(k_b*t))-1.0);
+
+            ln_plus = (1.0 + sqrt(abs(1.0 - ph_loss[i]/ie))) / (1.0 - sqrt(abs(1.0 - ph_loss[i]/ie)));
+            term_plus = (n_lo + 1.0)*(1.0/eps_inf - 1.0/eps_zero)*ph_loss[i]/(2.0*ie*4*PI);
+            iphmfp_plus += term_plus*log(ln_plus);
+
+            ln_minus = (1.0 + sqrt(abs(1.0 + ph_loss[i]/ie))) / (-1.0 + sqrt(abs(1.0 + ph_loss[i]/ie)));
+            term_minus = n_lo*(1.0/eps_inf - 1.0/eps_zero)*ph_loss[i]/(2.0*ie*4*PI);
+            iphmfp_minus += term_minus*log(ln_minus);
+        }
+        iphmfp.push_back({ie, iphmfp_plus + iphmfp_minus});
+    }
+    return iphmfp;
 }
 
 vector<vector<array<double,2> > > inelang(double ie)
