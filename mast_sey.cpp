@@ -616,7 +616,7 @@ void getInput(int argc, char** argv)
     if (strcmp(argv[1], "prepare") == 0) { prep = true; }
 
     if (ins) {
-        elow = eg+evb+1e-4;
+        elow = eg+eg+evb+1e-4;
     } else {
         elow = ef+1e-4;
     }
