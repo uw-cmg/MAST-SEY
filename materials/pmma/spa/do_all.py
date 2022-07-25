@@ -7,7 +7,7 @@ sey = []
 
 for energy in energies:
     print(energy)
-    os.system("mast_sey -e {} -m 1000 -ins -ph > ttt".format(energy))
+    os.system("mast_sey -e {} -m 1000 -ins > ttt".format(energy))
     res = np.loadtxt('ttt', comments='#')
     tey.append(res[1])
     sey.append(res[2])
