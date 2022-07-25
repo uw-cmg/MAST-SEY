@@ -147,7 +147,7 @@ class Electron
         array<double,3> uvw{0.,0.,1.};
         vector<array<double,3> > coord;
         bool inside, dead, phonon;
-    Electron(double ie, double x=0.0, double y=0.0, double z=0.0, double u=0.0, double v=0.0, double w=1.0, int sec=0, bool ph=false)
+    Electron(double ie, double x=0.0, double y=0.0, double z=0.0, double u=0.0, double v=0.0, double w=1.0, int sec=0)
     {
         e = ie;
         de = 0.0;
@@ -165,8 +165,7 @@ class Electron
         defl[1] = 0.0;
         iimfp = IIMFP();
         iemfp = IEMFP();  
-        phonon = ph;
-        if (phonon)
+        if (ph)
         {
             iphmfp_plus = IPHMFP_plus();
             iphmfp_minus = IPHMFP_minus();
@@ -292,7 +291,7 @@ class Electron
         {
             double detot_inel_int = linterp2d(e,-1,ie_arr,inel_arr,true);
             de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
-            if (phonon && de < eg)
+            if (ins && de < eg)
             {
                 while (de < eg)
                 {
@@ -315,7 +314,7 @@ class Electron
             {
                 iimfp = IIMFP();
                 iemfp = IEMFP();
-                if (phonon)
+                if (ph)
                 {
                     iphmfp_plus = IPHMFP_plus();
                     iphmfp_minus = IPHMFP_minus();
@@ -605,7 +604,7 @@ int main(int argc, char** argv)
                 printProgress();
             }
             progress = printStars(progress,n_e,mc_elec);
-            elec_arr.push_back(Electron(erange,0.0,0.0,0.0,sin(ini_angle),0.0,cos(ini_angle),0,ph));
+            elec_arr.push_back(Electron(erange,0.0,0.0,0.0,sin(ini_angle),0.0,cos(ini_angle),0));
             while (i < (int)elec_arr.size()-1)
             {
                 i++;
@@ -640,7 +639,7 @@ int main(int argc, char** argv)
                                 } else {
                                     s_uvw = f_rotdircos(elec_arr[i].uvw,asin(cos(elec_arr[i].defl[0])),elec_arr[i].defl[1]+PI);
                                 }
-                                elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1,ph));
+                                elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                             // valence band interaction
                             else if (elec_arr[i].de+elec_arr[i].s_ef>u0+eg)
@@ -660,7 +659,7 @@ int main(int argc, char** argv)
                                 } else {
                                     s_uvw = f_rotdircos(elec_arr[i].uvw,asin(cos(elec_arr[i].defl[0])),elec_arr[i].defl[1]+PI);
                                 }
-                                elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1,ph));
+                                elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                         } 
                         else if (elec_arr[i].sc_type_el)
