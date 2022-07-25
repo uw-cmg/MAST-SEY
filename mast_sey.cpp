@@ -244,7 +244,8 @@ class Electron
             double detot_ph_minus_int = linterp2d(e,-1,ie_arr,phon_minus_arr,true);
             if (rn5 < detot_ph_plus_int/(detot_ph_plus_int+detot_ph_minus_int))
             {
-                de = linterp2d(e,rn6*detot_ph_plus_int,ie_arr,phon_plus_arr,false,true);
+                // de = linterp2d(e,rn6*detot_ph_plus_int,ie_arr,phon_plus_arr,false,true);
+                de = 0.0095*EV2HA;
                 e = e-de;
                 died();
                 if (! dead)
@@ -265,7 +266,8 @@ class Electron
             }
             else
             {
-                de = linterp2d(e,rn6*detot_ph_minus_int,ie_arr,phon_minus_arr,false,true);
+                // de = linterp2d(e,rn6*detot_ph_minus_int,ie_arr,phon_minus_arr,false,true);
+                de = 0.0095*EV2HA;
                 e = e+de;
                 died();
                 if (! dead)
@@ -290,6 +292,14 @@ class Electron
         {
             double detot_inel_int = linterp2d(e,-1,ie_arr,inel_arr,true);
             de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
+            if (phonon && de < eg)
+            {
+                while (de < eg)
+                {
+                    rn3 = random01();
+                    de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
+                }
+            }
             if (classical_ang)
             {
                 defl[0] = asin(sqrt(de/e));
@@ -609,7 +619,6 @@ int main(int argc, char** argv)
                     
                     if (elec_arr[i].inside && ! elec_arr[i].dead)
                     {
-                        
                         elec_arr[i].determ_scatter();
                         if (elec_arr[i].scatter())
                         {
@@ -654,8 +663,10 @@ int main(int argc, char** argv)
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1,ph));
                             }
                         } 
-
-                        elec_arr[i].uvw = f_rotdircos(elec_arr[i].uvw,elec_arr[i].defl[0],elec_arr[i].defl[1]);
+                        else if (elec_arr[i].sc_type_el)
+                        {
+                            elec_arr[i].uvw = f_rotdircos(elec_arr[i].uvw,elec_arr[i].defl[0],elec_arr[i].defl[1]);
+                        }
                     }
                 }
             }
