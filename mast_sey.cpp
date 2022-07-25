@@ -642,7 +642,7 @@ int main(int argc, char** argv)
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                             // valence band interaction
-                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0+eg)
+                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0)
                             {
                                 s_ene = elec_arr[i].de+elec_arr[i].s_ef;
                                 s_xyz[0] = elec_arr[i].xyz[0];
@@ -1201,7 +1201,7 @@ void readMaterialFile(string filename)
         evb = EV2HA*evb;
         chi = EV2HA*chi;
         u0 = eg+evb+chi;
-        ebeg = eg+evb+1e-4;
+        ebeg = eg+eg+evb+1e-4;
     } else {
         infile >> vol >> ef >> wf;
         ef = EV2HA*ef;
