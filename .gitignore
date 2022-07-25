@@ -1,3 +1,12 @@
 *.DS_Store
 *.dSYM
 mast_sey
+*phonon_plus.in
+*phonon_minus.in
+*elastic.in
+*inelastic.in
+*mfp.plot
+*ttt
+*results
+*energies.in
+*elf_qdep.out
