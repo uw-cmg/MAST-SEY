@@ -652,7 +652,7 @@ int main(int argc, char** argv)
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                             // valence band interaction
-                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0)
+                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0+eg)
                             {
                                 s_ene = elec_arr[i].de+elec_arr[i].s_ef;
                                 s_xyz[0] = elec_arr[i].xyz[0];
