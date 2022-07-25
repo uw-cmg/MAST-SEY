@@ -1215,7 +1215,7 @@ void readMaterialFile(string filename)
         evb = EV2HA*evb;
         chi = EV2HA*chi;
         u0 = eg+evb+chi;
-        ebeg = eg+evb+1e-4;
+        ebeg = eg+eg+evb+1e-4;
     } else {
         infile >> vol >> ef >> wf;
         ef = EV2HA*ef;
