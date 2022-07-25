@@ -142,7 +142,6 @@ class Electron
         bool sc_type_el;
         bool sc_type_ph;
         array<int,2> sc_type_elinel{0,0};
-        array<int,1> sc_type_phon{0};
         array<double,3> xyz{0.,0.,0.};
         array<double,3> uvw{0.,0.,1.};
         vector<array<double,3> > coord;
@@ -207,18 +206,19 @@ class Electron
         if (rn < iemfp/itmfp)
         {
             sc_type_el = true;
+            sc_type_ph = false;
             sc_type_elinel[0]++;
         }
         else if (rn < (iemfp+iimfp)/itmfp)
         {
             sc_type_el = false;
+            sc_type_ph = false;
             sc_type_elinel[1]++;
         }
         else
         {
             sc_type_el = false;
             sc_type_ph = true;
-            sc_type_phon[0]++;
         }
     }
 
@@ -237,21 +237,86 @@ class Electron
             defl[0] = linterp2d(e,rn2*tot_elast_int,ie_arr,elas_arr,false,true);
             return false;
         }
-        else if (sc_type_ph)
-        {
-            double detot_ph_plus_int = linterp2d(e,-1,ie_arr,phon_plus_arr,true);
-            double detot_ph_minus_int = linterp2d(e,-1,ie_arr,phon_minus_arr,true);
-            if (rn5 < detot_ph_plus_int/(detot_ph_plus_int+detot_ph_minus_int))
+        else
+        { 
+            if (sc_type_ph)
             {
-                // de = linterp2d(e,rn6*detot_ph_plus_int,ie_arr,phon_plus_arr,false,true);
-                de = 0.0095*EV2HA;
+                double detot_ph_plus_int = linterp2d(e,-1,ie_arr,phon_plus_arr,true);
+                double detot_ph_minus_int = linterp2d(e,-1,ie_arr,phon_minus_arr,true);
+                if (rn5 < detot_ph_plus_int/(detot_ph_plus_int+detot_ph_minus_int))
+                {
+                    // de = linterp2d(e,rn6*detot_ph_plus_int,ie_arr,phon_plus_arr,false,true);
+                    de = 0.0095*EV2HA;
+                    e = e-de;
+                    died();
+                    if (! dead)
+                    {
+                        iimfp = IIMFP();
+                        iemfp = IEMFP();
+                        if (phonon)
+                        {
+                            iphmfp_plus = IPHMFP_plus();
+                            iphmfp_minus = IPHMFP_minus();
+                            itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
+                        }
+                        else
+                        {
+                            itmfp = iemfp+iimfp;
+                        }
+                    }
+                }
+                else
+                {
+                    // de = linterp2d(e,rn6*detot_ph_minus_int,ie_arr,phon_minus_arr,false,true);
+                    de = 0.0095*EV2HA;
+                    e = e+de;
+                    died();
+                    if (! dead)
+                    {
+                        iimfp = IIMFP();
+                        iemfp = IEMFP();
+                        if (phonon)
+                        {
+                            iphmfp_plus = IPHMFP_plus();
+                            iphmfp_minus = IPHMFP_minus();
+                            itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
+                        }
+                        else
+                        {
+                            itmfp = iemfp+iimfp;
+                        }
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                double detot_inel_int = linterp2d(e,-1,ie_arr,inel_arr,true);
+                de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
+                if (ins && de < eg)
+                {
+                    while (de < eg)
+                    {
+                        rn3 = random01();
+                        de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
+                    }
+                }
+                if (classical_ang)
+                {
+                    defl[0] = asin(sqrt(de/e));
+                }
+                else
+                {
+                    vector<array<double,2> > int_inelas_ang = int_inelastic_ang(&elfq,0.0,PI/2.,100,e,de,true);
+                    defl[0] = linterp(rn*int_inelas_ang[int_inelas_ang.size()-1][1],int_inelas_ang,true);
+                }
                 e = e-de;
                 died();
                 if (! dead)
                 {
                     iimfp = IIMFP();
                     iemfp = IEMFP();
-                    if (phonon)
+                    if (ph)
                     {
                         iphmfp_plus = IPHMFP_plus();
                         iphmfp_minus = IPHMFP_minus();
@@ -262,89 +327,27 @@ class Electron
                         itmfp = iemfp+iimfp;
                     }
                 }
-            }
-            else
-            {
-                // de = linterp2d(e,rn6*detot_ph_minus_int,ie_arr,phon_minus_arr,false,true);
-                de = 0.0095*EV2HA;
-                e = e+de;
-                died();
-                if (! dead)
+                if (use_dos) 
                 {
-                    iimfp = IIMFP();
-                    iemfp = IEMFP();
-                    if (phonon)
+                    if (feg_dos)
                     {
-                        iphmfp_plus = IPHMFP_plus();
-                        iphmfp_minus = IPHMFP_minus();
-                        itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                    }
-                    else
-                    {
-                        itmfp = iemfp+iimfp;
-                    }
-                }
-            }
-            return false;
-        }
-        else
-        {
-            double detot_inel_int = linterp2d(e,-1,ie_arr,inel_arr,true);
-            de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
-            if (ins && de < eg)
-            {
-                while (de < eg)
-                {
-                    rn3 = random01();
-                    de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
-                }
-            }
-            if (classical_ang)
-            {
-                defl[0] = asin(sqrt(de/e));
-            }
-            else
-            {
-                vector<array<double,2> > int_inelas_ang = int_inelastic_ang(&elfq,0.0,PI/2.,100,e,de,true);
-                defl[0] = linterp(rn*int_inelas_ang[int_inelas_ang.size()-1][1],int_inelas_ang,true);
-            }
-            e = e-de;
-            died();
-            if (! dead)
-            {
-                iimfp = IIMFP();
-                iemfp = IEMFP();
-                if (ph)
-                {
-                    iphmfp_plus = IPHMFP_plus();
-                    iphmfp_minus = IPHMFP_minus();
-                    itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                }
-                else
-                {
-                    itmfp = iemfp+iimfp;
-                }
-            }
-            if (use_dos) 
-            {
-                if (feg_dos)
-                {
-                    if (ins) {
-                        s_ef = fzero(&jdos,0.,evb,de,rn4);
+                        if (ins) {
+                            s_ef = fzero(&jdos,0.,evb,de,rn4);
+                        } else {
+                            s_ef = fzero(&jdos,0.,ef,de,rn4);
+                        }
                     } else {
-                        s_ef = fzero(&jdos,0.,ef,de,rn4);
+                        double s_ef_int = linterp2d(de,-1,de_arr,jdos_arr,true);
+                        s_ef = linterp2d(de,rn4*s_ef_int,de_arr,jdos_arr,false,true);
                     }
                 } else {
-                    double s_ef_int = linterp2d(de,-1,de_arr,jdos_arr,true);
-                    s_ef = linterp2d(de,rn4*s_ef_int,de_arr,jdos_arr,false,true);
+                    if (ins)
+                        s_ef = evb;
+                    else
+                        s_ef = ef;
                 }
-            } else {
-                if (ins)
-                    s_ef = evb;
-                else
-                    s_ef = ef;
+                return true;
             }
-            return true;
         }
     }
 
@@ -418,7 +421,14 @@ class Electron
 
     void died()
     {
-        if (e<u0+eg) { dead = true; }
+        if (ins)
+        {
+            if (e<u0+eg) { dead = true; }
+        }
+        else
+        {
+            if (e<u0) { dead = true; }
+        }
     }
 
     double random01()
@@ -834,6 +844,10 @@ void getInput(int argc, char** argv)
         if (strcmp(argv[i], "-ph") == 0)
         {
             ph = true;
+        }
+        else
+        {
+            ph = false;
         }
 
         if (strcmp(argv[i], "-dircos") == 0)
