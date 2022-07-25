@@ -1,1 +1,2 @@
+*.psd filter=lfs diff=lfs merge=lfs -text
 *elf.in filter=lfs diff=lfs merge=lfs -text
