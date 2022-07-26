@@ -99,10 +99,18 @@ energy[n] ELF[n][q[k]]
 q[k] q[k]
 ```
 
+Example `ph.in` file for insulators containing ([energy loss (eV)], eps_0, eps_inf) to include the electron-phonon interaction:
+```
+0.062 0.15
+3.84
+2.25
+```
+
 The command below is an example of how to run the "prepare" step:
 ```bash
-mast_sey prepare -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
-mast_sey prepare -ins -e 1000 100 -i 100 50 -qdep DFT -elastic P DHFS FM
+mast_sey prepare -e 1000 100 -i 100 50 -qdep SPA -elastic P DHFS FM
+mast_sey prepare -e 1000 100 -i 100 50 -qdep SPA -elastic P DHFS FM -ins
+mast_sey prepare -e 1000 100 -i 100 50 -qdep SPA -elastic P DHFS FM -ins -ph
 ```
 The user should be greeted with the default MAST-SEY output screen. It contains the basic info along with a short feedback on the chosen options and files used. If a basic error is detected, it will be displayed here. In all the input values are correct, a progress bar on the bottom should start filling up (although for accurate calculations it may take a while for even the first bar to appear).
 
@@ -151,11 +159,14 @@ otherwise, the "simulate" version will be executed
 
 Please be careful when giving input arguments, there is no extensive input checks
 Example executions:
-./mast_sey prepare -e 700 1000 -i 200 100 -elastic F TFD TF
-./mast_sey -e 350 -m 10000
+mast_sey prepare -e 1000 100 -i 100 50 -elastic F DHFS FM -qdep SPA
+mast_sey -e 350 -m 10000
 
-./mast_sey prepare -ins -e 700 1000 -i 200 100 -elastic F TFD TF
-./mast_sey -ins -e 350 -m 10000
+mast_sey prepare -e 1000 100 -i 100 50 -elastic F DHFS FM -qdep SPA -ins
+mast_sey -e 350 -m 10000 -ins
+
+mast_sey prepare -e 1000 100 -i 100 50 -elastic F DHFS FM -qdep SPA -ins -ph
+mast_sey -e 350 -m 10000 -ins -ph
 ```
 
 The [examples directory](https://github.com/uw-cmg/MAST-SEY/tree/master/examples) contains examples that showcase most of the capabilities of the code.
