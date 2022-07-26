@@ -126,7 +126,6 @@ Input options:
 otherwise, the "simulate" version will be executed
 
 "prepare" options:
--ins     calculate properties for insulators
 -e       [iniE(eV,optional) range(eV) grid] energy range and grid (def: 1000 500)
 -lin     generate the energy grid on a linear scale (default is logarithmic)
 -i       [ICS q-int] grids for ICS and q integration (def: 1000 100)
@@ -139,9 +138,10 @@ otherwise, the "simulate" version will be executed
          exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar
          (optional): [SOLID] muffin-tin model potential
          (optional): [LDA] LDA correlation–polarization potential model
+-ins     calculate properties for insulators
+-ph      calculate electron-phonon scattering properties
 
 "simulate" options:
--ins     simulate for insulators
 -e       [incident_energy(eV)] energy of incident energy
 -m       [number_of_e-] number of incident electrons (def: 1000)
 -core    [energy(eV)] allow secondaries to come from bound states
@@ -152,6 +152,8 @@ otherwise, the "simulate" version will be executed
 -distr   save distribution of secondaries
 -noang   use classical approach to inelastic angle scattering
 -noout   supress all output
+-ins     simulate for insulators
+-ph      include electron-phonon scattering
 
 -v       display version of the code
 -h       this message
