@@ -98,6 +98,7 @@ vector<array<double,2> > cumintVect(const vector<array<double,2>> &xyarr);
 array<double,3> f_rotdircos(array<double,3> uvw, double ang0, double ang1);
 vector<array<double,2> > linterp2dline(double x0,double y0, const vector<double> &xarr, const vector<vector<array<double,2> > > &ytuparr);
 double linterp(double x, const vector<array<double,2> > &xyarr, bool xfind=false);
+vector<array<double,2>> linterp1d(double x0,double y0, const vector<double> &xarr, const vector<vector<array<double,2> > > &ytuparr);
 double linterp2d(double x0,double y0, const vector<double> &xarr, const vector<vector<array<double,2> > > &ytuparr, bool total=false, bool xfind=false);
 double linterp3d(double x0, double y0, double z0, const vector<double> &xarr, const vector<vector<vector<array<double,2> > > > &ytuparr, bool total, bool xfind);
 double fzero(double (*f)(double,double,double), double x0, double x1, double ww, double qq, double tol=1e-6);
@@ -203,13 +204,13 @@ class Electron
     void determ_scatter()
     {
         double rn = random01();
-        if (rn < iemfp/itmfp)
+        if (rn <= iemfp/itmfp)
         {
             sc_type_el = true;
             sc_type_ph = false;
             sc_type_elinel[0]++;
         }
-        else if (rn < (iemfp+iimfp)/itmfp)
+        else if (rn <= (iemfp+iimfp)/itmfp)
         {
             sc_type_el = false;
             sc_type_ph = false;
@@ -243,10 +244,24 @@ class Electron
             {
                 double detot_ph_plus_int = linterp2d(e,-1,ie_arr,phon_plus_arr,true);
                 double detot_ph_minus_int = linterp2d(e,-1,ie_arr,phon_minus_arr,true);
+                double total = 0.0;
+                double dummy = 0.0;
                 if (rn5 < detot_ph_plus_int/(detot_ph_plus_int+detot_ph_minus_int))
                 {
-                    // de = linterp2d(e,rn6*detot_ph_plus_int,ie_arr,phon_plus_arr,false,true);
-                    de = 0.0095*EV2HA;
+                    vector<array<double,2>> ytup_intrp = linterp1d(e,-1,ie_arr,phon_plus_arr);
+                    for (size_t i = 0; i < ytup_intrp.size(); i++)
+                    {
+                        total += ytup_intrp[i][1];
+                    }
+                    for (size_t i = 0; i < ytup_intrp.size(); i++)
+                    {
+                        if (rn6 <= (ytup_intrp[i][1] + dummy)/total)
+                        {
+                            de = ytup_intrp[i][0];
+                            break;
+                        }
+                        dummy += ytup_intrp[i][1];
+                    }
                     e = e-de;
                     died();
                     if (! dead)
@@ -267,8 +282,20 @@ class Electron
                 }
                 else
                 {
-                    // de = linterp2d(e,rn6*detot_ph_minus_int,ie_arr,phon_minus_arr,false,true);
-                    de = 0.0095*EV2HA;
+                    vector<array<double,2>> ytup_intrp = linterp1d(e,-1,ie_arr,phon_minus_arr);
+                    for (size_t i = 0; i < ytup_intrp.size(); i++)
+                    {
+                        total += ytup_intrp[i][1];
+                    }
+                    for (size_t i = 0; i < ytup_intrp.size(); i++)
+                    {
+                        if (rn6 <= (ytup_intrp[i][1] + dummy)/total)
+                        {
+                            de = ytup_intrp[i][0];
+                            break;
+                        }
+                        dummy += ytup_intrp[i][1];
+                    }
                     e = e+de;
                     died();
                     if (! dead)
@@ -1233,7 +1260,7 @@ void readPhononFile(string filename)
     while ( infile.peek() != '\n' )
     {
         infile >> ph_tmp;
-        ph_loss.push_back(ph_tmp);
+        ph_loss.push_back(ph_tmp*EV2HA);
     }
     infile >> eps_zero >> eps_inf;
 }
@@ -2027,6 +2054,26 @@ double linterp2d(double x0,double y0, const vector<double> &xarr, const vector<v
         }
     }
     return linterp(y0, ytup_intrp, xfind);
+}
+
+vector<array<double,2>> linterp1d(double x0,double y0, const vector<double> &xarr, const vector<vector<array<double,2> > > &ytuparr)
+{
+    vector<array<double,2>> ytup_intrp;
+    ytup_intrp.reserve(ytuparr[0].size());
+    double dx;
+    for (size_t i = 0; i < xarr.size()-1; i++)
+    {
+        if (x0<=xarr[i+1] && x0>=xarr[i])
+        {
+            dx = (x0-xarr[i])/(xarr[i+1]-xarr[i]);
+            for (size_t j = 0; j < ytuparr[0].size(); j++)
+            {
+                ytup_intrp.push_back({ytuparr[i][j][0]+(ytuparr[i+1][j][0]-ytuparr[i][j][0])*dx,ytuparr[i][j][1]+(ytuparr[i+1][j][1]-ytuparr[i][j][1])*dx});
+            }
+            break;
+        }
+    }
+    return ytup_intrp;
 }
 
 double fzero(double (*f)(double,double,double), double x0, double x1, double ww, double qq, double tol)
