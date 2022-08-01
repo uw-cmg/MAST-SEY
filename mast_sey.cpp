@@ -1172,6 +1172,8 @@ void printVersion(char** argv)
         cout << "         exchange: [NO]/[FM]Furness–McCarthy/[TF]Thomas-Fermi/[RT]Riley–Truhlar" << endl;
         cout << "         (optional): [SOLID] muffin-tin model potential" << endl;
         cout << "         (optional): [LDA] LDA correlation–polarization potential model" << endl;
+        cout << "-ins     calculate properties for insulators" << endl;
+        cout << "-ph      calculate electron-phonon scattering properties" << endl;
         cout << "\n\"simulate\" options:" << endl;
         cout << "-e       [incident_energy(eV)] energy of incident energy" << endl;
         cout << "-m       [number_of_e-] number of incident electrons (def: 1000)" << endl;
@@ -1183,6 +1185,8 @@ void printVersion(char** argv)
         cout << "-distr   save distribution of secondaries" << endl;
         cout << "-noang   use classical approach to inelastic angle scattering" << endl;
         cout << "-noout   supress all output" << endl;
+        cout << "-ins     simulate for insulators" << endl;
+        cout << "-ph      include electron-phonon scattering" << endl;
         cout << "\n-v       display version of the code" << endl;
         cout << "-h       this message\n" << endl;
         cout << "\nPlease be careful when giving input arguments, there is no extensive input checks" << endl;
