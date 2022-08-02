@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-energies = [50, 100, 150, 200, 250, 500, 700, 900]
+energies = [50, 100, 150, 200, 250, 500, 700, 1000, 2000, 4500]
 tey = []
 sey = []
 

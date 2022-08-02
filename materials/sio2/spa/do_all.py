@@ -1,16 +1,14 @@
 import os
-import numpy as np
+from multiprocessing import Pool
 
-energies = [50, 100, 150, 200, 250, 500, 700, 900]
-tey = []
-sey = []
+energies = [50, 100, 200, 300, 500, 700, 1000, 2000, 3000, 4500]
 
-for energy in energies:
-    print(energy)
-    os.system("mast_sey -e {} -m 10000 -ins -ph > ttt".format(energy))
-    res = np.loadtxt('ttt', comments='#')
-    tey.append(res[1])
-    sey.append(res[2])
+def run_mast(i):
+	print(energies[i])
+	os.system("mast_sey -e {} -m 10000 -ins > {}-spa.stdout.txt".format(energies[i],energies[i]))
 
-data = np.column_stack([energies, tey, sey])
-np.savetxt('results', data, fmt=['%d','%.2f','%.2f'])
+
+if __name__ == '__main__':
+	with Pool(processes=10) as pool:
+		pool.map(run_mast, range(len(energies)))
+
