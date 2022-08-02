@@ -1,6 +1,5 @@
 import os
 from multiprocessing import Pool
-import numpy as np
 
 energies = [50, 100, 200, 300, 500, 700, 1000, 2000, 3000, 4500]
 
