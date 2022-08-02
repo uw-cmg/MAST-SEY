@@ -877,6 +877,23 @@ void getInput(int argc, char** argv)
             ph = false;
         }
 
+        if (strcmp(argv[i], "-u") == 0)
+        {
+            if (argc > i+1)
+            {
+                if (argv[i+1][0] != '-')
+                {
+                    u0 = stod(argv[i+1])*EV2HA;
+                } else {
+                    cerr << "Too few arguments for " << argv[i] << ", needs 1 argument." << endl;
+                    exit(1);
+                }
+            } else {
+                cerr << "Too few arguments for " << argv[i] << ", needs 1 argument." << endl;
+                exit(1);
+            }
+        }
+
         if (strcmp(argv[i], "-dircos") == 0)
         {
             if (argc > i+1)
