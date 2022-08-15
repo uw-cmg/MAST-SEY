@@ -146,7 +146,7 @@ class Electron
         array<double,3> xyz{0.,0.,0.};
         array<double,3> uvw{0.,0.,1.};
         vector<array<double,3> > coord;
-        bool inside, dead, phonon;
+        bool inside, dead;
     Electron(double ie, double x=0.0, double y=0.0, double z=0.0, double u=0.0, double v=0.0, double w=1.0, int sec=0)
     {
         e = ie;
@@ -169,7 +169,11 @@ class Electron
         {
             iphmfp_plus = IPHMFP_plus();
             iphmfp_minus = IPHMFP_minus();
-            itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
+            if (e<ebeg+eg) {
+                itmfp = iemfp+iphmfp_plus+iphmfp_minus;
+            } else {
+                itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
+            }
         }
         else
         {
@@ -210,16 +214,17 @@ class Electron
             sc_type_ph = false;
             sc_type_elinel[0]++;
         }
-        else if (rn <= (iemfp+iimfp)/itmfp)
-        {
-            sc_type_el = false;
-            sc_type_ph = false;
-            sc_type_elinel[1]++;
-        }
-        else
-        {
-            sc_type_el = false;
-            sc_type_ph = true;
+        else {
+            if (ph && (rn <= (iemfp+iphmfp_plus+iphmfp_minus)/itmfp || e < ebeg+eg)) {
+                sc_type_el = false;
+                sc_type_ph = true;
+            }
+            else
+            {
+                sc_type_el = false;
+                sc_type_ph = false;
+                sc_type_elinel[1]++;
+            }
         }
     }
 
@@ -266,17 +271,14 @@ class Electron
                     died();
                     if (! dead)
                     {
-                        iimfp = IIMFP();
                         iemfp = IEMFP();
-                        if (phonon)
-                        {
-                            iphmfp_plus = IPHMFP_plus();
-                            iphmfp_minus = IPHMFP_minus();
+                        iphmfp_plus = IPHMFP_plus();
+                        iphmfp_minus = IPHMFP_minus();
+                        if (e<ebeg+eg) {
+                            itmfp = iemfp+iphmfp_plus+iphmfp_minus;
+                        } else {
+                            iimfp = IIMFP();
                             itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                        }
-                        else
-                        {
-                            itmfp = iemfp+iimfp;
                         }
                     }
                 }
@@ -297,21 +299,17 @@ class Electron
                         dummy += ytup_intrp[i][1];
                     }
                     e = e+de;
-                    died();
-                    if (! dead)
+                    iemfp = IEMFP();
+                    iphmfp_plus = IPHMFP_plus();
+                    iphmfp_minus = IPHMFP_minus();
+                    if (e<ebeg+eg)
+                    {
+                        itmfp = iemfp+iphmfp_plus+iphmfp_minus;
+                    }
+                    else
                     {
                         iimfp = IIMFP();
-                        iemfp = IEMFP();
-                        if (phonon)
-                        {
-                            iphmfp_plus = IPHMFP_plus();
-                            iphmfp_minus = IPHMFP_minus();
-                            itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                        }
-                        else
-                        {
-                            itmfp = iemfp+iimfp;
-                        }
+                        itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
                     }
                 }
                 return false;
@@ -322,11 +320,12 @@ class Electron
                 de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
                 if (ins && de < eg)
                 {
-                    while (de < eg)
-                    {
-                        rn3 = random01();
-                        de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
-                    }
+                    cout << "de = " << de << ", eg = " << eg << endl;
+                    // while (de < eg)
+                    // {
+                    //     rn3 = random01();
+                    //     de = linterp2d(e,rn3*detot_inel_int,ie_arr,inel_arr,false,true);
+                    // }
                 }
                 if (classical_ang)
                 {
@@ -343,11 +342,11 @@ class Electron
                 {
                     iimfp = IIMFP();
                     iemfp = IEMFP();
-                    if (ph)
+                    if (ph && e < ebeg+eg)
                     {
                         iphmfp_plus = IPHMFP_plus();
                         iphmfp_minus = IPHMFP_minus();
-                        itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
+                        itmfp = iemfp+iphmfp_plus+iphmfp_minus;
                     }
                     else
                     {
@@ -448,14 +447,8 @@ class Electron
 
     void died()
     {
-        if (ins)
-        {
-            if (e<u0+eg) { dead = true; }
-        }
-        else
-        {
-            if (e<u0) { dead = true; }
-        }
+        if (e<u0) { dead = true; }
+        else if (ins && !ph && pathlength > 500) { dead = true; }
     }
 
     double random01()
@@ -526,7 +519,11 @@ int main(int argc, char** argv)
 
             if(!emfp_only)
             {
-                inel_arr.push_back(inel(ie_arr[i]));
+                if (ie_arr[i] <= ebeg+eg) {
+                    inel_arr.push_back(inel(ebeg+eg));
+                } else {
+                    inel_arr.push_back(inel(ie_arr[i]));
+                }
                 if (ph)
                 {
                     phon_plus_arr.push_back(phonon_plus(ie_arr[i]));
@@ -648,7 +645,6 @@ int main(int argc, char** argv)
                 
                 while (elec_arr[i].inside && ! elec_arr[i].dead)
                 {
-                    
                     elec_arr[i].travel_s();
                     
                     elec_arr[i].escaped();
@@ -679,7 +675,7 @@ int main(int argc, char** argv)
                                 elec_arr.push_back(Electron(s_ene,s_xyz[0],s_xyz[1],s_xyz[2],s_uvw[0],s_uvw[1],s_uvw[2],elec_arr[i].secondary+1));
                             }
                             // valence band interaction
-                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0+eg)
+                            else if (elec_arr[i].de+elec_arr[i].s_ef>u0)
                             {
                                 s_ene = elec_arr[i].de+elec_arr[i].s_ef;
                                 s_xyz[0] = elec_arr[i].xyz[0];
@@ -782,7 +778,7 @@ void getInput(int argc, char** argv)
     if (strcmp(argv[1], "prepare") == 0) { prep = true; }
 
     if (ins) {
-        elow = eg+eg+evb+1e-4;
+        elow = eg+evb+1e-4;
     } else {
         elow = ef+1e-4;
     }
@@ -1263,7 +1259,7 @@ void readMaterialFile(string filename)
         evb = EV2HA*evb;
         chi = EV2HA*chi;
         u0 = eg+evb+chi;
-        ebeg = eg+eg+evb+1e-4;
+        ebeg = eg+evb+1e-4;
     } else {
         infile >> vol >> ef >> wf;
         ef = EV2HA*ef;
@@ -1432,9 +1428,11 @@ void prepareJDOS(const vector<array<double,2> > &dos)
     vector<array<double,2> > arr2d;
     vector<array<double,2> > arr2dint;
     vector<vector<array<double,2> > > arr3d;
+    double d_ev;
     arr2d.reserve(200);
     arr2dint.reserve(200);
-    double d_ev = ef/200.;
+    if(ins) {d_ev = (eg+evb)/200.;}
+    else {d_ev = ef/200.;}
     for (size_t di = 0; di < de_arr.size(); di++)
     {
         for (int n_ev = 0; n_ev < 200; n_ev++)
@@ -1837,7 +1835,12 @@ vector<array<double,2> > int_inelastic_ene(double (*f)(double,double,int), doubl
     double a,b;
     double intgrl = 0.;
     vector<array<double,2> > int_arr;
-    int_arr.push_back({0.,0.});
+    // int_arr.push_back({0.,0.});
+    if (ins) {
+        int_arr.push_back({eg,0.});
+    } else {
+        int_arr.push_back({0.,0.});
+    }
     for (int i = 0; i < ndiv; i++)
     {
         a = (*f)(x,args,1);
