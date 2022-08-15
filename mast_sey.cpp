@@ -146,7 +146,7 @@ class Electron
         array<double,3> xyz{0.,0.,0.};
         array<double,3> uvw{0.,0.,1.};
         vector<array<double,3> > coord;
-        bool inside, dead, phonon;
+        bool inside, dead;
     Electron(double ie, double x=0.0, double y=0.0, double z=0.0, double u=0.0, double v=0.0, double w=1.0, int sec=0)
     {
         e = ie;
@@ -268,7 +268,7 @@ class Electron
                     {
                         iimfp = IIMFP();
                         iemfp = IEMFP();
-                        if (phonon)
+                        if (ph)
                         {
                             iphmfp_plus = IPHMFP_plus();
                             iphmfp_minus = IPHMFP_minus();
@@ -302,7 +302,7 @@ class Electron
                     {
                         iimfp = IIMFP();
                         iemfp = IEMFP();
-                        if (phonon)
+                        if (ph)
                         {
                             iphmfp_plus = IPHMFP_plus();
                             iphmfp_minus = IPHMFP_minus();
@@ -1432,9 +1432,14 @@ void prepareJDOS(const vector<array<double,2> > &dos)
     vector<array<double,2> > arr2d;
     vector<array<double,2> > arr2dint;
     vector<vector<array<double,2> > > arr3d;
+    double d_ev;
     arr2d.reserve(200);
     arr2dint.reserve(200);
-    double d_ev = ef/200.;
+    if (ins) {
+        d_ev = (eg+evb)/200.;
+    } else {
+        d_ev = ef/200.;
+    }
     for (size_t di = 0; di < de_arr.size(); di++)
     {
         for (int n_ev = 0; n_ev < 200; n_ev++)
