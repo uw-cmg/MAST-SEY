@@ -1,14 +1,14 @@
 import os
 from multiprocessing import Pool
 
-energies = [50, 100, 200, 300, 500, 700, 1000, 2000, 3000, 4500]
+energies = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 250, 500, 750, 1000, 1250, 1500, 2000, 3000]
 
 def run_mast(i):
 	print(energies[i])
-	os.system("mast_sey -e {} -m 10000 -ins -ph > out-ph/e{}.stdout.txt".format(energies[i],energies[i]))
+	os.system("mast_sey -e {} -m 1000 -ins -ph -u 15 -dos FEG > out-ph-u/e{}.stdout.txt".format(energies[i],energies[i]))
 
 
 if __name__ == '__main__':
-	with Pool(processes=10) as pool:
+	with Pool(processes=8) as pool:
 		pool.map(run_mast, range(len(energies)))
 

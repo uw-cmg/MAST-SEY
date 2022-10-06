@@ -169,7 +169,7 @@ class Electron
         {
             iphmfp_plus = IPHMFP_plus();
             iphmfp_minus = IPHMFP_minus();
-            if (e<ebeg+eg) {
+            if (e<eg) {
                 itmfp = iemfp+iphmfp_plus+iphmfp_minus;
             } else {
                 itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
@@ -178,6 +178,8 @@ class Electron
         else
         {
             itmfp = iemfp+iimfp;
+            iphmfp_plus = 0.0;
+            iphmfp_minus = 0.0;
         }  
         inside = true;
         dead = false;
@@ -214,17 +216,16 @@ class Electron
             sc_type_ph = false;
             sc_type_elinel[0]++;
         }
-        else {
-            if (ph && (rn <= (iemfp+iphmfp_plus+iphmfp_minus)/itmfp || e < ebeg+eg)) {
-                sc_type_el = false;
-                sc_type_ph = true;
-            }
-            else
-            {
-                sc_type_el = false;
-                sc_type_ph = false;
-                sc_type_elinel[1]++;
-            }
+        else if (rn <= (iemfp+iphmfp_plus+iphmfp_minus)/itmfp)
+        {
+            sc_type_el = false;
+            sc_type_ph = true;
+        }
+        else
+        {
+            sc_type_el = false;
+            sc_type_ph = false;
+            sc_type_elinel[1]++;
         }
     }
 
@@ -274,12 +275,8 @@ class Electron
                         iemfp = IEMFP();
                         iphmfp_plus = IPHMFP_plus();
                         iphmfp_minus = IPHMFP_minus();
-                        if (e<ebeg+eg) {
-                            itmfp = iemfp+iphmfp_plus+iphmfp_minus;
-                        } else {
-                            iimfp = IIMFP();
-                            itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                        }
+                        iimfp = IIMFP();
+                        itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
                     }
                 }
                 else
@@ -302,15 +299,8 @@ class Electron
                     iemfp = IEMFP();
                     iphmfp_plus = IPHMFP_plus();
                     iphmfp_minus = IPHMFP_minus();
-                    if (e<ebeg+eg)
-                    {
-                        itmfp = iemfp+iphmfp_plus+iphmfp_minus;
-                    }
-                    else
-                    {
-                        iimfp = IIMFP();
-                        itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
-                    }
+                    iimfp = IIMFP();
+                    itmfp = iemfp+iimfp+iphmfp_plus+iphmfp_minus;
                 }
                 return false;
             }
@@ -342,7 +332,7 @@ class Electron
                 {
                     iimfp = IIMFP();
                     iemfp = IEMFP();
-                    if (ph && e < ebeg+eg)
+                    if (ph)
                     {
                         iphmfp_plus = IPHMFP_plus();
                         iphmfp_minus = IPHMFP_minus();
@@ -448,7 +438,6 @@ class Electron
     void died()
     {
         if (e<u0) { dead = true; }
-        else if (ins && !ph && pathlength > 500) { dead = true; }
     }
 
     double random01()
@@ -519,8 +508,8 @@ int main(int argc, char** argv)
 
             if(!emfp_only)
             {
-                if (ie_arr[i] <= ebeg+eg) {
-                    inel_arr.push_back(inel(ebeg+eg));
+                if (ie_arr[i] <= ebeg) {
+                    inel_arr.push_back(inel(ebeg));
                 } else {
                     inel_arr.push_back(inel(ie_arr[i]));
                 }
